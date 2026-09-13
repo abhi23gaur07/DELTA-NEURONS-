@@ -67,7 +67,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  const parsedUrl = url.parse(req.url, true);
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost:3000'}`);
   const pathname = parsedUrl.pathname;
 
   // -----------------------------------------------------------
@@ -281,7 +281,16 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ ERROR: Port ${PORT} is already in use by another process.`);
+    console.error(`👉 Close the existing server instance or run with PORT=3001.\n`);
+  } else {
+    console.error('\n❌ Server error:', err);
+  }
+});
+
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ============================================================
   🧠 DELTA NEURONS: Full-Stack Platform Active!
