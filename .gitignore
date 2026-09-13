@@ -1,0 +1,14 @@
+# Node & Dependencies
+node_modules/
+npm-debug.log*
+
+# SQLite temporary journal/WAL files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

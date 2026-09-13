@@ -1,0 +1,1786 @@
+/* ==========================================================================
+   DELTA NEURONS: Design System & Stylesheet (Expanded 6-Game Edition)
+   Tailored for Elderly Dementia Patients in India's North Eastern Region (NER)
+   Accessibility standard: WCAG 2.1 AAA Compliant
+   ========================================================================== */
+
+:root {
+  /* Font Scaling (Default Normal: 20px base for elderly comfort) */
+  --font-base: 20px;
+  --font-h1: 2.2rem;
+  --font-h2: 1.8rem;
+  --font-h3: 1.4rem;
+  --font-body: 1.1rem;
+  --font-sub: 0.95rem;
+  --btn-min-height: 64px;
+
+  /* Calming Nature & NER Cultural Palette (Warm Earthen / Tea Garden / Brahmaputra) */
+  --bg-app: #F7F5F0;
+  --bg-surface: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F2EFE9;
+  --bg-banner: #EBF4F0;
+
+  --text-primary: #192734;
+  --text-secondary: #4A5B6A;
+  --text-muted: #6C7D8E;
+  
+  --primary: #1E6B52;            /* Lush Kaziranga Sage Green */
+  --primary-hover: #154D3B;
+  --primary-light: #E6F3EE;
+  --primary-border: #9DC3B4;
+
+  --accent-amber: #C9751E;       /* Muga Golden Silk / Assam Amber */
+  --accent-amber-light: #FFF4E5;
+  --accent-blue: #1D6F8A;        /* Brahmaputra River Blue */
+  --accent-blue-light: #E6F4F8;
+  --accent-red: #B83A2E;         /* Traditional Naga Scarlet / Warning */
+  --accent-red-light: #FDEEED;
+  --accent-purple: #6A3875;      /* Orchid Purple */
+
+  --border-subtle: #E2DBD0;
+  --border-strong: #C4B9AA;
+
+  --shadow-sm: 0 3px 6px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+  --focus-ring: 4px solid #C9751E;
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --transition: all 0.25s ease-out;
+}
+
+/* -------------------------------------------------------------
+   Font Scaling Variants
+   ------------------------------------------------------------- */
+body.font-small {
+  --font-base: 18px;
+  --btn-min-height: 56px;
+}
+body.font-normal {
+  --font-base: 20px;
+  --btn-min-height: 64px;
+}
+body.font-large {
+  --font-base: 23px;
+  --btn-min-height: 72px;
+}
+body.font-xlarge {
+  --font-base: 26px;
+  --btn-min-height: 80px;
+}
+
+/* -------------------------------------------------------------
+   SUPER-EASY "AITA / KOKA" MODE (Max Accessibility)
+   ------------------------------------------------------------- */
+body.super-easy-mode {
+  --font-base: 26px;
+  --btn-min-height: 86px;
+}
+
+body.super-easy-mode .elder-action-card {
+  padding: 36px;
+  border-width: 4px;
+}
+
+body.super-easy-mode .card-icon-bubble {
+  width: 96px;
+  height: 96px;
+  font-size: 3rem;
+}
+
+body.super-easy-mode .nav-item-btn {
+  padding: 16px 28px;
+  font-size: 1.3rem;
+}
+
+/* -------------------------------------------------------------
+   High-Contrast Mode
+   ------------------------------------------------------------- */
+body.high-contrast {
+  --bg-app: #0D0F12;
+  --bg-surface: #1A1D24;
+  --bg-card: #222630;
+  --bg-card-hover: #2E3342;
+  --bg-banner: #1C2B26;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #F0F4F8;
+  --text-muted: #D1DCE5;
+
+  --primary: #2ECC71;
+  --primary-hover: #27AE60;
+  --primary-light: #163624;
+  --primary-border: #2ECC71;
+
+  --accent-amber: #F1C40F;
+  --accent-amber-light: #38300E;
+  --accent-blue: #3498DB;
+  --accent-blue-light: #122B3B;
+  --accent-red: #E74C3C;
+  --accent-red-light: #3D1714;
+
+  --border-subtle: #495469;
+  --border-strong: #8A9BB3;
+  --focus-ring: 5px solid #F1C40F;
+}
+
+/* -------------------------------------------------------------
+   Base Resets & Typography
+   ------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: var(--font-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button, a, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* -------------------------------------------------------------
+   Top Accessibility & Control Header
+   ------------------------------------------------------------- */
+.accessibility-bar {
+  background: var(--bg-surface);
+  border-bottom: 2px solid var(--border-subtle);
+  padding: 10px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+.access-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.access-label {
+  font-size: var(--font-sub);
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.pill-btn {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: var(--font-sub);
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+  min-height: 44px;
+}
+
+.pill-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+}
+
+.pill-btn.active {
+  background: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+}
+
+.lang-select {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 6px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.btn-portal-switch {
+  background: var(--accent-amber-light);
+  color: var(--accent-amber);
+  border: 2px solid var(--accent-amber);
+  border-radius: var(--radius-full);
+  padding: 6px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.btn-portal-switch:hover {
+  background: var(--accent-amber);
+  color: #FFFFFF;
+}
+
+/* -------------------------------------------------------------
+   Mini Audio Helper Button (1-Click Read Aloud for any Tile)
+   ------------------------------------------------------------- */
+.mini-speaker-btn {
+  background: var(--bg-app);
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.mini-speaker-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: scale(1.15);
+}
+
+/* -------------------------------------------------------------
+   Main Brand Header
+   ------------------------------------------------------------- */
+.main-header {
+  background: var(--bg-surface);
+  padding: 16px 24px;
+  border-bottom: 3px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo-icon {
+  width: 58px;
+  height: 58px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: var(--font-h1);
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  font-size: var(--font-sub);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.header-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--primary-light);
+  border: 2px solid var(--primary-border);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-sub);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.pulse-dot {
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+/* -------------------------------------------------------------
+   Navigation Bar
+   ------------------------------------------------------------- */
+.primary-nav {
+  background: var(--bg-surface);
+  padding: 12px 24px;
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.nav-item-btn {
+  background: var(--bg-app);
+  color: var(--text-secondary);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 22px;
+  font-size: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  min-height: var(--btn-min-height);
+  transition: var(--transition);
+}
+
+.nav-item-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.nav-item-btn.active {
+  background: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* -------------------------------------------------------------
+   App Container & View Layout
+   ------------------------------------------------------------- */
+.app-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  width: 100%;
+  flex: 1;
+}
+
+.view-section {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.view-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------
+   Welcome Banner
+   ------------------------------------------------------------- */
+.welcome-banner {
+  background: var(--bg-banner);
+  border: 2px solid var(--primary-border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.banner-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.banner-title {
+  font-size: var(--font-h2);
+  color: var(--primary);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.banner-subtitle {
+  font-size: var(--font-body);
+  color: var(--text-secondary);
+}
+
+.audio-narrate-btn {
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 24px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-md);
+  min-height: var(--btn-min-height);
+  transition: var(--transition);
+}
+
+.audio-narrate-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------------
+   Elderly Dashboard Action Grid
+   ------------------------------------------------------------- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.elder-action-card {
+  background: var(--bg-card);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.elder-action-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+  background: var(--bg-card-hover);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.card-icon-bubble {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.bubble-green { background: var(--primary-light); color: var(--primary); }
+.bubble-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
+.bubble-blue { background: var(--accent-blue-light); color: var(--accent-blue); }
+.bubble-purple { background: #F3EAF8; color: var(--accent-purple); }
+
+.card-title {
+  font-size: var(--font-h3);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.card-desc {
+  font-size: var(--font-body);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.card-action-cue {
+  background: var(--bg-app);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  color: var(--primary);
+  font-size: var(--font-sub);
+  border: 1px solid var(--border-subtle);
+}
+
+/* -------------------------------------------------------------
+   Cognitive Gaming Suite Layout
+   ------------------------------------------------------------- */
+.game-arena-wrapper {
+  background: var(--bg-card);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.game-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border-subtle);
+  margin-bottom: 24px;
+}
+
+.game-title-group h2 {
+  font-size: var(--font-h2);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-adaptive-pill {
+  background: var(--primary-light);
+  border: 2px solid var(--primary-border);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--font-sub);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.game-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: var(--bg-app);
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.gentle-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-body);
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.btn-hint {
+  background: var(--accent-amber-light);
+  color: var(--accent-amber);
+  border: 2px solid var(--accent-amber);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  transition: var(--transition);
+}
+
+.btn-hint:hover {
+  background: var(--accent-amber);
+  color: #FFFFFF;
+}
+
+/* -------------------------------------------------------------
+   Game 1: Memory Grid
+   ------------------------------------------------------------- */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin: 0 auto 28px;
+  max-width: 800px;
+  perspective: 1000px;
+}
+
+.memory-card {
+  aspect-ratio: 1 / 1;
+  min-height: 120px;
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: var(--radius-md);
+}
+
+.memory-card.flipped, .memory-card.matched {
+  transform: rotateY(180deg);
+}
+
+.memory-card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  text-align: center;
+  user-select: none;
+  border: 3px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.memory-card-back {
+  background: linear-gradient(145deg, #2D6A4F, #1E4E3A);
+  color: #FFFFFF;
+}
+
+.memory-card-back-pattern {
+  width: 48px;
+  height: 48px;
+  border: 3px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.memory-card-front {
+  background: var(--bg-surface);
+  transform: rotateY(180deg);
+  border-color: var(--primary);
+  position: relative;
+}
+
+.memory-card-front .mini-speaker-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+}
+
+.memory-card.matched .memory-card-front {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  box-shadow: 0 0 16px rgba(30, 107, 82, 0.35);
+}
+
+.memory-card.ai-hint {
+  animation: gentleGlow 1.5s infinite alternate;
+}
+
+@keyframes gentleGlow {
+  0% { box-shadow: 0 0 4px #C9751E; border-color: #C9751E; }
+  100% { box-shadow: 0 0 24px #C9751E; border-color: #C9751E; transform: scale(1.04); }
+}
+
+.card-symbol-icon { font-size: 2.5rem; margin-bottom: 4px; }
+.card-symbol-name { font-size: 0.85rem; font-weight: 800; color: var(--text-primary); line-height: 1.1; }
+.card-symbol-sub { font-size: 0.75rem; color: var(--text-secondary); }
+
+/* -------------------------------------------------------------
+   Game 2: Attention Items
+   ------------------------------------------------------------- */
+.attention-canvas-area {
+  background: var(--bg-app);
+  border: 3px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  min-height: 360px;
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.target-prompt-banner {
+  background: var(--accent-blue-light);
+  border: 2px solid var(--accent-blue);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: var(--font-body);
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.target-specimen {
+  font-size: 1.8rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 4px 14px;
+  border: 2px solid var(--accent-blue);
+}
+
+.attention-item {
+  width: 95px;
+  height: 95px;
+  background: var(--bg-surface);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.attention-item:hover {
+  transform: scale(1.08);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* -------------------------------------------------------------
+   Game 3: Reminiscence & Landmark Recognition
+   ------------------------------------------------------------- */
+.reminiscence-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.reminiscence-image-card {
+  width: 100%;
+  background: var(--bg-app);
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.reminiscence-illustration {
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(135deg, #DCEEE7, #F2E8DA);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+}
+
+.reminiscence-caption {
+  padding: 16px 20px;
+  text-align: center;
+  font-size: var(--font-h3);
+  font-weight: 800;
+  background: var(--bg-surface);
+  border-top: 2px solid var(--border-subtle);
+}
+
+.reminiscence-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.reminiscence-option-btn {
+  background: var(--bg-surface);
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  color: var(--text-primary);
+  cursor: pointer;
+  min-height: 72px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: var(--transition);
+}
+
+.reminiscence-option-btn:hover {
+  border-color: var(--primary);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------------
+   GAME 4: BIHU DHOL TAAL (RHYTHM MEMORY PADS)
+   ------------------------------------------------------------- */
+.rhythm-game-arena {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rhythm-status-banner {
+  background: var(--accent-amber-light);
+  border: 3px solid var(--accent-amber);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  font-size: var(--font-h3);
+  font-weight: 800;
+  color: var(--accent-amber);
+  margin-bottom: 28px;
+}
+
+.instrument-pads-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin: 0 auto;
+}
+
+.instrument-pad {
+  background: var(--bg-surface);
+  border: 4px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 32px 20px;
+  min-height: 150px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+
+.instrument-pad .pad-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+}
+
+.instrument-pad .pad-name {
+  font-size: var(--font-body);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.instrument-pad .pad-sub {
+  font-size: var(--font-sub);
+  color: var(--text-secondary);
+}
+
+.instrument-pad:hover {
+  transform: scale(1.04);
+  border-color: var(--primary);
+}
+
+/* Highlight pad when playing or demoing */
+.instrument-pad.playing {
+  animation: padHighlight 0.4s ease-out;
+  border-color: #FFD700 !important;
+  background: #FFF8DB !important;
+  box-shadow: 0 0 32px rgba(255, 215, 0, 0.8) !important;
+  transform: scale(1.08) !important;
+}
+
+@keyframes padHighlight {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1.08); }
+}
+
+/* -------------------------------------------------------------
+   GAME 5: CULTURAL CATEGORY SORTING (WOVEN BASKETS)
+   ------------------------------------------------------------- */
+.sorting-arena {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sorting-prompt-card {
+  background: var(--bg-surface);
+  border: 3px solid var(--primary-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.baskets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.woven-basket-card {
+  background: #FAF5EB;
+  border: 4px dashed #C49764; /* Woven bamboo texture border */
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.woven-basket-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.woven-basket-card.correct-basket {
+  animation: basketCelebrate 0.6s ease-out;
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+@keyframes basketCelebrate {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.basket-icon { font-size: 3.5rem; margin-bottom: 10px; }
+.basket-title { font-size: var(--font-h3); font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+.basket-sub { font-size: var(--font-sub); color: var(--text-secondary); }
+
+/* -------------------------------------------------------------
+   GAME 6: FOLKTALES & HISTORICAL LEGENDS
+   ------------------------------------------------------------- */
+.folktale-parchment-card {
+  background: #FFFDF9;
+  border: 3px solid #D5C7B2;
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.folktale-story-text {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  text-align: center;
+  font-style: normal;
+}
+
+/* -------------------------------------------------------------
+   CALMING BREATHING PACER MODAL (Relaxation Exercise)
+   ------------------------------------------------------------- */
+.breathing-modal-box {
+  background: var(--bg-surface);
+  border: 4px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  max-width: 580px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.breathing-lotus-wrapper {
+  margin: 32px auto;
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breathing-lotus-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #83C5BE, #1E6B52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 3.2rem;
+  box-shadow: 0 0 24px rgba(30, 107, 82, 0.4);
+  animation: lotusBreath 10s infinite ease-in-out;
+}
+
+@keyframes lotusBreath {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.6); }   /* Inhale */
+  50% { transform: scale(1.6); }   /* Hold */
+  85% { transform: scale(1); }     /* Exhale */
+  100% { transform: scale(1); }    /* Rest */
+}
+
+.breathing-instruction-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+/* -------------------------------------------------------------
+   Feedback Modal
+   ------------------------------------------------------------- */
+.calm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.calm-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.calm-modal-box {
+  background: var(--bg-surface);
+  border: 4px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  max-width: 540px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.calm-modal-overlay.active .calm-modal-box {
+  transform: translateY(0);
+}
+
+.modal-icon-badge { font-size: 3.8rem; margin-bottom: 12px; }
+.modal-title { font-size: var(--font-h2); color: var(--primary); margin-bottom: 10px; font-weight: 800; }
+.modal-body-text { font-size: var(--font-body); color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
+
+.modal-btn-action {
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 16px 36px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+  min-height: var(--btn-min-height);
+  width: 100%;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.modal-btn-action:hover {
+  background: var(--primary-hover);
+}
+
+/* -------------------------------------------------------------
+   Routine & Reminders Module
+   ------------------------------------------------------------- */
+.reminders-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+.routine-panel {
+  background: var(--bg-card);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.panel-title {
+  font-size: var(--font-h3);
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hydration-visual-card {
+  background: var(--accent-blue-light);
+  border: 2px solid var(--accent-blue);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.water-cups-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+
+.water-cup-btn {
+  width: 58px;
+  height: 72px;
+  background: #FFFFFF;
+  border: 3px solid var(--accent-blue);
+  border-radius: 6px 6px 14px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  transition: var(--transition);
+}
+
+.water-cup-btn.drank {
+  background: var(--accent-blue);
+  color: #FFFFFF;
+}
+
+.btn-add-water {
+  background: var(--accent-blue);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 28px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--btn-min-height);
+  width: 100%;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.btn-add-water:hover { background: #15556B; }
+
+.medicine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.med-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: var(--transition);
+}
+
+.med-card.taken {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  opacity: 0.85;
+}
+
+.med-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.med-pill-icon { font-size: 2rem; }
+.med-name { font-size: var(--font-body); font-weight: 800; color: var(--text-primary); }
+.med-timing { font-size: var(--font-sub); color: var(--text-secondary); }
+
+.btn-take-pill {
+  background: var(--bg-app);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 48px;
+  transition: var(--transition);
+}
+
+.med-card.taken .btn-take-pill {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+/* -------------------------------------------------------------
+   Reminiscence Soundscape & Album
+   ------------------------------------------------------------- */
+.soundscape-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.soundscape-card {
+  background: var(--bg-card);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.soundscape-card:hover, .soundscape-card.playing {
+  border-color: var(--accent-amber);
+  background: var(--accent-amber-light);
+  transform: translateY(-4px);
+}
+
+.soundscape-icon { font-size: 3rem; margin-bottom: 12px; }
+.soundscape-title { font-size: var(--font-h3); font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.soundscape-desc { font-size: var(--font-sub); color: var(--text-secondary); margin-bottom: 16px; }
+
+.soundscape-btn {
+  background: var(--accent-amber);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  font-weight: 800;
+  cursor: pointer;
+  width: 100%;
+}
+
+.photo-album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.album-photo-card {
+  background: var(--bg-surface);
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.album-photo-frame {
+  height: 200px;
+  background: #EAE6DF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+.album-caption {
+  padding: 14px 18px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--font-body);
+}
+
+/* -------------------------------------------------------------
+   Caregiver Dashboard
+   ------------------------------------------------------------- */
+.caregiver-hero {
+  background: linear-gradient(135deg, #193B2D, #0D261B);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.caregiver-hero h2 { font-size: var(--font-h2); margin-bottom: 6px; }
+.caregiver-hero p { color: #D1E7DD; font-size: var(--font-body); }
+
+.btn-export-report {
+  background: #FFFFFF;
+  color: #193B2D;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 12px 26px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-label { font-size: var(--font-sub); color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+.kpi-value { font-size: 2.2rem; font-weight: 800; color: var(--primary); line-height: 1.1; margin-bottom: 6px; }
+.kpi-subtext { font-size: 0.85rem; color: var(--text-secondary); }
+
+.chart-container-box {
+  background: var(--bg-card);
+  border: 3px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.chart-canvas { width: 100%; height: 280px; background: var(--bg-app); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+
+.alert-feed { display: flex; flex-direction: column; gap: 12px; }
+.alert-entry {
+  background: var(--bg-surface);
+  border-left: 6px solid var(--primary);
+  border-top: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.alert-entry.warning { border-left-color: var(--accent-amber); background: var(--accent-amber-light); }
+.alert-time { font-size: var(--font-sub); color: var(--text-muted); font-weight: 700; }
+
+.sos-banner {
+  background: var(--accent-red-light);
+  border: 3px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.btn-sos {
+  background: var(--accent-red);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 28px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* -------------------------------------------------------------
+   Footer
+   ------------------------------------------------------------- */
+.main-footer {
+  background: var(--bg-surface);
+  border-top: 2px solid var(--border-subtle);
+  padding: 24px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-credits { font-size: var(--font-sub); color: var(--text-muted); font-weight: 600; }
+
+/* -------------------------------------------------------------
+   Print
+   ------------------------------------------------------------- */
+@media print {
+  .accessibility-bar, .primary-nav, .audio-narrate-btn, .btn-portal-switch, .main-footer, .btn-hint, .btn-sos {
+    display: none !important;
+  }
+  body { background: #FFFFFF !important; color: #000000 !important; }
+  .app-container { max-width: 100% !important; padding: 0 !important; }
+}
+
+/* -------------------------------------------------------------
+   Responsive Breakpoints
+   ------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .main-header { flex-direction: column; align-items: flex-start; }
+  .accessibility-bar { padding: 10px 14px; }
+  .primary-nav { padding: 10px 14px; }
+  .app-container { padding: 16px 12px 40px; }
+  .welcome-banner { flex-direction: column; align-items: flex-start; }
+  .audio-narrate-btn { width: 100%; justify-content: center; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .instrument-pads-grid { grid-template-columns: 1fr; }
+}
+
+/* =============================================================
+   ROLE-BASED PORTALS, DATA TABLES & AUTO-SYNC STYLES
+   ============================================================= */
+
+/* Role Badges */
+.role-pill {
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.role-pill.patient { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary); }
+.role-pill.doctor { background: var(--accent-blue-light); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+.role-pill.family { background: var(--accent-amber-light); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
+.role-pill.admin { background: #F3EAF8; color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+
+.role-badge-sm {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+.role-badge-sm.doctor { background: var(--accent-blue-light); color: var(--accent-blue); }
+.role-badge-sm.family { background: var(--accent-amber-light); color: var(--accent-amber); }
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+.status-taken { background: #E6F4EA; color: #1E7E34; border: 1px solid #A8D5B5; }
+.status-missed { background: #FDE8E8; color: #C5221F; border: 1px solid #F5C2C7; }
+
+.score-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--primary-border);
+}
+
+/* Data Tables */
+.data-table-wrapper {
+  overflow-x: auto;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  margin-top: 14px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.data-table th {
+  background: var(--bg-app);
+  padding: 14px 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-strong);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.data-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+/* User Pill in Header */
+.user-profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-app);
+  border: 2px solid var(--border-subtle);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-sub);
+}
+
+/* Auth Portal View */
+.auth-wrapper {
+  max-width: 620px;
+  margin: 30px auto;
+}
+
+.auth-card {
+  background: var(--bg-card);
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-md);
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+
+.auth-tab-btn {
+  background: none;
+  border: none;
+  font-size: var(--font-h3);
+  font-weight: 800;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 16px;
+  position: relative;
+}
+
+.auth-tab-btn.active {
+  color: var(--primary);
+}
+
+.auth-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.auth-form-group {
+  margin-bottom: 18px;
+}
+
+.auth-form-group label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.auth-form-control {
+  width: 100%;
+  background: var(--bg-app);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: var(--font-body);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.auth-form-control:focus {
+  border-color: var(--primary);
+  outline: var(--focus-ring);
+}
+
+.btn-auth-submit {
+  width: 100%;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px;
+  font-size: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  margin-top: 10px;
+}
+
+.btn-auth-submit:hover {
+  background: var(--primary-hover);
+}
+
+/* Quick Demo Shortcuts Card */
+.demo-shortcuts-box {
+  background: var(--bg-banner);
+  border: 2px dashed var(--primary-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.demo-shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-demo-shortcut {
+  background: #FFFFFF;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.btn-demo-shortcut:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Family Portal Form */
+.family-form-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.family-notes-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.family-note-entry {
+  background: var(--bg-app);
+  border-left: 4px solid var(--accent-amber);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+}
+
+/* Admin Portal Stats Grid */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-tile {
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-align: center;
+}
+
+.stat-tile-val {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.stat-tile-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DELTA NEURONS | AI Cognitive Platform & Multi-Role Healthcare Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-normal">
+
+  <!-- =========================================================
+       1. Top Accessibility & Multi-Role Header
+       ========================================================= -->
+  <header class="accessibility-bar" role="region" aria-label="Accessibility Controls">
+    <div class="access-group">
+      <span class="access-label">অক্ষৰ (Font):</span>
+      <button id="btn-font-decrease" class="pill-btn" aria-label="Decrease text size">A -</button>
+      <button id="btn-font-increase" class="pill-btn" aria-label="Increase text size">A +</button>
+      <button id="btn-toggle-super-easy" class="pill-btn" aria-label="Toggle Super Easy Mode">
+        🔘 অতি সহজ (Super Easy)
+      </button>
+    </div>
+
+    <div class="access-group">
+      <button id="btn-toggle-contrast" class="pill-btn" aria-label="Toggle high contrast mode">
+        👁️ স্পষ্টতা (Contrast)
+      </button>
+      <button class="pill-btn btn-open-breathing" aria-label="Open guided calming breathing">
+        🧘 উশাহ (Breathe)
+      </button>
+      <button id="btn-narrate-screen" class="pill-btn" aria-label="Read screen aloud">
+        🔊 পঢ়ক (Read)
+      </button>
+    </div>
+
+    <div class="access-group">
+      <label for="language-select" class="access-label">ভাষা:</label>
+      <select id="language-select" class="lang-select" aria-label="Select regional language">
+        <option value="as" selected>অসমীয়া (Assamese)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="mni">মৈতৈলোন্ (Manipuri)</option>
+        <option value="kha">Khasi (Meghalaya)</option>
+        <option value="brx">बर' (Bodo)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <!-- User Profile & Auth Switcher -->
+    <div class="access-group">
+      <div id="top-user-pill" class="user-profile-pill">
+        <span style="font-weight: 800;">Bapuji Goswami</span>
+        <span class="role-pill patient">🧓 ৰোগী</span>
+      </div>
+      <button id="btn-auth-portal-switch" class="btn-portal-switch" data-goto-view="view-auth">
+        🔑 প্ৰৱেশ / পঞ্জীয়ন (Login)
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       2. Brand Header & Real-Time Sync Status
+       ========================================================= -->
+  <div class="main-header">
+    <div class="brand-wrapper">
+      <div class="brand-logo-icon">🧠</div>
+      <div>
+        <h1 class="brand-title">DELTA NEURONS</h1>
+        <p class="brand-subtitle">AI-Powered Cognitive Healthcare Platform • North Eastern Region (NER)</p>
+      </div>
+    </div>
+
+    <!-- Live Auto-Sync Indicator Badge -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div id="sync-status-badge" class="header-status-badge status-online">
+        <span class="pulse-dot"></span>
+        <span>🟢 অনলাইন (ডাটা সংৰক্ষিত / Synced)</span>
+      </div>
+      <button class="pill-btn" onclick="window.SyncEngine.flushQueue()" title="Force auto-sync with SQLite backend">
+        🔄 ছিংক (Sync)
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       3. Primary Navigation (Role-Aware Tabs)
+       ========================================================= -->
+  <nav class="primary-nav" role="navigation" aria-label="Main Navigation">
+    <button class="nav-item-btn active" data-view="view-dashboard">
+      <span>🏠</span>
+      <span>মুখ্য পৃষ্ঠা (Patient Home)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-games">
+      <span>🧠</span>
+      <span>মগজুৰ খেল (৬ বিধ খেল)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-reminders">
+      <span>💊</span>
+      <span>ঔষধ আৰু পানী (Patient Care)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-doctor">
+      <span>🩺</span>
+      <span>চিকিৎসক প্ৰতিবেদন (Doctor Portal)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-family">
+      <span>👨‍👩‍👧</span>
+      <span>পৰিয়াল পৰিচৰ্যা (Family Portal)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-admin">
+      <span>🛡️</span>
+      <span>প্ৰশাসক (Admin Console)</span>
+    </button>
+  </nav>
+
+  <!-- =========================================================
+       4. Main Application Container
+       ========================================================= -->
+  <main class="app-container">
+
+    <!-- -----------------------------------------------------
+         VIEW 1: PATIENT DASHBOARD (HOME)
+         ----------------------------------------------------- -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="welcome-banner">
+        <div class="banner-content">
+          <h2 class="banner-title" id="txt-welcome-title">প্ৰণাম আইতা-ককা, আপোনাৰ মন জুৰণি হওক!</h2>
+          <p class="banner-subtitle" id="txt-welcome-sub">আজিৰ দিনটো আনন্দৰে কটাওক। কোনো খৰখেদা নাই, আহক আমি মনৰ আনন্দদায়ক খেল খেলোঁ।</p>
+        </div>
+        <button class="audio-narrate-btn" id="btn-welcome-audio" onclick="window.VoiceNER.speak(document.getElementById('txt-welcome-title').textContent + '. ' + document.getElementById('txt-welcome-sub').textContent)">
+          <span>🔊</span>
+          <span>শুনি শুনক (Listen)</span>
+        </button>
+      </div>
+
+      <!-- Calming Guided Breathing Quick Banner -->
+      <div style="background: linear-gradient(135deg, #E6F4F0, #FDF7EC); border: 2px solid var(--primary-border); border-radius: var(--radius-md); padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 2.4rem;">🪷</span>
+          <div>
+            <strong style="font-size: var(--font-body); color: var(--primary);">মন শান্ত কৰাৰ উশাহ-নিশাহ (Calm Breathing):</strong>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">খেল আৰম্ভ কৰাৰ আগতে মন শান্ত আৰু স্নিগ্ধ কৰি লওক।</p>
+          </div>
+        </div>
+        <button class="pill-btn active btn-open-breathing" style="min-height: 52px; padding: 10px 22px;">
+          🧘 উশাহৰ অনুশীলন আৰম্ভ কৰক (Start Breathing)
+        </button>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Action Card 1: Games Suite -->
+        <article class="elder-action-card" data-goto-view="view-games">
+          <div>
+            <div class="card-top">
+              <div class="card-icon-bubble bubble-green">🦏</div>
+              <div style="flex: 1;">
+                <h3 class="card-title" id="card-games-title">মগজুৰ আনন্দ খেল</h3>
+                <span style="font-size: 0.9rem; color: var(--primary); font-weight: 700;">৬ বিধ সাংস্কৃতিক খেল (Adaptive)</span>
+              </div>
+              <button class="mini-speaker-btn" title="Read Aloud" onclick="event.stopPropagation(); window.VoiceNER.speak(document.getElementById('card-games-title').textContent + '. ' + document.getElementById('card-games-desc').textContent)">🔊</button>
+            </div>
+            <p class="card-desc" id="card-games-desc">
+              কাজিৰঙাৰ গঁড়, বিহু ঢোলৰ তাল আৰু চাহ বাগিচাৰ স্মৃতিৰে আনন্দময় খেল।
+            </p>
+          </div>
+          <div class="card-action-cue">
+            <span>খেল আৰম্ভ কৰক (Play Games)</span>
+            <span style="font-size: 1.4rem;">➔</span>
+          </div>
+        </article>
+
+        <!-- Action Card 2: Reminders & Water -->
+        <article class="elder-action-card" data-goto-view="view-reminders">
+          <div>
+            <div class="card-top">
+              <div class="card-icon-bubble bubble-blue">💧</div>
+              <div style="flex: 1;">
+                <h3 class="card-title" id="card-meds-title">ঔষধ আৰু পানীৰ যত্ন</h3>
+                <span style="font-size: 0.9rem; color: var(--accent-blue); font-weight: 700;">দৈনিক নিয়ম (Routine)</span>
+              </div>
+              <button class="mini-speaker-btn" title="Read Aloud" onclick="event.stopPropagation(); window.VoiceNER.speak(document.getElementById('card-meds-title').textContent + '. ' + document.getElementById('card-meds-desc').textContent)">🔊</button>
+            </div>
+            <p class="card-desc" id="card-meds-desc">
+              সময়মতে পানী খোৱা আৰু চিকিৎসকৰ দৰৱ লোৱাৰ সহজ আৰু স্পষ্ট তালিকা।
+            </p>
+          </div>
+          <div class="card-action-cue" style="color: var(--accent-blue);">
+            <span>তালিকা চাওক (View Reminders)</span>
+            <span style="font-size: 1.4rem;">➔</span>
+          </div>
+        </article>
+
+        <!-- Action Card 3: Reminiscence & Sounds -->
+        <article class="elder-action-card" data-goto-view="view-reminiscence">
+          <div>
+            <div class="card-top">
+              <div class="card-icon-bubble bubble-amber">🎵</div>
+              <div style="flex: 1;">
+                <h3 class="card-title" id="card-rem-title">পুৰণি স্মৃতি আৰু সুৰ</h3>
+                <span style="font-size: 0.9rem; color: var(--accent-amber); font-weight: 700;">শান্তি আৰু আনন্দ (Relax)</span>
+              </div>
+              <button class="mini-speaker-btn" title="Read Aloud" onclick="event.stopPropagation(); window.VoiceNER.speak(document.getElementById('card-rem-title').textContent + '. ' + document.getElementById('card-rem-desc').textContent)">🔊</button>
+            </div>
+            <p class="card-desc" id="card-rem-desc">
+              ব্ৰহ্মপুত্ৰৰ ঢৌ, বাঁহীৰ সুৰ আৰু আমাৰ চিনাকি অসমৰ প্ৰাকৃতিক দৃশ্য উপভোগ কৰক।
+            </p>
+          </div>
+          <div class="card-action-cue" style="color: var(--accent-amber);">
+            <span>সুৰ শুনক (Listen Melody)</span>
+            <span style="font-size: 1.4rem;">➔</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Quick Health Bar -->
+      <div style="background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.8rem;">✨</span>
+          <div>
+            <strong style="font-size: var(--font-body);">আজিৰ অগ্ৰগতি (Today's Progress):</strong>
+            <span style="color: var(--text-secondary); margin-left: 8px;">৩ গিলাচ পানী গ্ৰহণ • ২টা খেল সম্পন্ন • অনলাইন সংমিশ্ৰিত</span>
+          </div>
+        </div>
+        <button class="pill-btn active" data-goto-view="view-reminders">+ পানী যোগ কৰক</button>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 2: COGNITIVE GAMING ARENA (6 NER GAMES)
+         ----------------------------------------------------- -->
+    <section id="view-games" class="view-section">
+      <div class="game-arena-wrapper">
+        <div class="game-header-bar">
+          <div class="game-title-group">
+            <h2>🧠 মনৰ শক্তি আৰু স্মৃতিৰ আনন্দদায়ক অনুশীলন</h2>
+            <p>আৰামদায়ক গতিৰে খেলক। কোনো খৰখেদা বা ভুলৰ শাস্তি নাই।</p>
+          </div>
+
+          <div id="ai-telemetry-badge" class="ai-adaptive-pill">
+            <span>🤖 AI স্তৰ: ১ (আৰামদায়ক গতি)</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+          <button class="pill-btn active game-type-selector-btn" data-game="memory">
+            🦏 ১. স্মৃতি মেল (Memory Match)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="attention">
+            🎯 ২. ধ্যান বিন্দু (Focus Point)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="recognition">
+            🏛️ ৩. চেনা মুখৰ (Reminiscence)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="rhythm">
+            🥁 ৪. বিহু ঢোল-তাল (Rhythm)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="sorting">
+            🧺 ৫. বাপতি-সাহোন (Sorting)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="folktale">
+            📜 ৬. সাধুকথা আৰু বুৰঞ্জী (Folktales)
+          </button>
+        </div>
+
+        <div class="game-controls-bar">
+          <div class="gentle-timer" id="game-timer-display">⏱️ 0s</div>
+          <button class="btn-hint" id="btn-request-hint">
+            <span>💡</span>
+            <span>সহায় সংকেত (Ask Hint)</span>
+          </button>
+        </div>
+
+        <div id="game-arena-content">
+          <!-- Populated dynamically by js/games.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 3: PATIENT ROUTINE & WATER
+         ----------------------------------------------------- -->
+    <section id="view-reminders" class="view-section">
+      <div class="reminders-layout">
+        
+        <!-- Hydration Tracker Panel -->
+        <div class="routine-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">💧 পানী খোৱাৰ ষ্টেচন (Water Tracker)</h3>
+            <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-blue);">দৈনিক লক্ষ্য: ৬ গিলাচ</span>
+          </div>
+
+          <div class="hydration-visual-card">
+            <div style="font-size: 1.1rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 6px;">
+              আজিৰ পানী গ্ৰহণ
+            </div>
+            <div id="water-counter-text" style="font-size: 1.8rem; font-weight: 800; color: var(--accent-blue);">
+              ৩ / ৬ গিলাচ
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 4px;">
+              প্ৰতিটো গিলাচ স্পৰ্শ কৰি পানী খোৱা নিশ্চিত কৰক।
+            </p>
+
+            <div class="water-cups-row" id="water-cups-row"></div>
+
+            <button class="btn-add-water" id="btn-add-water">
+              <span>💧</span>
+              <span>এঢোক পানী খালোঁ (+1 Glass)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Medicine Schedule Panel -->
+        <div class="routine-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">💊 ঔষধৰ সময়সূচী (Daily Medicines)</h3>
+            <span style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">প্ৰেছক্ৰিপশ্বন</span>
+          </div>
+
+          <div class="medicine-list" id="medicines-list"></div>
+        </div>
+
+      </div>
+
+      <!-- Daily Habit Checklist -->
+      <div class="routine-panel" style="margin-top: 28px;">
+        <div class="panel-header">
+          <h3 class="panel-title">🌿 আজিৰ সুস্থ নিয়ম (Healthy Daily Habits)</h3>
+        </div>
+        <div class="medicine-list" id="routines-list"></div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 4: CALM REMINISCENCE & SENSORY ZONE
+         ----------------------------------------------------- -->
+    <section id="view-reminiscence" class="view-section">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: var(--font-h2); color: var(--primary); margin-bottom: 6px;">
+          🌸 পুৰণি স্মৃতি আৰু প্ৰাকৃতিক সুৰ
+        </h2>
+        <p style="font-size: var(--font-body); color: var(--text-secondary);">
+          মন শান্ত কৰিবলৈ বাঁহীৰ সুৰ আৰু উত্তৰ-পূব ভাৰতৰ দৃশ্য উপভোগ কৰক।
+        </p>
+      </div>
+
+      <div class="soundscape-grid">
+        <div class="soundscape-card" id="soundscape-bamboo">
+          <div class="soundscape-icon">🎋</div>
+          <h3 class="soundscape-title">শান্তিময় বাঁহীৰ সুৰ</h3>
+          <p class="soundscape-desc">মৃদু আৰু গভীৰ বাঁহীৰ তান, যিয়ে মনলৈ প্ৰশান্তি আনি দিয়ে।</p>
+          <button class="soundscape-btn" id="btn-toggle-soundscape">
+            🎵 বাঁহীৰ শান্তিময় সুৰ (Play Flute)
+          </button>
+        </div>
+
+        <div class="soundscape-card" onclick="window.VoiceNER.playBihuDhol(); window.VoiceNER.playPepa()">
+          <div class="soundscape-icon">🥁🎺</div>
+          <h3 class="soundscape-title">বিহু ঢোল আৰু পেঁপাৰ সুৰ</h3>
+          <p class="soundscape-desc">বাপতি-সাহোন ৰঙালী বিহুৰ চিৰচেনাহী আনন্দময় সুৰ।</p>
+          <button class="soundscape-btn" style="background: var(--accent-amber);">
+            🔔 সুৰ বজাওক (Play Dhol & Pepa)
+          </button>
+        </div>
+
+        <div class="soundscape-card" onclick="window.VoiceNER.playTaal()">
+          <div class="soundscape-icon">🪘🔔</div>
+          <h3 class="soundscape-title">নামঘৰৰ শান্তিময় খোল-তাল</h3>
+          <p class="soundscape-desc">সন্ধ্যা আৰতিৰ পৱিত্ৰ ধ্বনি আৰু ভক্তিভাৱ।</p>
+          <button class="soundscape-btn" style="background: var(--primary);">
+            🔔 তালৰ ধ্বনি (Listen Taal)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 5: DOCTOR CLINICAL DIAGNOSTICS & REPORT CENTER
+         ----------------------------------------------------- -->
+    <section id="view-doctor" class="view-section">
+      <div class="caregiver-hero" style="background: linear-gradient(135deg, #163624, #0E291C);">
+        <div>
+          <h2>🩺 চিকিৎসক পৰীক্ষণ আৰু নিদান কেন্দ্ৰ (Doctor Clinical Center)</h2>
+          <p>পৰ্যবেক্ষণকাৰী চিকিৎসক: <strong>Dr. Hirendra Sharma (MD Neurology)</strong> • ৰোগী: বাপুজী গোস্বামী (৭২ বছৰ)</p>
+        </div>
+        <button class="btn-export-report" onclick="window.print()">
+          <span>📄</span>
+          <span>চিকিৎসা প্ৰতিবেদন প্ৰিণ্ট কৰক (Export PDF)</span>
+        </button>
+      </div>
+
+      <!-- KPI Metrics -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">MMSE আনুমানিক সূচক</div>
+          <div class="kpi-value" id="doc-kpi-mmse">25 / 30</div>
+          <div class="kpi-subtext">মৃদু লক্ষণ (Mild Cognitive Impairment)</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">মগজুৰ সক্ৰিয়তা (Agility)</div>
+          <div class="kpi-value" id="doc-kpi-agility">82%</div>
+          <div class="kpi-subtext">অফলাইন-অনলাইন স্বয়ংক্ৰিয় সংমিশ্ৰিত</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">ঔষধ পালন হাৰ (Adherence)</div>
+          <div class="kpi-value" id="doc-kpi-adherence">92%</div>
+          <div class="kpi-subtext">সময়মতে দৰৱ গ্ৰহণ</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">মুঠ খেল সম্পন্ন</div>
+          <div class="kpi-value" id="doc-kpi-games">6 খেল</div>
+          <div class="kpi-subtext">বিগত সপ্তাহৰ সক্ৰিয়তা</div>
+        </div>
+      </div>
+
+      <!-- 1. Detailed Medication Taken / Not Taken Adherence Table -->
+      <div class="routine-panel" style="margin-bottom: 28px;">
+        <div class="panel-header">
+          <h3 class="panel-title">💊 ঔষধ গ্ৰহণৰ সবিশেষ পৰ্যবেক্ষণ তালিকা (Medication Taken / Missed History)</h3>
+          <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">SQLite Real-Time Data</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ঔষধৰ নাম (Medication)</th>
+                <th>নিৰ্ধাৰিত সময় (Scheduled)</th>
+                <th>স্থিতি (Status)</th>
+                <th>গ্ৰহণ কৰা সময় (Taken At)</th>
+                <th>সংযোজনকাৰী (Added By)</th>
+              </tr>
+            </thead>
+            <tbody id="doc-medication-adherence-tbody">
+              <!-- Rendered dynamically by js/portals.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. Cognitive Sessions Log -->
+      <div class="routine-panel" style="margin-bottom: 28px;">
+        <div class="panel-header">
+          <h3 class="panel-title">🧠 মগজুৰ খেল আৰু সঁহাৰি সময়ৰ হিচাপ (Cognitive Telemetry)</h3>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>খেলৰ নাম (Game)</th>
+                <th>স্ক’ৰ (Score)</th>
+                <th>সঁহাৰি সময় (Latency)</th>
+                <th>নিখুঁততা (Accuracy)</th>
+                <th>সংকেত ব্যৱহাৰ (Hints)</th>
+                <th>তাৰিখ আৰু সময় (Timestamp)</th>
+              </tr>
+            </thead>
+            <tbody id="doc-sessions-tbody">
+              <!-- Rendered dynamically by js/portals.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. Family Care Notes -->
+      <div class="routine-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">📝 পৰিয়াল আৰু সেৱকৰ দৈনন্দিন টোকা (Family Care Observations)</h3>
+        </div>
+        <div class="family-notes-feed" id="doc-family-notes-feed">
+          <!-- Rendered dynamically by js/portals.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 6: FAMILY CAREGIVER PORTAL
+         ----------------------------------------------------- -->
+    <section id="view-family" class="view-section">
+      <div class="caregiver-hero" style="background: linear-gradient(135deg, #7A4816, #4D2D0C);">
+        <div>
+          <h2>👨‍👩‍👧 পৰিয়াল পৰিচৰ্যা আৰু ঔষধ নিয়ন্ত্ৰণ কেন্দ্ৰ (Family Portal)</h2>
+          <p>অভিভাৱক: <strong>Anita Goswami (Daughter)</strong> • ৰোগীৰ ঔষধ আৰু পানীৰ দায়িত্ব পৰিচালনা কৰক</p>
+        </div>
+        <button class="pill-btn active" onclick="window.FamilyPortal.loadMedications()">
+          🔄 তালিকা সতেজ কৰক (Refresh)
+        </button>
+      </div>
+
+      <div class="reminders-layout">
+        <!-- Family Card 1: Add New Medication -->
+        <div class="routine-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">➕ নতুন ঔষধ সংযোগ কৰক (Add Medication Schedule)</h3>
+          </div>
+          <form id="form-add-medication" class="family-form-card" onsubmit="event.preventDefault(); const n = document.getElementById('new-med-name').value; const t = document.getElementById('new-med-time').value; const icon = document.getElementById('new-med-icon').value; window.FamilyPortal.addMedication(n, t, icon); document.getElementById('new-med-name').value='';">
+            <div class="auth-form-group">
+              <label for="new-med-name">ঔষধৰ নাম (Medicine Name & Dosage):</label>
+              <input type="text" id="new-med-name" class="auth-form-control" placeholder="যেনে: Donepezil 5mg / ওমেগা-৩" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="new-med-time">গ্ৰহণৰ সময় (Schedule Time):</label>
+              <input type="text" id="new-med-time" class="auth-form-control" placeholder="যেনে: পুৱা ৮:৩০ (8:30 AM) বা ৰাতি" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="new-med-icon">টেবলেটৰ ৰং/আইকন (Pill Icon):</label>
+              <select id="new-med-icon" class="auth-form-control">
+                <option value="🔴">🔴 ৰঙা টেবলেট (Red)</option>
+                <option value="🟡">🟡 হালধীয়া টেবলেট (Yellow)</option>
+                <option value="🔵">🔵 নীলা টেবলেট (Blue)</option>
+                <option value="⚪">⚪ বগা টেবলেট (White)</option>
+                <option value="🌿">🌿 আয়ুৰ্বেদিক ঔষধি (Herbal)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-auth-submit" style="background: var(--accent-amber);">
+              + ঔষধৰ তালিকাত যোগ কৰক (Schedule Medicine)
+            </button>
+          </form>
+        </div>
+
+        <!-- Family Card 2: Manage & Mark Given -->
+        <div class="routine-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">📋 আজিৰ ঔষধসমূহ (Mark Medication Given)</h3>
+          </div>
+          <div id="family-med-manage-list" class="medicine-list">
+            <!-- Rendered by js/portals.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Family Care Observations Post -->
+      <div class="routine-panel" style="margin-top: 28px;">
+        <div class="panel-header">
+          <h3 class="panel-title">✍️ চিকিৎসকৰ বাবে পৰিয়ালৰ টোকা লিখক (Log Patient Care Note)</h3>
+        </div>
+        <form onsubmit="event.preventDefault(); const txt = document.getElementById('family-note-input').value; window.FamilyPortal.postCareNote(txt);" style="margin-top: 14px;">
+          <div class="auth-form-group">
+            <label for="family-note-input">আজি বাপুজীৰ মনৰ অৱস্থা, খাদ্য আৰু নিদ্ৰাৰ বিষয়ে লিখক:</label>
+            <textarea id="family-note-input" class="auth-form-control" rows="3" placeholder="যেনে: আজি পুৱা বাপুজীয়ে আনন্দমনে বিহু ঢোলৰ খেল খেলিলে। দুপৰীয়া শান্তভাৱে আহাৰ গ্ৰহণ কৰিলে।" required></textarea>
+          </div>
+          <button type="submit" class="pill-btn active" style="min-height: 48px; padding: 10px 24px;">
+            📝 টোকা প্ৰেৰণ কৰক (Submit Care Note to Doctor)
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 7: ADMIN CONSOLE
+         ----------------------------------------------------- -->
+    <section id="view-admin" class="view-section">
+      <div class="caregiver-hero" style="background: linear-gradient(135deg, #371C4B, #1B0C26);">
+        <div>
+          <h2>🛡️ প্ৰশাসনিক নিয়ন্ত্ৰণ কক্ষ (Delta Neurons Admin Console)</h2>
+          <p>প্ৰশাসক: <strong>System Administrator</strong> • কেন্দ্ৰীয় SQLite ডাটাবেছ আৰু ব্যৱহাৰকাৰী পৰিচালনা</p>
+        </div>
+        <button class="btn-export-report" onclick="window.AdminPortal.refresh()">
+          <span>🔄</span>
+          <span>তথ্য পুনৰুদ্ধাৰ (Refresh Database)</span>
+        </button>
+      </div>
+
+      <!-- Database Statistics Grid -->
+      <div class="admin-stats-grid">
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="stat-total-users">4</div>
+          <div class="stat-tile-label">পঞ্জীকৃত সদস্য (Registered Users)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="stat-total-sessions">6</div>
+          <div class="stat-tile-label">খেল অধিবেশন (Cognitive Sessions)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="stat-total-meds">4</div>
+          <div class="stat-tile-label">ঔষধ তালিকা (Scheduled Meds)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="stat-total-syncs">1</div>
+          <div class="stat-tile-label">স্বয়ংক্ৰিয় ছিংক (Auto-Sync Events)</div>
+        </div>
+      </div>
+
+      <!-- User Registry Table -->
+      <div class="routine-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">👥 ব্যৱহাৰকাৰী পঞ্জীয়ন তালিকা (User Registry & Roles)</h3>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>আইডি (ID)</th>
+                <th>ব্যৱহাৰকাৰী নাম (Username)</th>
+                <th>সম্পূৰ্ণ নাম (Full Name)</th>
+                <th>ভূমিকা (Role)</th>
+                <th>ফোন নম্বৰ (Phone)</th>
+                <th>পঞ্জীয়ন তাৰিখ (Registered Date)</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody">
+              <!-- Populated by js/portals.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 8: REGISTRATION & LOGIN PORTAL
+         ----------------------------------------------------- -->
+    <section id="view-auth" class="view-section">
+      <div class="auth-wrapper">
+        <div class="auth-card">
+          <!-- Auth Tabs -->
+          <div class="auth-tabs">
+            <button id="tab-btn-login" class="auth-tab-btn active" onclick="document.getElementById('form-login').style.display='block'; document.getElementById('form-register').style.display='none'; this.classList.add('active'); document.getElementById('tab-btn-register').classList.remove('active');">
+              প্ৰৱেশ (Login)
+            </button>
+            <button id="tab-btn-register" class="auth-tab-btn" onclick="document.getElementById('form-login').style.display='none'; document.getElementById('form-register').style.display='block'; this.classList.add('active'); document.getElementById('tab-btn-login').classList.remove('active');">
+              নতুন পঞ্জীয়ন (Register)
+            </button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="form-login" onsubmit="event.preventDefault(); const u = document.getElementById('login-username').value; const p = document.getElementById('login-password').value; window.AuthEngine.login(u, p);">
+            <div class="auth-form-group">
+              <label for="login-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+              <input type="text" id="login-username" class="auth-form-control" placeholder="যেনে: bapuji / dr_sharma" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="login-password">পাছৱৰ্ড (Password):</label>
+              <input type="password" id="login-password" class="auth-form-control" placeholder="পাছৱৰ্ড লিখক" required>
+            </div>
+            <button type="submit" class="btn-auth-submit">
+              প্ৰৱেশ কৰক (Login) ➔
+            </button>
+          </form>
+
+          <!-- Register Form -->
+          <form id="form-register" style="display: none;" onsubmit="event.preventDefault(); const fn = document.getElementById('reg-fullname').value; const u = document.getElementById('reg-username').value; const p = document.getElementById('reg-password').value; const r = document.getElementById('reg-role').value; const ph = document.getElementById('reg-phone').value; window.AuthEngine.register(u, p, fn, r, ph);">
+            <div class="auth-form-group">
+              <label for="reg-fullname">সম্পূৰ্ণ নাম (Full Name):</label>
+              <input type="text" id="reg-fullname" class="auth-form-control" placeholder="যেনে: Bapuji Goswami / Dr. Baruah" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="reg-role">ভূমিকা বাছক (Select Role):</label>
+              <select id="reg-role" class="auth-form-control" required>
+                <option value="patient" selected>🧓 ৰোগী (Patient - Dementia Care)</option>
+                <option value="doctor">🩺 চিকিৎসক (Doctor / Clinician)</option>
+                <option value="family">👨‍👩‍👧 পৰিয়াল / সেৱক (Family Caregiver)</option>
+                <option value="admin">🛡️ প্ৰশাসক (Administrator)</option>
+              </select>
+            </div>
+            <div class="auth-form-group">
+              <label for="reg-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+              <input type="text" id="reg-username" class="auth-form-control" placeholder="unique_username" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="reg-password">পাছৱৰ্ড (Password):</label>
+              <input type="password" id="reg-password" class="auth-form-control" placeholder="Password" required>
+            </div>
+            <div class="auth-form-group">
+              <label for="reg-phone">ফোন নম্বৰ (Phone):</label>
+              <input type="tel" id="reg-phone" class="auth-form-control" placeholder="+91 94350 XXXXX">
+            </div>
+            <button type="submit" class="btn-auth-submit" style="background: var(--accent-blue);">
+              একাউন্ট পঞ্জীয়ন কৰক (Create Account)
+            </button>
+          </form>
+
+          <!-- Quick 1-Click Demo Shortcut Logins -->
+          <div class="demo-shortcuts-box">
+            <strong style="font-size: 0.9rem; color: var(--primary);">⚡ দ্ৰুত পৰীক্ষণৰ বাবে ১-ক্লিক প্ৰৱেশ (1-Click Demo Shortcuts):</strong>
+            <div class="demo-shortcuts-grid">
+              <button class="btn-demo-shortcut" onclick="window.AuthEngine.quickDemoLogin('patient')">
+                🧓 <strong>Patient:</strong> bapuji
+              </button>
+              <button class="btn-demo-shortcut" onclick="window.AuthEngine.quickDemoLogin('doctor')">
+                🩺 <strong>Doctor:</strong> dr_sharma
+              </button>
+              <button class="btn-demo-shortcut" onclick="window.AuthEngine.quickDemoLogin('family')">
+                👨‍👩‍👧 <strong>Family:</strong> anita_family
+              </button>
+              <button class="btn-demo-shortcut" onclick="window.AuthEngine.quickDemoLogin('admin')">
+                🛡️ <strong>Admin:</strong> admin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       5. Guided Calming Breathing Pacer Modal
+       ========================================================= -->
+  <div id="calm-breathing-modal" class="calm-modal-overlay" role="dialog" aria-modal="true">
+    <div class="breathing-modal-box">
+      <div style="font-size: 3rem; margin-bottom: 6px;">🪷</div>
+      <h3 style="font-size: var(--font-h2); color: var(--primary); margin-bottom: 8px;">
+        প্ৰশান্তি উশাহ-নিশাহ (Guided Breathing)
+      </h3>
+      <p style="font-size: var(--font-body); color: var(--text-secondary);">
+        পদুম ফুলটো মেল খোৱাৰ লগে লগে দীঘলকৈ উশাহ লওক, আৰু সংকুচিত হোৱাৰ সময়ত লাহেকৈ এৰি দিয়ক।
+      </p>
+
+      <div class="breathing-lotus-wrapper">
+        <div class="breathing-lotus-circle">🌸</div>
+      </div>
+
+      <div id="breathing-live-text" class="breathing-instruction-text">
+        দীঘলকৈ উশাহ লওক... (Breathe In)
+      </div>
+
+      <button id="btn-close-breathing" class="modal-btn-action" style="background: var(--text-secondary);">
+        অনুশীলন সমাপ্ত কৰক (Done)
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       6. Gentle Encouragement Modal
+       ========================================================= -->
+  <div id="calm-feedback-modal" class="calm-modal-overlay" role="dialog" aria-modal="true">
+    <div class="calm-modal-box">
+      <div class="modal-icon-badge">🌟</div>
+      <h3 id="modal-feedback-title" class="modal-title">বৰ সুন্দৰ হৈছে!</h3>
+      <div id="modal-feedback-body" class="modal-body-text">
+        আপুনি বহুত ভাল খেল খেলিলে। আহক আমি আগবাঢ়োঁ।
+      </div>
+      <button id="btn-dismiss-modal" class="modal-btn-action">
+        পৰৱৰ্তী স্তৰলৈ যাওক (Continue) ➔
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       7. Footer
+       ========================================================= -->
+  <footer class="main-footer">
+    <p class="footer-credits">
+      <strong>DELTA NEURONS</strong> • AI-Powered Cognitive Therapy & Multi-Role Healthcare Platform (NER)
+    </p>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">
+      100% Offline-to-Online Auto-Sync • SQLite Database Engine • Role-Based Healthcare Architecture
+    </p>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/voice-ner.js"></script>
+  <script src="js/ai-engine.js"></script>
+  <script src="js/sync-engine.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/portals.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/reminders.js"></script>
+  <script src="js/caregiver.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
