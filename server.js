@@ -176,7 +176,7 @@ const server = http.createServer(async (req, res) => {
 
   // 5. Sync: Pull (Fetch latest cloud/server state)
   if (pathname === '/api/sync/pull' && req.method === 'GET') {
-    const patientId = parsedUrl.query.patientId || 1;
+    const patientId = Number(parsedUrl.searchParams.get('patientId')) || 1;
     const report = db.getClinicalReport(patientId);
     return sendJson(res, 200, {
       success: true,
@@ -188,7 +188,7 @@ const server = http.createServer(async (req, res) => {
 
   // 6. Clinical Report (For Doctor)
   if (pathname === '/api/reports/clinical' && req.method === 'GET') {
-    const patientId = parsedUrl.query.patientId || 1;
+    const patientId = Number(parsedUrl.searchParams.get('patientId')) || 1;
     const report = db.getClinicalReport(patientId);
     return sendJson(res, 200, { success: true, report });
   }
@@ -288,6 +288,14 @@ server.on('error', (err) => {
   } else {
     console.error('\n❌ Server error:', err);
   }
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('\n⚠️ Uncaught Exception caught (server kept alive):', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('\n⚠️ Unhandled Rejection caught (server kept alive):', reason);
 });
 
 server.listen(PORT, '0.0.0.0', () => {
