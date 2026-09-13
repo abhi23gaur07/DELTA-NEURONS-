@@ -1,7 +1,6 @@
 /**
  * DELTA NEURONS: Role-Based Authentication & Portal Router
- * Manages user registration, login, session persistence, and role-based routing
- * Roles: 'patient' | 'doctor' | 'family' | 'admin'
+ * Roles: 'patient' | 'doctor' | 'family' | 'admin' | 'head_admin'
  */
 
 class AuthEngine {
@@ -17,7 +16,7 @@ class AuthEngine {
       if (saved) return JSON.parse(saved);
     } catch (e) {}
 
-    // Default to Patient mode for elderly simplicity if not logged in
+    // Default to Patient mode
     return {
       id: 1,
       username: 'bapuji',
@@ -35,13 +34,14 @@ class AuthEngine {
     this.routeUserByRole(user.role);
   }
 
-  // 1-Click Demo Shortcut Login for Testing & Evaluation
+  // 1-Click Demo Shortcut Login
   async quickDemoLogin(role) {
     const demoCreds = {
       patient: { username: 'bapuji', password: 'pass123' },
       doctor: { username: 'dr_sharma', password: 'doc123' },
       family: { username: 'anita_family', password: 'family123' },
-      admin: { username: 'admin', password: 'admin123' }
+      admin: { username: 'admin', password: 'admin123' },
+      head_admin: { username: 'head_admin', password: 'head123' }
     };
 
     const cred = demoCreds[role] || demoCreds.patient;
@@ -72,7 +72,8 @@ class AuthEngine {
         bapuji: { id: 1, username: 'bapuji', fullName: 'Bapuji Goswami (বাপুজী)', role: 'patient' },
         dr_sharma: { id: 2, username: 'dr_sharma', fullName: 'Dr. Hirendra Sharma', role: 'doctor' },
         anita_family: { id: 3, username: 'anita_family', fullName: 'Anita Goswami', role: 'family' },
-        admin: { id: 4, username: 'admin', fullName: 'System Admin', role: 'admin' }
+        admin: { id: 4, username: 'admin', fullName: 'System Admin', role: 'admin' },
+        head_admin: { id: 5, username: 'head_admin', fullName: 'Dr. A. K. Baruah (Head Admin)', role: 'head_admin' }
       };
 
       if (offlineUsers[username]) {
@@ -110,14 +111,19 @@ class AuthEngine {
 
   logout() {
     localStorage.removeItem(this.storageKey);
-    this.currentUser = { id: 1, username: 'guest', fullName: 'Guest Patient', role: 'patient' };
-    this.updateUserUI();
-    this.routeUserByRole('patient');
+    window.location.href = 'login.html';
   }
 
   // Route user automatically to their dedicated portal based on Role
   routeUserByRole(role) {
-    if (role === 'doctor') {
+    if (role === 'head_admin') {
+      if (typeof window.showAppView === 'function') {
+        window.showAppView('view-head-admin');
+      }
+      if (window.HeadAdminPortal && typeof window.HeadAdminPortal.refresh === 'function') {
+        window.HeadAdminPortal.refresh();
+      }
+    } else if (role === 'doctor') {
       if (typeof window.showAppView === 'function') {
         window.showAppView('view-doctor');
       }
@@ -156,7 +162,8 @@ class AuthEngine {
       patient: '🧓 ৰোগী (Patient)',
       doctor: '🩺 চিকিৎসক (Doctor)',
       family: '👨‍👩‍👧 পৰিয়াল (Family)',
-      admin: '🛡️ প্ৰশাসক (Admin)'
+      admin: '🛡️ প্ৰশাসক (Admin)',
+      head_admin: '👑 মুখ্য প্ৰশাসক (Head Admin)'
     };
 
     userPill.innerHTML = `
@@ -168,4 +175,3 @@ class AuthEngine {
 
 // Export singleton instance
 window.AuthEngine = new AuthEngine();
-

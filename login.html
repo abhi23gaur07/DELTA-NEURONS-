@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DELTA NEURONS | Identity Access Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #EBF4F0, #F7F5F0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+    .portal-container {
+      width: 100%;
+      max-width: 680px;
+    }
+    .portal-brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .portal-brand-logo {
+      width: 76px;
+      height: 76px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      color: #FFFFFF;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 12px;
+    }
+    .portal-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .portal-sub {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    .portal-card {
+      background: #FFFFFF;
+      border: 3px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    .portal-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+    .portal-tab-btn {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px 18px;
+      position: relative;
+    }
+    .portal-tab-btn.active {
+      color: var(--primary);
+    }
+    .portal-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .demo-role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .demo-role-tile {
+      background: var(--bg-app);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .demo-role-tile:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .demo-role-tile.head-admin-tile {
+      border-color: #F1C40F;
+      background: #FFFDF0;
+    }
+    .demo-role-tile.head-admin-tile:hover {
+      background: #FFF8D6;
+    }
+  </style>
+</head>
+<body class="font-normal">
+
+  <div class="portal-container">
+    <!-- Brand Title -->
+    <div class="portal-brand-header">
+      <div class="portal-brand-logo">🧠</div>
+      <h1 class="portal-title">DELTA NEURONS</h1>
+      <p class="portal-sub">পৰিচয় প্ৰৱেশ কেন্দ্ৰ • Identity Access & Healthcare Management Portal</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="portal-card">
+      <!-- Tabs -->
+      <div class="portal-tabs">
+        <button id="tab-login" class="portal-tab-btn active" onclick="showTab('login')">
+          প্ৰৱেশ (Login)
+        </button>
+        <button id="tab-register" class="portal-tab-btn" onclick="showTab('register')">
+          নতুন পঞ্জীয়ন (Register)
+        </button>
+      </div>
+
+      <!-- Form 1: Login -->
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="auth-form-group">
+          <label for="input-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+          <input type="text" id="input-username" class="auth-form-control" placeholder="যেনে: bapuji / dr_sharma / head_admin" required autofocus>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="input-password">পাছৱৰ্ড (Password):</label>
+          <input type="password" id="input-password" class="auth-form-control" placeholder="পাছৱৰ্ড লিখক" required>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-auth-submit" style="min-height: 56px;">
+          প্ৰৱেশ কৰক (Secure Login) ➔
+        </button>
+      </form>
+
+      <!-- Form 2: Register -->
+      <form id="register-form" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+        <div class="auth-form-group">
+          <label for="reg-fullname">সম্পূৰ্ণ নাম (Full Name):</label>
+          <input type="text" id="reg-fullname" class="auth-form-control" placeholder="যেনে: Dr. Hemanta Baruah / Anita Goswami" required>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="reg-role">ভূমিকা বাছক (Select Role):</label>
+          <select id="reg-role" class="auth-form-control" required>
+            <option value="patient" selected>🧓 ৰোগী (Patient - Dementia Care)</option>
+            <option value="doctor">🩺 চিকিৎসক (Doctor / Clinician)</option>
+            <option value="family">👨‍👩‍👧 পৰিয়াল / সেৱক (Family Caregiver)</option>
+            <option value="admin">🛡️ প্ৰশাসক (Administrator)</option>
+            <option value="head_admin">👑 মুখ্য প্ৰশাসক (Head Admin - Universal View)</option>
+          </select>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="reg-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+          <input type="text" id="reg-username" class="auth-form-control" placeholder="unique_username" required>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="reg-password">পাছৱৰ্ড (Password):</label>
+          <input type="password" id="reg-password" class="auth-form-control" placeholder="পাছৱৰ্ড" required>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="reg-phone">ফোন নম্বৰ (Phone):</label>
+          <input type="tel" id="reg-phone" class="auth-form-control" placeholder="+91 94350 XXXXX">
+        </div>
+
+        <button type="submit" class="btn-auth-submit" style="background: var(--accent-blue); min-height: 56px;">
+          একাউন্ট পঞ্জীয়ন কৰক (Create Account) ➔
+        </button>
+      </form>
+
+      <!-- 1-Click Quick Demo Role Shortcuts -->
+      <div class="demo-shortcuts-box" style="margin-top: 28px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="color: var(--primary); font-size: 1rem;">
+            ⚡ দ্ৰুত পৰীক্ষণৰ বাবে ১-ক্লিক প্ৰৱেশ (1-Click Demo Shortcuts):
+          </strong>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
+          যিকোনো এটা ভূমিকা নিৰ্বাচন কৰক আৰু পোনপটীয়াকৈ সেই কামৰ ড্যাশবৰ্ডলৈ যাওক।
+        </p>
+
+        <div class="demo-role-grid">
+          <!-- 1. Patient -->
+          <div class="demo-role-tile" onclick="quickLogin('bapuji', 'pass123')">
+            <div style="font-size: 1.4rem;">🧓</div>
+            <strong style="font-size: 0.95rem;">ৰোগী (Patient)</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">User: bapuji</div>
+          </div>
+
+          <!-- 2. Doctor -->
+          <div class="demo-role-tile" onclick="quickLogin('dr_sharma', 'doc123')">
+            <div style="font-size: 1.4rem;">🩺</div>
+            <strong style="font-size: 0.95rem;">চিকিৎসক (Doctor)</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">User: dr_sharma</div>
+          </div>
+
+          <!-- 3. Family -->
+          <div class="demo-role-tile" onclick="quickLogin('anita_family', 'family123')">
+            <div style="font-size: 1.4rem;">👨‍👩‍👧</div>
+            <strong style="font-size: 0.95rem;">পৰিয়াল (Family)</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">User: anita_family</div>
+          </div>
+
+          <!-- 4. Admin -->
+          <div class="demo-role-tile" onclick="quickLogin('admin', 'admin123')">
+            <div style="font-size: 1.4rem;">🛡️</div>
+            <strong style="font-size: 0.95rem;">প্ৰশাসক (Admin)</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">User: admin</div>
+          </div>
+
+          <!-- 5. Head Admin (Universal Detail Access) -->
+          <div class="demo-role-tile head-admin-tile" onclick="quickLogin('head_admin', 'head123')">
+            <div style="font-size: 1.4rem;">👑</div>
+            <strong style="font-size: 0.95rem; color: #8C6200;">মুখ্য প্ৰশাসক (Head Admin)</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">User: head_admin</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+
+      if (tab === 'login') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const u = document.getElementById('input-username').value.trim();
+      const p = document.getElementById('input-password').value.trim();
+      await executeLogin(u, p);
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('reg-fullname').value.trim();
+      const role = document.getElementById('reg-role').value;
+      const username = document.getElementById('reg-username').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, fullName, role, phone })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          localStorage.setItem('delta_neurons_current_user', JSON.stringify(data.user));
+          window.location.href = 'index.html';
+        } else {
+          alert(data.message || 'পঞ্জীয়ন বিফল হ’ল');
+        }
+      } catch (err) {
+        // Offline registration fallback
+        const offlineUser = { id: Date.now(), username, fullName, role, phone };
+        localStorage.setItem('delta_neurons_current_user', JSON.stringify(offlineUser));
+        window.location.href = 'index.html';
+      }
+    }
+
+    async function quickLogin(username, password) {
+      document.getElementById('input-username').value = username;
+      document.getElementById('input-password').value = password;
+      await executeLogin(username, password);
+    }
+
+    async function executeLogin(username, password) {
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          localStorage.setItem('delta_neurons_current_user', JSON.stringify(data.user));
+          window.location.href = 'index.html';
+        } else {
+          alert(data.message || 'ভুল ব্যৱহাৰকাৰী নাম বা পাছৱৰ্ড');
+        }
+      } catch (err) {
+        // Offline demo account fallback
+        const offlineAccounts = {
+          bapuji: { id: 1, username: 'bapuji', fullName: 'Bapuji Goswami (বাপুজী)', role: 'patient' },
+          dr_sharma: { id: 2, username: 'dr_sharma', fullName: 'Dr. Hirendra Sharma (MD Neurology)', role: 'doctor' },
+          anita_family: { id: 3, username: 'anita_family', fullName: 'Anita Goswami (Daughter)', role: 'family' },
+          admin: { id: 4, username: 'admin', fullName: 'Delta Neurons Central Admin', role: 'admin' },
+          head_admin: { id: 5, username: 'head_admin', fullName: 'Dr. A. K. Baruah (Head Admin)', role: 'head_admin' }
+        };
+        const user = offlineAccounts[username] || { id: 1, username, fullName: username, role: 'patient' };
+        localStorage.setItem('delta_neurons_current_user', JSON.stringify(user));
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -285,8 +285,103 @@ class AdminPortalController {
   }
 }
 
+// -------------------------------------------------------------
+// 4. HEAD ADMIN UNIVERSAL MASTER PORTAL
+// -------------------------------------------------------------
+class HeadAdminPortalController {
+  constructor() {
+    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.cacheData = null;
+    this.activeTable = 'users';
+  }
+
+  async refresh() {
+    try {
+      const res = await fetch(`${this.apiBase}/api/headadmin/overview`);
+      if (res.ok) {
+        const data = await res.json();
+        this.cacheData = data.overview;
+        this.renderOverview(data.overview);
+      }
+    } catch (e) {
+      console.warn("Head Admin offline overview fallback:", e);
+    }
+  }
+
+  renderOverview(overview) {
+    if (!overview) return;
+
+    // Master KPIs
+    const kpiUsers = document.getElementById('ha-stat-users');
+    const kpiSessions = document.getElementById('ha-stat-sessions');
+    const kpiMeds = document.getElementById('ha-stat-meds');
+    const kpiSyncs = document.getElementById('ha-stat-syncs');
+    const kpiProfiles = document.getElementById('ha-stat-profiles');
+
+    if (kpiUsers) kpiUsers.textContent = overview.users.length;
+    if (kpiSessions) kpiSessions.textContent = overview.cognitiveSessions.length;
+    if (kpiMeds) kpiMeds.textContent = overview.medications.length;
+    if (kpiSyncs) kpiSyncs.textContent = overview.syncAudit.length;
+    if (kpiProfiles) kpiProfiles.textContent = overview.patientProfiles.length;
+
+    this.renderTable(this.activeTable);
+  }
+
+  switchTable(tableName) {
+    this.activeTable = tableName;
+    document.querySelectorAll('.ha-table-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.table === tableName);
+    });
+    this.renderTable(tableName);
+  }
+
+  renderTable(tableName) {
+    if (!this.cacheData) return;
+    const thead = document.getElementById('ha-inspector-thead');
+    const tbody = document.getElementById('ha-inspector-tbody');
+    if (!thead || !tbody) return;
+
+    const dataMap = {
+      users: this.cacheData.users,
+      patient_profiles: this.cacheData.patientProfiles,
+      cognitive_sessions: this.cacheData.cognitiveSessions,
+      medications: this.cacheData.medications,
+      hydration_logs: this.cacheData.hydrationLogs,
+      family_notes: this.cacheData.familyNotes,
+      sync_audit: this.cacheData.syncAudit
+    };
+
+    const rows = dataMap[tableName] || [];
+    if (rows.length === 0) {
+      thead.innerHTML = '<tr><th>তথ্য নাই (No Records Found)</th></tr>';
+      tbody.innerHTML = '<tr><td>কোনো ডাটা মজুত নাই</td></tr>';
+      return;
+    }
+
+    const keys = Object.keys(rows[0]);
+    thead.innerHTML = `<tr>${keys.map(k => `<th>${k.toUpperCase()}</th>`).join('')}</tr>`;
+
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = keys.map(k => {
+        let val = r[k];
+        if (k === 'role') {
+          return `<td><span class="role-pill ${val}">${val}</span></td>`;
+        }
+        if (k === 'is_taken') {
+          return `<td><span class="status-pill ${val === 1 ? 'status-taken' : 'status-missed'}">${val === 1 ? 'Taken' : 'Pending'}</span></td>`;
+        }
+        return `<td>${val !== null && val !== undefined ? val : '—'}</td>`;
+      }).join('');
+      tbody.appendChild(tr);
+    });
+  }
+}
+
 // Export singleton instances
 window.DoctorPortal = new DoctorPortalController();
 window.FamilyPortal = new FamilyPortalController();
 window.AdminPortal = new AdminPortalController();
+window.HeadAdminPortal = new HeadAdminPortalController();
 

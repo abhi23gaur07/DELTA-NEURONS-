@@ -47,13 +47,17 @@
     </div>
 
     <!-- User Profile & Auth Switcher -->
+    <!-- User Profile & Auth Switcher -->
     <div class="access-group">
       <div id="top-user-pill" class="user-profile-pill">
         <span style="font-weight: 800;">Bapuji Goswami</span>
         <span class="role-pill patient">🧓 ৰোগী</span>
       </div>
-      <button id="btn-auth-portal-switch" class="btn-portal-switch" data-goto-view="view-auth">
-        🔑 প্ৰৱেশ / পঞ্জীয়ন (Login)
+      <button class="pill-btn" onclick="window.location.href='login.html'" title="Switch account / Login portal">
+        🔑 পৰ্টেল (Login)
+      </button>
+      <button class="pill-btn" onclick="window.AuthEngine.logout()" title="Logout and return to Login Portal">
+        🚪 প্ৰস্থান (Logout)
       </button>
     </div>
   </header>
@@ -109,6 +113,10 @@
     <button class="nav-item-btn" data-view="view-admin">
       <span>🛡️</span>
       <span>প্ৰশাসক (Admin Console)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-head-admin">
+      <span>👑</span>
+      <span>মুখ্য প্ৰশাসক (Head Admin Deck)</span>
     </button>
   </nav>
 
@@ -687,6 +695,108 @@
               </button>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW 9: HEAD ADMIN UNIVERSAL MASTER CONTROL DECK
+         ----------------------------------------------------- -->
+    <section id="view-head-admin" class="view-section">
+      <div class="caregiver-hero" style="background: linear-gradient(135deg, #4A3500, #1A1200); border: 2px solid #F1C40F;">
+        <div>
+          <h2>👑 মুখ্য চিকিৎসা সঞ্চালক আৰু প্ৰধান প্ৰশাসক (Head Admin Universal Deck)</h2>
+          <p>প্ৰধান সঞ্চালক: <strong>Dr. A. K. Baruah (Chief Medical Director)</strong> • সৰ্বব্যাপী নিৰীক্ষণ ক্ষমতা (Universal Detail Access & Raw Database Inspector)</p>
+        </div>
+        <button class="btn-export-report" onclick="window.HeadAdminPortal.refresh()" style="background: #F1C40F; color: #1A1200; font-weight: 800;">
+          <span>🔄</span>
+          <span>সম্পূৰ্ণ ডাটাবেছ সতেজ কৰক (Live Refresh)</span>
+        </button>
+      </div>
+
+      <!-- Universal Impersonation / View Switcher Bar -->
+      <div style="background: var(--bg-card); border: 2px solid var(--border-strong); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+        <strong style="font-size: var(--font-body); color: var(--primary);">👁️ অন্য দৃষ্টিভঙ্গীৰে নিৰীক্ষণ কৰক (Switch Live Role View):</strong>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 4px 0 14px;">
+          Head Admin হিচাপে আপুনি যিকোনো ভূমিকাৰ কাৰ্যক্ষেত্ৰ পোনপটীয়াকৈ চাব পাৰে:
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="pill-btn" onclick="window.showAppView('view-dashboard')">
+            🧓 ৰোগীৰ খেল আৰু নিয়ম (View As Patient)
+          </button>
+          <button class="pill-btn" onclick="window.showAppView('view-doctor')">
+            🩺 চিকিৎসকৰ নিদান আৰু ঔষধ তালিকা (View As Doctor)
+          </button>
+          <button class="pill-btn" onclick="window.showAppView('view-family')">
+            👨‍👩‍👧 পৰিয়ালৰ ঔষধ সূচী আৰু টোকা (View As Family)
+          </button>
+          <button class="pill-btn" onclick="window.showAppView('view-admin')">
+            🛡️ প্ৰশাসনিক ব্যৱহাৰকাৰী তালিকা (View As Admin)
+          </button>
+        </div>
+      </div>
+
+      <!-- Head Admin Master System KPIs -->
+      <div class="admin-stats-grid">
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="ha-stat-users">5</div>
+          <div class="stat-tile-label">পঞ্জীকৃত সদস্য (Total Users)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="ha-stat-profiles">1</div>
+          <div class="stat-tile-label">ৰোগীৰ পৰিলেখ (Patient Profiles)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="ha-stat-sessions">6</div>
+          <div class="stat-tile-label">মগজুৰ খেল অধিবেশন (Sessions)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="ha-stat-meds">4</div>
+          <div class="stat-tile-label">নিৰ্ধাৰিত ঔষধ (Medications)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="ha-stat-syncs">1</div>
+          <div class="stat-tile-label">অফলাইন-অনলাইন ছিংক (Syncs)</div>
+        </div>
+      </div>
+
+      <!-- Raw SQLite Database Table Inspector -->
+      <div class="routine-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">🔍 কেন্দ্ৰীয় SQLite ডাটাবেছ টেবুল পৰীক্ষক (Raw Database Inspector)</h3>
+          <span style="font-size: 0.85rem; color: #8C6200; font-weight: 800;">LIVE SQLITE (delta_neurons.db)</span>
+        </div>
+
+        <!-- Table Selector Tabs -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+          <button class="pill-btn active ha-table-tab-btn" data-table="users" onclick="window.HeadAdminPortal.switchTable('users')">
+            1. Users (ব্যৱহাৰকাৰী)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="patient_profiles" onclick="window.HeadAdminPortal.switchTable('patient_profiles')">
+            2. Patient Profiles (ৰোগী পৰিলেখ)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="cognitive_sessions" onclick="window.HeadAdminPortal.switchTable('cognitive_sessions')">
+            3. Cognitive Sessions (খেলৰ তথ্য)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="medications" onclick="window.HeadAdminPortal.switchTable('medications')">
+            4. Medications (ঔষধ আৰু স্থিতি)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="hydration_logs" onclick="window.HeadAdminPortal.switchTable('hydration_logs')">
+            5. Hydration Logs (পানী খোৱাৰ তথ্য)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="family_notes" onclick="window.HeadAdminPortal.switchTable('family_notes')">
+            6. Family Notes (পৰিয়ালৰ টোকা)
+          </button>
+          <button class="pill-btn ha-table-tab-btn" data-table="sync_audit" onclick="window.HeadAdminPortal.switchTable('sync_audit')">
+            7. Sync Audit (ছিংক অডিট)
+          </button>
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead id="ha-inspector-thead"></thead>
+            <tbody id="ha-inspector-tbody"></tbody>
+          </table>
         </div>
       </div>
     </section>

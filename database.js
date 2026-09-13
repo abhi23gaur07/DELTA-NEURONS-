@@ -21,7 +21,7 @@ function initSchema() {
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       full_name TEXT NOT NULL,
-      role TEXT NOT NULL CHECK(role IN ('patient', 'doctor', 'family', 'admin')),
+      role TEXT NOT NULL CHECK(role IN ('patient', 'doctor', 'family', 'admin', 'head_admin')),
       phone TEXT,
       created_at TEXT NOT NULL
     );
@@ -105,6 +105,7 @@ function seedDefaultData() {
   insertUser.run('dr_sharma', 'doc123', 'Dr. Hirendra Sharma (MD Neurology)', 'doctor', '+91 98640 54321', now);
   insertUser.run('anita_family', 'family123', 'Anita Goswami (Daughter/Caregiver)', 'family', '+91 94350 98765', now);
   insertUser.run('admin', 'admin123', 'Delta Neurons Central Admin', 'admin', '+91 90000 00001', now);
+  insertUser.run('head_admin', 'head123', 'Dr. A. K. Baruah (Chief Medical Director & Head Admin)', 'head_admin', '+91 94350 00000', now);
 
   // Patient Profile
   db.prepare(`
@@ -312,6 +313,19 @@ function logSyncAudit(userId, syncType, itemsCount) {
   `).run(userId || 1, syncType, itemsCount || 1, now);
 }
 
+function getHeadAdminOverview() {
+  return {
+    users: db.prepare('SELECT id, username, full_name, role, phone, created_at FROM users ORDER BY id ASC').all(),
+    patientProfiles: db.prepare('SELECT * FROM patient_profiles').all(),
+    cognitiveSessions: db.prepare('SELECT * FROM cognitive_sessions ORDER BY id DESC LIMIT 50').all(),
+    medications: db.prepare('SELECT * FROM medications ORDER BY id ASC').all(),
+    hydrationLogs: db.prepare('SELECT * FROM hydration_logs ORDER BY id DESC LIMIT 20').all(),
+    familyNotes: db.prepare('SELECT * FROM family_notes ORDER BY id DESC LIMIT 20').all(),
+    syncAudit: db.prepare('SELECT * FROM sync_audit ORDER BY id DESC LIMIT 30').all(),
+    stats: getDatabaseStats()
+  };
+}
+
 // Initialize on module load
 initSchema();
 
@@ -329,5 +343,6 @@ module.exports = {
   saveGameSession,
   getAllUsers,
   getDatabaseStats,
-  logSyncAudit
+  logSyncAudit,
+  getHeadAdminOverview
 };

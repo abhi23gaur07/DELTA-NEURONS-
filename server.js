@@ -243,10 +243,18 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { success: true, stats });
   }
 
+  // 11. Head Admin: Universal Inspection Overview (All Tables)
+  if (pathname === '/api/headadmin/overview' && req.method === 'GET') {
+    const overview = db.getHeadAdminOverview();
+    return sendJson(res, 200, { success: true, overview });
+  }
+
   // -----------------------------------------------------------
   // STATIC FILE SERVING
   // -----------------------------------------------------------
-  let relativePath = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
+  let relativePath = pathname === '/' ? 'login.html' : pathname.replace(/^\//, '');
+  if (relativePath === 'login') relativePath = 'login.html';
+  if (relativePath === 'app') relativePath = 'index.html';
   const filePath = path.join(PUBLIC_DIR, relativePath);
 
   // Security: prevent directory traversal
@@ -286,6 +294,7 @@ server.listen(PORT, () => {
      • Doctor:        dr_sharma    / doc123
      • Family:        anita_family / family123
      • Admin:         admin        / admin123
+     • Head Admin:    head_admin   / head123
 ============================================================
   `);
 });

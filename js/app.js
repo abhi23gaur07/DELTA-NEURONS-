@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.FamilyPortal) window.FamilyPortal.refresh();
     } else if (viewId === 'view-admin') {
       if (window.AdminPortal) window.AdminPortal.refresh();
+    } else if (viewId === 'view-head-admin') {
+      if (window.HeadAdminPortal) window.HeadAdminPortal.refresh();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
