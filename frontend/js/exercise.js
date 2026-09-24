@@ -373,3 +373,4 @@ class ExerciseSuite {
 
 // Export singleton instance
 window.ExerciseSuite = new ExerciseSuite();
+
