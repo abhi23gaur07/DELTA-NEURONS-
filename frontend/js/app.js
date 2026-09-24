@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lifecycle events
     if (viewId === 'view-games') {
       const activeGameBtn = document.querySelector('.game-type-selector-btn.active');
-      const gameType = activeGameBtn ? activeGameBtn.dataset.game : 'memory';
+      const gameType = activeGameBtn ? activeGameBtn.dataset.game : 'weaving';
       launchGameByType(gameType);
     } else if (viewId === 'view-reminders') {
       window.Reminders.initUI();
@@ -49,7 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
   window.showAppView = showView;
 
   function launchGameByType(gameType) {
-    if (gameType === 'memory') {
+    if (gameType === 'weaving') {
+      window.GameSuite.startWeavingGame('game-arena-content');
+    } else if (gameType === 'level1') {
+      window.GameSuite.startLevelOneGame('game-arena-content');
+    } else if (gameType === 'level2') {
+      window.GameSuite.startLevelTwoGame('game-arena-content');
+    } else if (gameType === 'level3') {
+      window.GameSuite.startLevelThreeGame('game-arena-content');
+    } else if (gameType === 'memory') {
       window.GameSuite.startMemoryGame('game-arena-content');
     } else if (gameType === 'attention') {
       window.GameSuite.startAttentionGame('game-arena-content');
@@ -98,6 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Global Escape key listener to exit fullscreen theater mode
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const fsTheater = document.getElementById('fullscreen-game-theater');
+      if (fsTheater) {
+        window.GameSuite.exitFullscreenTheater();
+      }
+    }
+  });
 
   // -------------------------------------------------------------
   // ACCESSIBILITY & ELDERLY-FRIENDLY CONTROLS
@@ -158,6 +176,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (document.getElementById('view-caregiver').classList.contains('active')) {
         window.Caregiver.renderCanvasChart();
+      }
+    });
+  }
+
+  // Cultural Animations Toggle (সাংস্কৃতিক গতি নিয়ন্ত্ৰণ)
+  const culturalMotionBtn = document.getElementById('btn-toggle-cultural-motion');
+  if (culturalMotionBtn) {
+    let motionActive = true;
+    culturalMotionBtn.addEventListener('click', () => {
+      motionActive = !motionActive;
+      document.body.classList.toggle('cultural-animations-paused', !motionActive);
+      culturalMotionBtn.classList.toggle('active', motionActive);
+      culturalMotionBtn.innerHTML = motionActive
+        ? '🎭 সাংস্কৃতিক দৃশ্য (Motion: ON)'
+        : '⏸️ স্নিগ্ধ গতি (Motion: PAUSED)';
+      if (window.VoiceNER) {
+        window.VoiceNER.speak(motionActive ? 'সাংস্কৃতিক দৃশ্য সক্ৰিয় কৰা হৈছে' : 'সাংস্কৃতিক দৃশ্য বিৰাম দিয়া হৈছে');
       }
     });
   }

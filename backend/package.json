@@ -1,0 +1,18 @@
+{
+  "name": "delta-neurons-backend",
+  "version": "1.0.0",
+  "description": "DELTA NEURONS native Node.js and SQLite backend server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "delta-neurons",
+    "sqlite",
+    "healthcare",
+    "rest-api"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

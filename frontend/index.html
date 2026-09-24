@@ -31,6 +31,9 @@
       <button id="btn-narrate-screen" class="pill-btn" aria-label="Read screen aloud">
         🔊 পঢ়ক (Read)
       </button>
+      <button id="btn-toggle-cultural-motion" class="pill-btn active" aria-label="Toggle cultural animations">
+        🎭 সাংস্কৃতিক দৃশ্য (Motion)
+      </button>
     </div>
 
     <div class="access-group">
@@ -248,25 +251,25 @@
           </div>
         </div>
 
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+          <button class="pill-btn active game-type-selector-btn" data-game="weaving">
+            🧵 হস্ততাঁত আৰু মাকুৰ খেল (Weaving Match)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="level1">
+            🧠 Level 1: Early Stage Dementia
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="level2">
+            🎯 Level 2: Middle Stage Dementia
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="level3">
+            🌙 Level 3: Late Stage Dementia
+          </button>
+        </div>
+
         <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
-          <button class="pill-btn active game-type-selector-btn" data-game="memory">
-            🦏 ১. স্মৃতি মেল (Memory Match)
-          </button>
-          <button class="pill-btn game-type-selector-btn" data-game="attention">
-            🎯 ২. ধ্যান বিন্দু (Focus Point)
-          </button>
-          <button class="pill-btn game-type-selector-btn" data-game="recognition">
-            🏛️ ৩. চেনা মুখৰ (Reminiscence)
-          </button>
-          <button class="pill-btn game-type-selector-btn" data-game="rhythm">
-            🥁 ৪. বিহু ঢোল-তাল (Rhythm)
-          </button>
-          <button class="pill-btn game-type-selector-btn" data-game="sorting">
-            🧺 ৫. বাপতি-সাহোন (Sorting)
-          </button>
-          <button class="pill-btn game-type-selector-btn" data-game="folktale">
-            📜 ৬. সাধুকথা আৰু বুৰঞ্জী (Folktales)
-          </button>
+          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🧵 Gamusa Weave Match • Weaving Shuttle (তাঁতৰ মাকু) • Memory Grid • NeuroRacer</span>
+          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🍃 Executive Target • Planting • Robot Companion • WiiFit Balance</span>
+          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🎶 Passive Sensory Therapy • Folk Music • Calm Reminiscence</span>
         </div>
 
         <div class="game-controls-bar">

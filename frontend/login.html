@@ -307,7 +307,8 @@
 
     async function executeLogin(username, password) {
       try {
-        const res = await fetch('/api/auth/login', {
+        const apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
+        const res = await fetch(`${apiBase}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })

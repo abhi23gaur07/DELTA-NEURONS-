@@ -645,10 +645,118 @@ class VoiceNEREngine {
       try {
         node.osc.stop();
         node.osc.disconnect();
-      } catch (e) {}
-    });
     this.ambientNodes = [];
     this.isAmbientPlaying = false;
+  }
+
+  // Traditional Handloom Shuttle & Reed Clack (তাঁতৰ মাকু আৰু শালৰ খটখটনি)
+  playLoomClack() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      // 1. Sharp wooden shuttle strike (Maku tip hitting loom box)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(620, now);
+      osc1.frequency.exponentialRampToValueAtTime(160, now + 0.035);
+
+      gain1.gain.setValueAtTime(0.24, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.045);
+
+      // 2. Resonant wooden batten press (Loom reed pressing the weft)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(340, now + 0.035);
+      filter.Q.setValueAtTime(3.5, now + 0.035);
+
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(240, now + 0.035);
+      osc2.frequency.exponentialRampToValueAtTime(85, now + 0.11);
+
+      gain2.gain.setValueAtTime(0.001, now);
+      gain2.gain.setValueAtTime(0.28, now + 0.035);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+      osc2.connect(filter);
+      filter.connect(gain2);
+      gain2.connect(ctx.destination);
+
+      osc2.start(now + 0.035);
+      osc2.stop(now + 0.13);
+    } catch (e) {
+      console.warn("Loom clack audio error:", e);
+    }
+  }
+
+  // Shuttle flight swoosh across warp threads
+  playLoomSwoosh() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(950, now);
+      filter.frequency.exponentialRampToValueAtTime(420, now + 0.22);
+      filter.Q.setValueAtTime(2.0, now);
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.22);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.24);
+    } catch (e) {
+      console.warn("Loom swoosh audio error:", e);
+    }
+  }
+
+  // Gentle Game Zoom In Chime
+  playZoomChime() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+      // Soft ascending pentatonic chord: D5, F#5, A5, D6
+      const chord = [587.33, 739.99, 880.00, 1174.66];
+      chord.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+        gain.gain.setValueAtTime(0.001, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.12, now + idx * 0.06 + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.9);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.95);
+      });
+    } catch (e) {
+      console.warn("Zoom chime error:", e);
+    }
   }
 }
 

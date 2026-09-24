@@ -1784,3 +1784,655 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   margin-top: 4px;
 }
 
+/* ==========================================================================
+   FULL-SCREEN GAME THEATER, WOODEN LOOM & REALISTIC NORTHEAST CULTURAL PANORAMA
+   ========================================================================== */
+
+/* -------------------------------------------------------------
+   1. Fullscreen Game Theater Container (100% Screen Takeover)
+   ------------------------------------------------------------- */
+.fullscreen-game-theater {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 15%, #2a1608 0%, #120904 60%, #080402 100%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  animation: zoomIntoTheater 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes zoomIntoTheater {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 0.98;
+    transform: scale(1.01);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: none;
+  }
+}
+
+/* -------------------------------------------------------------
+   2. Theater Sticky Top Navigation Bar
+   ------------------------------------------------------------- */
+.theater-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(22, 11, 5, 0.92);
+  border-bottom: 3px solid rgba(255, 215, 140, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.theater-btn-back {
+  background: linear-gradient(180deg, #d94337, #9b1c12);
+  color: #FFFFFF;
+  border: 2px solid #FFCDD2;
+  border-radius: var(--radius-full);
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 46px;
+}
+
+.theater-btn-back:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 16px rgba(217, 67, 55, 0.5);
+}
+
+.theater-title-block {
+  text-align: center;
+}
+
+.theater-main-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #FFE082;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.theater-sub-title {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 600;
+}
+
+.theater-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.theater-action-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFE6B0;
+  border: 1.5px solid rgba(255, 215, 140, 0.35);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  min-height: 42px;
+}
+
+.theater-action-btn:hover, .theater-action-btn.active {
+  background: #C9751E;
+  color: #FFFFFF;
+  border-color: #FFE082;
+}
+
+/* -------------------------------------------------------------
+   3. Panoramic Cultural Theater Stage (Backdrop Behind Loom)
+   ------------------------------------------------------------- */
+.theater-stage-panoramic {
+  position: relative;
+  flex: 1;
+  padding: 24px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: calc(100vh - 75px);
+}
+
+/* Panoramic Landscape Layer (BEHIND EVERYTHING) */
+.panoramic-scenery-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.88;
+}
+
+/* Flowing Brahmaputra River & Sunset Sky */
+.scenery-sky-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 280px;
+  background: linear-gradient(180deg, #1C3545 0%, #355C6E 35%, #7C5335 70%, #A6652E 100%);
+  border-bottom: 2px solid rgba(255,215,140,0.2);
+}
+
+.scenery-mountain-silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background:
+    radial-gradient(ellipse 60% 80px at 25% 100%, #172D24 0%, transparent 100%),
+    radial-gradient(ellipse 70% 95px at 75% 100%, #12241D 0%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #0F1E18 100%);
+  opacity: 0.9;
+}
+
+.scenery-river-waves {
+  position: absolute;
+  top: 280px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    repeating-linear-gradient(180deg, rgba(29, 111, 138, 0.15) 0px 4px, transparent 4px 18px),
+    linear-gradient(180deg, #1A3B35 0%, #152B23 40%, #101E17 100%);
+}
+
+/* Flying Hornbills in Fullscreen Sky */
+.hornbill-bird-fs {
+  position: absolute;
+  top: 35px;
+  left: -100px;
+  width: 85px;
+  height: 48px;
+  z-index: 2;
+  animation: hornbillFlyAcross 16s linear infinite;
+}
+.hornbill-bird-fs-2 {
+  top: 95px;
+  animation-delay: 8s;
+  transform: scale(0.75);
+}
+
+/* Country Boat (Naaw) Drifting on River */
+.boatman-silhouette {
+  position: absolute;
+  top: 245px;
+  left: 12%;
+  width: 70px;
+  height: 35px;
+  z-index: 2;
+  animation: boatDrift 28s ease-in-out infinite alternate;
+}
+@keyframes boatDrift {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(60px) translateY(3px); }
+  100% { transform: translateX(120px) translateY(-2px); }
+}
+
+/* Floating Gamusa in Sky */
+.floating-gamusa-fs {
+  position: absolute;
+  top: 170px;
+  left: -140px;
+  width: 140px;
+  height: 36px;
+  background: repeating-linear-gradient(90deg, #FFFFFF 0px 10px, #B83A2E 10px 13px, #FFFFFF 13px 24px);
+  border-top: 4px solid #B83A2E;
+  border-bottom: 4px solid #B83A2E;
+  border-radius: 4px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  animation: gamusaWaveFloat 20s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  opacity: 0.9;
+  z-index: 2;
+}
+
+/* -------------------------------------------------------------
+   4. 3-Column Panoramic Stage Grid (Flanks + Center Loom)
+   ------------------------------------------------------------- */
+.theater-stage-grid {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1480px;
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr) 290px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .theater-stage-grid {
+    grid-template-columns: 250px minmax(0, 1fr) 250px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 991px) {
+  .theater-stage-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Flanking Cultural Pavilions (Left & Right of Loom) */
+.cultural-pavilion {
+  background: rgba(30, 18, 9, 0.78);
+  border: 2px solid rgba(255, 215, 140, 0.3);
+  border-radius: 22px;
+  padding: 16px 14px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pavilion-header {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #FFE082;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid rgba(255, 215, 140, 0.2);
+}
+
+.cultural-figure-card {
+  background: rgba(18, 10, 5, 0.85);
+  border: 1.5px solid rgba(255, 215, 140, 0.22);
+  border-radius: 16px;
+  padding: 12px 10px;
+  text-align: center;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.cultural-figure-card:hover {
+  transform: translateY(-3px);
+  border-color: #FFE082;
+  box-shadow: 0 8px 18px rgba(255, 215, 140, 0.25);
+}
+
+.figure-svg-container {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.figure-name {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #FFE6B0;
+  line-height: 1.2;
+}
+
+.figure-desc {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 2px;
+}
+
+/* -------------------------------------------------------------
+   5. Center Stage Wooden Weaving Loom Board (*তাঁত-শালৰ পাট*)
+   ------------------------------------------------------------- */
+.wooden-loom-center-stage {
+  position: relative;
+  width: 100%;
+  border-radius: 28px;
+  padding: 20px 20px 24px;
+  background:
+    linear-gradient(135deg, #4A2E18 0%, #633E20 25%, #3D2312 50%, #5B371C 75%, #351E0E 100%);
+  border: 12px solid #281407;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 215, 140, 0.4),
+    inset 0 0 50px rgba(0, 0, 0, 0.7),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* Authentic Brass Metal Corner Brackets */
+.brass-corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #FFE082, #B8860B, #8B6914);
+  border: 2px solid #5A4010;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.6);
+  z-index: 12;
+  pointer-events: none;
+}
+.brass-corner-tl { top: 4px; left: 4px; border-radius: 6px 0 18px 0; }
+.brass-corner-tr { top: 4px; right: 4px; border-radius: 0 6px 0 18px; }
+.brass-corner-bl { bottom: 4px; left: 4px; border-radius: 0 18px 0 6px; }
+.brass-corner-br { bottom: 4px; right: 4px; border-radius: 18px 0 6px 0; }
+
+/* Top & Bottom Loom Beams (Tula & Gura-mora) */
+.loom-beam-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, #744b2a, #432714);
+  border-radius: 14px;
+  border: 2px solid rgba(255, 215, 140, 0.3);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.35);
+  margin-bottom: 16px;
+}
+
+.loom-beam-bottom {
+  margin-top: 18px;
+  margin-bottom: 0;
+}
+
+/* Vertical Silk Warp Threads with Semi-Transparency (দীঘ সূতা) */
+.loom-warp-canvas-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 235, 190, 0.16) 0px 1px, transparent 1px 11px),
+    repeating-linear-gradient(90deg, rgba(217, 67, 55, 0.10) 0px 2px, transparent 2px 44px);
+  z-index: 1;
+  opacity: 0.92;
+}
+
+/* -------------------------------------------------------------
+   6. Animated Weaving Shuttle System (তাঁতৰ মাকু - Maku)
+   ------------------------------------------------------------- */
+.shuttle-track-arena {
+  position: relative;
+  width: 100%;
+  height: 96px;
+  background: rgba(30, 16, 8, 0.7);
+  border-radius: 18px;
+  border: 2.5px solid rgba(255, 215, 140, 0.35);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+  margin: 14px 0 18px;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+/* Dynamic Weft Thread Extending Across Warp */
+.weft-thread-line {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  height: 3.5px;
+  background: linear-gradient(90deg, #d94337, #E6A15C, #FFFDF8, #d94337);
+  box-shadow: 0 0 10px rgba(255, 215, 140, 0.7);
+  z-index: 3;
+  transform: translateY(-50%);
+  animation: weftVibrate 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes weftVibrate {
+  0% { transform: translateY(-50%) scaleY(1); opacity: 0.85; }
+  50% { transform: translateY(-46%) scaleY(1.4); opacity: 1; }
+  100% { transform: translateY(-54%) scaleY(0.9); opacity: 0.9; }
+}
+
+/* The Authentic Boat Shuttle (Maku) Container */
+.weaving-shuttle-maku {
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 140px;
+  height: 52px;
+  z-index: 6;
+  cursor: pointer;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.6));
+  transition: transform 0.2s ease-out;
+  animation: shuttleAmbientGlide 3.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.weaving-shuttle-maku:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+@keyframes shuttleAmbientGlide {
+  0% {
+    left: 8%;
+    transform: translateY(-50%) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-48%) rotate(0deg);
+  }
+  100% {
+    left: 78%;
+    transform: translateY(-50%) rotate(3deg);
+  }
+}
+
+/* Fast Interactive Throw when Thread Clicked */
+.shuttle-shooting-active {
+  animation: shuttleShootPass 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
+}
+
+@keyframes shuttleShootPass {
+  0% {
+    left: 5%;
+    transform: translateY(-50%) rotate(-6deg) scale(1.05);
+  }
+  45% {
+    transform: translateY(-52%) rotate(0deg) scale(1.14);
+  }
+  100% {
+    left: 80%;
+    transform: translateY(-50%) rotate(5deg) scale(1);
+  }
+}
+
+/* Spinning Bobbin / Pirn */
+.shuttle-bobbin-spinning {
+  animation: bobbinSpin 0.5s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes bobbinSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Newly Woven Line Loom-Press Pulse */
+.loom-row-pressed {
+  animation: loomRowPressFlash 0.6s ease-out;
+}
+
+@keyframes loomRowPressFlash {
+  0% {
+    transform: scaleY(1.35);
+    filter: brightness(1.6) drop-shadow(0 0 12px #FFE082);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: none;
+  }
+}
+
+/* -------------------------------------------------------------
+   7. Dancer Keyframe Animations
+   ------------------------------------------------------------- */
+
+/* Assamese Bihu Dancer Sway & Mudras */
+.bihu-dancer-body {
+  transform-origin: bottom center;
+  animation: bihuTorsoSway 2.2s ease-in-out infinite alternate;
+}
+@keyframes bihuTorsoSway {
+  0% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(0deg) translateY(-3px); }
+  100% { transform: rotate(5deg) translateY(0); }
+}
+
+.bihu-arms-left {
+  transform-origin: 32px 42px;
+  animation: bihuLeftArmMudra 1.8s ease-in-out infinite alternate;
+}
+@keyframes bihuLeftArmMudra {
+  0% { transform: rotate(-18deg); }
+  100% { transform: rotate(22deg); }
+}
+
+.bihu-arms-right {
+  transform-origin: 48px 42px;
+  animation: bihuRightArmMudra 1.8s ease-in-out infinite alternate;
+}
+@keyframes bihuRightArmMudra {
+  0% { transform: rotate(20deg); }
+  100% { transform: rotate(-20deg); }
+}
+
+/* Bihu Dholiya & Pepa Pulse */
+.dholiya-arms-beat {
+  transform-origin: 40px 48px;
+  animation: dholBeatMotion 0.8s ease-in-out infinite alternate;
+}
+@keyframes dholBeatMotion {
+  0% { transform: rotate(-12deg); }
+  100% { transform: rotate(16deg); }
+}
+
+.pepa-blow-tilt {
+  transform-origin: 40px 30px;
+  animation: pepaTiltMotion 1.4s ease-in-out infinite alternate;
+}
+@keyframes pepaTiltMotion {
+  0% { transform: rotate(-4deg); }
+  100% { transform: rotate(8deg); }
+}
+
+/* Bodo Bagurumba Butterfly Arm Flutter */
+.bodo-dancer-body {
+  transform-origin: bottom center;
+  animation: bodoBodyFlutter 2.0s ease-in-out infinite alternate;
+}
+@keyframes bodoBodyFlutter {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+.bodo-wing-arms {
+  transform-origin: center 46px;
+  animation: bagurumbaFlutter 1.2s ease-in-out infinite alternate;
+}
+@keyframes bagurumbaFlutter {
+  0% { transform: scaleY(0.85) rotate(-6deg); }
+  100% { transform: scaleY(1.15) rotate(6deg); }
+}
+
+/* Manipuri Classical Raas Graceful Glide */
+.manipuri-dancer-body {
+  transform-origin: center center;
+  animation: manipuriRaasGlide 3.2s ease-in-out infinite alternate;
+}
+@keyframes manipuriRaasGlide {
+  0% { transform: rotate(-3deg) scale(0.98); }
+  50% { transform: rotate(0deg) scale(1.02); }
+  100% { transform: rotate(3deg) scale(0.98); }
+}
+
+/* Naga Traditional Warrior Rhythmic Step */
+.naga-dancer-body {
+  transform-origin: bottom center;
+  animation: nagaRhythmStep 1.6s steps(2, end) infinite;
+}
+@keyframes nagaRhythmStep {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+.naga-spear-staff {
+  transform-origin: bottom right;
+  animation: nagaSpearTilt 1.6s ease-in-out infinite alternate;
+}
+@keyframes nagaSpearTilt {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Tea Garden Plucker Sway */
+.tea-plucker-hands {
+  transform-origin: 40px 45px;
+  animation: teaPluckMotion 1.5s ease-in-out infinite alternate;
+}
+@keyframes teaPluckMotion {
+  0% { transform: rotate(-10deg) translateY(0); }
+  100% { transform: rotate(12deg) translateY(4px); }
+}
+
+/* -------------------------------------------------------------
+   8. Accessibility Animation Pause State
+   ------------------------------------------------------------- */
+.cultural-animations-paused .bihu-dancer-body,
+.cultural-animations-paused .bihu-arms-left,
+.cultural-animations-paused .bihu-arms-right,
+.cultural-animations-paused .dholiya-arms-beat,
+.cultural-animations-paused .pepa-blow-tilt,
+.cultural-animations-paused .bodo-dancer-body,
+.cultural-animations-paused .bodo-wing-arms,
+.cultural-animations-paused .manipuri-dancer-body,
+.cultural-animations-paused .naga-dancer-body,
+.cultural-animations-paused .naga-spear-staff,
+.cultural-animations-paused .tea-plucker-hands,
+.cultural-animations-paused .hornbill-bird-fs,
+.cultural-animations-paused .floating-gamusa-fs,
+.cultural-animations-paused .boatman-silhouette,
+.cultural-animations-paused .weaving-shuttle-maku {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fullscreen-game-theater,
+  .bihu-dancer-body,
+  .bodo-dancer-body,
+  .manipuri-dancer-body,
+  .naga-dancer-body,
+  .hornbill-bird-fs,
+  .floating-gamusa-fs,
+  .weaving-shuttle-maku {
+    animation: none !important;
+  }
+}
+
+
+

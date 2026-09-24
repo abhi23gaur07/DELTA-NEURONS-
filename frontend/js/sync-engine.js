@@ -7,7 +7,7 @@
 class OfflineSyncEngine {
   constructor() {
     this.queueKey = 'delta_neurons_sync_queue';
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
     this.isOnline = navigator.onLine;
     this.isSyncing = false;
     this.listeners = [];

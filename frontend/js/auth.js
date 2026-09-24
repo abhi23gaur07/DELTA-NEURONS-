@@ -7,7 +7,7 @@ class AuthEngine {
   constructor() {
     this.storageKey = 'delta_neurons_current_user';
     this.currentUser = this.loadUser();
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
   }
 
   loadUser() {

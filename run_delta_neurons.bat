@@ -1,9 +1,9 @@
 @echo off
-title DELTA NEURONS Full-Stack Server & Platform
-cd /d "%~dp0"
+title DELTA NEURONS Full-Stack Server ^& Platform
+cd /d "%~dp0backend"
 
 echo =======================================================================
-echo          DELTA NEURONS: AI Cognitive Platform & Multi-Role Suite
+echo          DELTA NEURONS: AI Cognitive Platform ^& Multi-Role Suite
 echo       Native Node.js Server + SQLite Database + Offline Auto-Sync
 echo =======================================================================
 echo.

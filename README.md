@@ -51,13 +51,55 @@ Secure role-based access control (RBAC) with dedicated workspaces:
 5. **🧺 Bagicha Bheti (বাপতি-সাহোন - Cultural Category Sorting)**: Sorting regional delicacies vs traditional attire into woven baskets.
 6. **📜 Xadhu Kotha (সাধুকথা আৰু বুৰঞ্জী - Northeast Folktales)**: Reminiscence storytelling recall (Tejimola, Lachit Borphukan, Rani Gaidinliu).
 
+## 📁 Project Structure
+
+```
+DELTA-NEURONS-/
+├── backend/
+│   ├── server.js                  # Native Node.js REST API & static file server
+│   ├── database.js                # Native SQLite schema & persistence logic
+│   ├── delta_neurons.db           # SQLite database file
+│   └── package.json               # Backend configuration & npm scripts
+├── frontend/
+│   ├── index.html                 # Main application & cognitive suites
+│   ├── login.html                 # Authentication & demo role selector
+│   ├── css/
+│   │   └── style.css              # Styling, themes, responsive layouts
+│   ├── js/
+│   │   ├── ai-engine.js           # Adaptive difficulty & cognitive scoring
+│   │   ├── app.js                 # App initialization & tab routers
+│   │   ├── auth.js                # Frontend authentication client
+│   │   ├── caregiver.js           # Caregiver & family portal logic
+│   │   ├── games.js               # 6 cognitive games & procedural audio
+│   │   ├── portals.js             # Doctor, family, admin dashboard views
+│   │   ├── reminders.js           # Medication & hydration reminders
+│   │   ├── sync-engine.js         # Offline-first queue & background sync
+│   │   └── voice-ner.js           # Speech recognition & text-to-speech
+│   └── package.json               # Frontend package configuration
+├── run_delta_neurons.bat          # 1-click Windows launcher
+└── README.md                      # Documentation
+```
+
 ---
 
 ## 🚀 How to Run the Platform
 
-- **1-Click Launch**: Double-click `run_delta_neurons.bat` (Starts server on `http://localhost:3000` and opens browser).
-- **Manual Command**:
-  ```bash
-  node server.js
-  ```
-  Open `http://localhost:3000` in any web browser.
+### Option A: 1-Click Launch (Recommended)
+Double-click `run_delta_neurons.bat`.
+This launches the backend server on `http://localhost:3000` (serving the frontend files) and opens your default browser automatically.
+
+### Option B: Run Backend via Terminal
+```bash
+cd backend
+npm start
+# or: node server.js
+```
+Then open `http://localhost:3000` in any web browser.
+
+### Option C: Independent Frontend Dev Server (Optional)
+If you wish to serve frontend assets through a separate dev server (e.g. Vite or Live Server):
+1. Start the backend:
+   ```bash
+   cd backend && node server.js
+   ```
+2. Serve the `frontend` folder with your tool of choice (e.g., Live Server, `npx serve frontend -l 5000`, etc.). The frontend automatically detects when it is running on a different port and routes API calls to `http://localhost:3000`.

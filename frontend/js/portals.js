@@ -10,7 +10,7 @@
 // -------------------------------------------------------------
 class DoctorPortalController {
   constructor() {
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
   }
 
   async refreshReport() {
@@ -104,7 +104,7 @@ class DoctorPortalController {
 // -------------------------------------------------------------
 class FamilyPortalController {
   constructor() {
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
   }
 
   async refresh() {
@@ -227,7 +227,7 @@ class FamilyPortalController {
 // -------------------------------------------------------------
 class AdminPortalController {
   constructor() {
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
   }
 
   async refresh() {
@@ -290,7 +290,7 @@ class AdminPortalController {
 // -------------------------------------------------------------
 class HeadAdminPortalController {
   constructor() {
-    this.apiBase = window.location.origin.includes('localhost') ? '' : 'http://localhost:3000';
+    this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
     this.cacheData = null;
     this.activeTable = 'users';
   }
