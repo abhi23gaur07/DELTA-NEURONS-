@@ -2434,5 +2434,68 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   }
 }
 
+/* -------------------------------------------------------------
+   9. Dementia Exercise, Breathing & Chair Yoga Suite Styles
+   ------------------------------------------------------------- */
+.exercise-item-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.exercise-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.exercise-pacer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.exercise-visual-pacer {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), inset 0 0 16px rgba(255, 255, 255, 0.4);
+  transition: transform 3.8s ease-in-out, background-color 0.5s ease;
+}
+
+.pacer-lotus {
+  background: radial-gradient(circle, #E8F5E9 0%, #A5D6A7 60%, #4CAF50 100%);
+  border: 4px solid #2E7D32;
+}
+
+.pacer-yoga {
+  background: radial-gradient(circle, #FFF8E1 0%, #FFE082 60%, #FFA000 100%);
+  border: 4px solid #E65100;
+}
+
+.exercise-pacer-cue {
+  margin-top: 14px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: center;
+  min-height: 36px;
+}
+
+.melody-option-card:hover {
+  transform: translateY(-4px);
+  border-color: #FFE082 !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.melody-option-card:active {
+  transform: scale(0.96);
+}
+
+
 
 

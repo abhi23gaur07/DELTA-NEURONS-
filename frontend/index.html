@@ -99,7 +99,11 @@
     </button>
     <button class="nav-item-btn" data-view="view-games">
       <span>🧠</span>
-      <span>মগজুৰ খেল (৬ বিধ খেল)</span>
+      <span>মগজু আৰু সংগীতৰ খেল (Games & Music)</span>
+    </button>
+    <button class="nav-item-btn" data-view="view-exercise">
+      <span>🧘</span>
+      <span>ব্যায়াম আৰু যোগ (Exercise & Yoga)</span>
     </button>
     <button class="nav-item-btn" data-view="view-reminders">
       <span>💊</span>
@@ -220,6 +224,27 @@
             <span style="font-size: 1.4rem;">➔</span>
           </div>
         </article>
+
+        <!-- Action Card 4: Exercise & Chair Yoga -->
+        <article class="elder-action-card" data-goto-view="view-exercise">
+          <div>
+            <div class="card-top">
+              <div class="card-icon-bubble bubble-green">🧘</div>
+              <div style="flex: 1;">
+                <h3 class="card-title" id="card-exercise-title">ব্যায়াম আৰু যোগাসন</h3>
+                <span style="font-size: 0.9rem; color: var(--primary); font-weight: 700;">উশাহ আৰু চকীত কৰা যোগ (Mobility)</span>
+              </div>
+              <button class="mini-speaker-btn" title="Read Aloud" onclick="event.stopPropagation(); window.VoiceNER.speak(document.getElementById('card-exercise-title').textContent + '. ' + document.getElementById('card-exercise-desc').textContent)">🔊</button>
+            </div>
+            <p class="card-desc" id="card-exercise-desc">
+              স্মৃতিভ্ৰংশ আৰু বয়োজ্যেষ্ঠসকলৰ বাবে বিশেষভাৱে সুৰক্ষিত চকীত বহি কৰা যোগাসন আৰু ৪-৪-৪ উশাহৰ অনুশীলন।
+            </p>
+          </div>
+          <div class="card-action-cue" style="color: var(--primary);">
+            <span>যোগ আৰম্ভ কৰক (Start Yoga & Breath)</span>
+            <span style="font-size: 1.4rem;">➔</span>
+          </div>
+        </article>
       </div>
 
       <!-- Quick Health Bar -->
@@ -251,25 +276,49 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+        <!-- Game Selector Categories (Cognitive, Traditional Music, Crafts, Dementia Levels) -->
+        <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
           <button class="pill-btn active game-type-selector-btn" data-game="weaving">
-            🧵 হস্ততাঁত আৰু মাকুৰ খেল (Weaving Match)
+            🧵 হস্ততাঁত আৰু মাকু (Weaving Match)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="rhythm" style="border-color: #C9751E;">
+            🎶 বিহু ঢোল-তাল (Bihu Rhythm Echo)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="melody-detective" style="border-color: #8E44AD;">
+            🎵 সুৰৰ সন্ধান (Melody Detective)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="toka-pacer" style="border-color: #D35400;">
+            🪵 বাঁহৰ টকা তাল সংগতি (Toka Beat Pacer)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="memory">
+            🧠 স্মৃতি মেল (Memory Meadow)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="attention">
+            🎯 ধ্যান বিন্দু (Focus Point)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="recognition">
+            🌸 পুৰণি স্মৃতি (Landmarks & Faces)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="sorting">
+            🧺 বাপতি-সাহোন (Cultural Sorting)
+          </button>
+          <button class="pill-btn game-type-selector-btn" data-game="folktale">
+            📜 সাধুকথা (Folktales & Legends)
           </button>
           <button class="pill-btn game-type-selector-btn" data-game="level1">
-            🧠 Level 1: Early Stage Dementia
+            🌿 Level 1: Early Stage
           </button>
           <button class="pill-btn game-type-selector-btn" data-game="level2">
-            🎯 Level 2: Middle Stage Dementia
+            🎯 Level 2: Middle Stage
           </button>
           <button class="pill-btn game-type-selector-btn" data-game="level3">
-            🌙 Level 3: Late Stage Dementia
+            🌙 Level 3: Late Stage
           </button>
         </div>
 
         <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
-          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🧵 Gamusa Weave Match • Weaving Shuttle (তাঁতৰ মাকু) • Memory Grid • NeuroRacer</span>
-          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🍃 Executive Target • Planting • Robot Companion • WiiFit Balance</span>
-          <span class="pill-btn" style="opacity: 0.95; cursor: default;">🎶 Passive Sensory Therapy • Folk Music • Calm Reminiscence</span>
+          <span class="pill-btn" style="opacity: 0.95; cursor: default; background: rgba(0,0,0,0.04);">🎶 পৰম্পৰাগত সংগীত খেল: বিহু ঢোল, পেঁপা, টকা, গগনা, টোকোৰী, বাঁহী আৰু তাল</span>
+          <span class="pill-btn" style="opacity: 0.95; cursor: default; background: rgba(0,0,0,0.04);">🧠 মগজুৰ অনুশীলন: স্মৃতি শক্তি, দৃষ্টি সংযোগ, আৰু আৰামদায়ক ছন্দ</span>
         </div>
 
         <div class="game-controls-bar">
@@ -283,6 +332,45 @@
         <div id="game-arena-content">
           <!-- Populated dynamically by js/games.js -->
         </div>
+      </div>
+    </section>
+
+    <!-- -----------------------------------------------------
+         VIEW: DEMENTIA EXERCISE, BREATHING & CHAIR YOGA
+         ----------------------------------------------------- -->
+    <section id="view-exercise" class="view-section">
+      <div class="caregiver-hero" style="background: linear-gradient(135deg, #163E2B, #0E291C); margin-bottom: 24px;">
+        <div>
+          <h2>🧘 স্মৃতিভ্ৰংশ অনুকূল যোগাসন আৰু প্ৰশান্তি উশাহ (Exercise & Yoga)</h2>
+          <p>
+            বয়োজ্যেষ্ঠ আৰু ডিমেনচিয়া (Dementia) আক্ৰান্তসকলৰ বাবে বিশেষভাৱে প্ৰস্তুত কৰা আৰামদায়ক চকীত কৰা যোগাসন আৰু স্নিগ্ধ ৪-৪-৪ উশাহ-নিশাহৰ অনুশীলন।
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="pill-btn active exercise-filter-btn" id="filter-exercise-all" onclick="document.querySelectorAll('.exercise-filter-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); window.ExerciseSuite.renderExerciseGrid('all');">
+            🌟 সকলো (All Sessions)
+          </button>
+          <button class="pill-btn exercise-filter-btn" id="filter-exercise-breathing" onclick="document.querySelectorAll('.exercise-filter-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); window.ExerciseSuite.renderExerciseGrid('breathing');">
+            🪷 উশাহ-নিশাহ (Guided Breathing)
+          </button>
+          <button class="pill-btn exercise-filter-btn" id="filter-exercise-yoga" onclick="document.querySelectorAll('.exercise-filter-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); window.ExerciseSuite.renderExerciseGrid('yoga');">
+            🪑 চকীত কৰা যোগাসন (Chair Yoga)
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Guidance Banner -->
+      <div style="background: #FFFDF0; border: 2px solid #F1C40F; border-radius: var(--radius-md); padding: 16px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 2.4rem;">💡</span>
+        <div style="font-size: 0.95rem; color: #5D4037; line-height: 1.5;">
+          <strong>বয়োজ্যেষ্ঠ আৰু পৰিয়ালৰ বাবে সুৰক্ষা পৰামৰ্শ (Dementia Safety Guide):</strong><br>
+          সকলো আসন আৰামেৰে চকীত বহি কৰিব পাৰি। কোনো কঠিন বা জোৰযুক্ত সঞ্চালন নাই। আপোনাৰ সুবিধা অনুসৰি শৰীৰ শিথিল কৰি লাহে লাহে উশাহ লওক আৰু শৰীৰৰ সঞ্চালন কৰক।
+        </div>
+      </div>
+
+      <!-- Exercise Cards Grid -->
+      <div class="dashboard-grid" id="exercise-cards-container">
+        <!-- Rendered dynamically by js/exercise.js -->
       </div>
     </section>
 
@@ -834,7 +922,54 @@
   </div>
 
   <!-- =========================================================
-       6. Gentle Encouragement Modal
+       6. Exercise & Chair Yoga Active Session Runner Modal
+       ========================================================= -->
+  <div id="exercise-runner-modal" class="calm-modal-overlay" role="dialog" aria-modal="true">
+    <div class="breathing-modal-box" style="max-width: 620px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 14px; text-align: left;">
+          <span id="runner-modal-icon" style="font-size: 2.8rem;">🪷</span>
+          <div>
+            <h3 id="runner-modal-title" style="font-size: 1.3rem; color: var(--primary); margin: 0;"></h3>
+            <span id="runner-modal-sub" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;"></span>
+          </div>
+        </div>
+        <div id="runner-timer-text" class="gentle-timer" style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+          ⏱️ 60s
+        </div>
+      </div>
+
+      <p id="runner-modal-desc" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px;"></p>
+
+      <!-- Visual Breathing / Yoga Pacer Area -->
+      <div class="breathing-lotus-wrapper" style="margin: 16px auto 12px;">
+        <div id="runner-visual-pacer" class="breathing-lotus-circle" style="transition: transform 3.8s ease-in-out;">🌸</div>
+      </div>
+      <div id="runner-pacer-text" class="breathing-instruction-text" style="margin-bottom: 14px;">
+        দীঘলকৈ উশাহ লওক... (Breathe In)
+      </div>
+
+      <!-- Steps Instructions -->
+      <div style="background: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; margin: 16px 0; text-align: left;">
+        <strong style="color: var(--primary); font-size: 0.95rem; display: block; margin-bottom: 6px;">
+          অনুসৰণ কৰিবলগীয়া পদক্ষেপসমূহ (Steps to Follow):
+        </strong>
+        <ul id="runner-steps-list" style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;"></ul>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="modal-btn-action" onclick="window.ExerciseSuite.completeSession()" style="min-height: 52px; padding: 10px 24px; background: #2E7D32;">
+          ✅ সম্পন্ন কৰিলোঁ (Finish Session)
+        </button>
+        <button class="modal-btn-action" onclick="window.ExerciseSuite.closeSession()" style="min-height: 52px; padding: 10px 20px; background: #757575;">
+          বন্ধ কৰক (Close)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       7. Gentle Encouragement Modal
        ========================================================= -->
   <div id="calm-feedback-modal" class="calm-modal-overlay" role="dialog" aria-modal="true">
     <div class="calm-modal-box">
@@ -850,7 +985,7 @@
   </div>
 
   <!-- =========================================================
-       7. Footer
+       8. Footer
        ========================================================= -->
   <footer class="main-footer">
     <p class="footer-credits">
@@ -867,6 +1002,7 @@
   <script src="js/sync-engine.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/portals.js"></script>
+  <script src="js/exercise.js"></script>
   <script src="js/games.js"></script>
   <script src="js/reminders.js"></script>
   <script src="js/caregiver.js"></script>

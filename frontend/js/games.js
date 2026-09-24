@@ -79,12 +79,16 @@ class CognitiveGameSuite {
       }
     ];
 
-    // Traditional NER Folk Instruments for Rhythm Memory
+    // Traditional NER Folk Instruments for Rhythm & Music Games
     this.instruments = [
-      { id: 'dhol', nameAs: 'বিহু ঢোল', nameEn: 'Bihu Dhol', icon: '🥁', color: '#B85D43', play: () => window.VoiceNER.playBihuDhol() },
-      { id: 'pepa', nameAs: 'মহৰ শিঙৰ পেঁপা', nameEn: 'Pepa Horn', icon: '🎺', color: '#C9751E', play: () => window.VoiceNER.playPepa() },
-      { id: 'toka', nameAs: 'বাঁহৰ টকা', nameEn: 'Bamboo Toka', icon: '🪵', color: '#1E6B52', play: () => window.VoiceNER.playToka() },
-      { id: 'taal', nameAs: 'কাঁহৰ তাল', nameEn: 'Taal Cymbals', icon: '🔔', color: '#1D6F8A', play: () => window.VoiceNER.playTaal() }
+      { id: 'dhol', nameAs: 'বিহু ঢোল', nameEn: 'Bihu Dhol Drum', icon: '🥁', color: '#B85D43', play: () => window.VoiceNER.playBihuDhol() },
+      { id: 'pepa', nameAs: 'মহৰ শিঙৰ পেঁপা', nameEn: 'Buffalo Horn Pepa', icon: '🎺', color: '#C9751E', play: () => window.VoiceNER.playPepa() },
+      { id: 'toka', nameAs: 'বাঁহৰ টকা', nameEn: 'Bamboo Toka Clapper', icon: '🪵', color: '#1E6B52', play: () => window.VoiceNER.playToka() },
+      { id: 'taal', nameAs: 'কাঁহৰ তাল', nameEn: 'Bell-Metal Taal Cymbals', icon: '🔔', color: '#1D6F8A', play: () => window.VoiceNER.playTaal() },
+      { id: 'gogona', nameAs: 'বাঁহৰ গগনা', nameEn: 'Bamboo Gogona Harp', icon: '🎋', color: '#8E44AD', play: () => window.VoiceNER.playGogona() },
+      { id: 'tokari', nameAs: 'টোকোৰী বীণা', nameEn: 'Tokari Folk Lute', icon: '🪕', color: '#D35400', play: () => window.VoiceNER.playTokari() },
+      { id: 'khol', nameAs: 'নামঘৰৰ খোল', nameEn: 'Devotional Clay Khol', icon: '🪘', color: '#27AE60', play: () => window.VoiceNER.playKhol() },
+      { id: 'bahi', nameAs: 'অসমীয়া বাঁহী', nameEn: 'Assamese Bamboo Bahi', icon: '🎵', color: '#2980B9', play: () => window.VoiceNER.playBahi() }
     ];
 
     // Cultural Category Sorting Items
@@ -1658,6 +1662,197 @@ class CognitiveGameSuite {
         this.playRhythmDemoSequence();
       }, 1200);
     }
+  }
+
+  // -------------------------------------------------------------
+  // TRADITIONAL MUSIC GAME 2: SUROR SONDHAN (সুৰৰ সন্ধান - MELODY DETECTIVE)
+  // -------------------------------------------------------------
+  startMelodyDetectiveGame(containerId = 'game-arena-content') {
+    this.stopTimer();
+    this.timerSeconds = 0;
+    this.melodyRound = this.melodyRound || 0;
+
+    // Pick target instrument
+    const instPool = [...this.instruments];
+    instPool.sort(() => 0.5 - Math.random());
+    const targetInst = instPool[0];
+    const distractor1 = instPool[1];
+    const distractor2 = instPool[2];
+
+    const options = [targetInst, distractor1, distractor2].sort(() => 0.5 - Math.random());
+
+    const innerHtml = `
+      <div style="max-width: 860px; margin: 0 auto; color: white; text-align: center;">
+        <div style="background: rgba(0,0,0,0.45); border-radius: 20px; padding: 22px 20px; margin-bottom: 22px; border: 2px solid rgba(255, 215, 140, 0.35);">
+          <div style="font-size: 3.5rem; margin-bottom: 8px;">🎶👂</div>
+          <h3 style="font-size: 1.4rem; color: #FFE082; margin-bottom: 6px;">
+            সুৰৰ সন্ধান • পৰম্পৰাগত বাদ্য চিনাক্তকৰণ (Traditional Melody Detective)
+          </h3>
+          <p style="font-size: 0.95rem; color: rgba(255,255,255,0.9); margin-bottom: 16px;">
+            সুৰটো শুনি কওকচোন, তলৰ কোনটো পৰম্পৰাগত বাদ্যৰ ধ্বনি এয়া?
+          </p>
+
+          <button id="btn-replay-mystery-sound" class="pill-btn active" style="min-height: 56px; padding: 12px 28px; font-size: 1.05rem; background: #C9751E; border-color: #FFE082;">
+            🔊 সুৰটো পুনৰ শুনক (Replay Sound)
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          ${options.map(opt => `
+            <button class="melody-option-card" data-id="${opt.id}" style="
+              background: linear-gradient(180deg, rgba(60, 35, 15, 0.85), rgba(25, 12, 5, 0.95));
+              border: 3px solid rgba(255, 215, 140, 0.35); border-radius: 20px; padding: 24px 16px;
+              cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+              box-shadow: 0 8px 18px rgba(0,0,0,0.4); transition: transform 0.2s ease, border-color 0.2s ease;
+            ">
+              <div style="font-size: 3.5rem;">${opt.icon}</div>
+              <div style="font-size: 1.2rem; font-weight: 800; color: #FFE082;">${opt.nameAs}</div>
+              <div style="font-size: 0.85rem; color: rgba(255,255,255,0.75);">${opt.nameEn}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    const theater = this.renderFullscreenTheater({
+      innerHtml,
+      title: 'সুৰৰ সন্ধান • Melody Detective',
+      subtitle: 'Identify Traditional Northeast Indian Instruments by Sound',
+      containerId
+    });
+
+    const playSound = () => {
+      targetInst.play();
+    };
+
+    // Auto play sound after theater renders
+    setTimeout(playSound, 800);
+
+    const replayBtn = theater.querySelector('#btn-replay-mystery-sound');
+    if (replayBtn) {
+      replayBtn.addEventListener('click', playSound);
+    }
+
+    theater.querySelectorAll('.melody-option-card').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selectedId = btn.dataset.id;
+        const isCorrect = selectedId === targetInst.id;
+
+        window.AIEngine.recordMove(isCorrect);
+
+        if (isCorrect) {
+          btn.style.background = '#2E7D32';
+          btn.style.borderColor = '#81C784';
+          btn.style.transform = 'scale(1.05)';
+          window.VoiceNER.playChimeSuccess();
+          window.VoiceNER.speak(`বৰ সুন্দৰ! এইটো ${targetInst.nameAs}ৰ সুৰ।`);
+
+          setTimeout(() => {
+            this.melodyRound++;
+            if (this.melodyRound >= 3) {
+              this.melodyRound = 0;
+              this.handleGameComplete('Suror Sondhan (Melody Detective)');
+            } else {
+              this.startMelodyDetectiveGame(containerId);
+            }
+          }, 1400);
+        } else {
+          btn.style.borderColor = '#E57373';
+          window.VoiceNER.playSoftTap();
+          window.VoiceNER.speak(window.VoiceNER.t('gentleTryAgain'));
+        }
+      });
+    });
+
+    this.startTimer();
+  }
+
+  // -------------------------------------------------------------
+  // TRADITIONAL MUSIC GAME 3: TOKA BEAT KEEPER (বাঁহৰ টকা তাল সংগতি)
+  // -------------------------------------------------------------
+  startTokaBeatKeeperGame(containerId = 'game-arena-content') {
+    this.stopTimer();
+    this.timerSeconds = 0;
+    let beatsHit = 0;
+    const targetBeats = 8;
+
+    const innerHtml = `
+      <div style="max-width: 860px; margin: 0 auto; color: white; text-align: center;">
+        <div style="background: rgba(0,0,0,0.45); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 2px solid rgba(255, 215, 140, 0.35);">
+          <div style="font-size: 3.5rem; margin-bottom: 6px;">🪵🥁</div>
+          <h3 style="font-size: 1.35rem; color: #FFE082; margin-bottom: 4px;">
+            বাঁহৰ টকা তাল সংগতি • Bamboo Toka Beat Pacer
+          </h3>
+          <p style="font-size: 0.95rem; color: rgba(255,255,255,0.9); margin: 0;">
+            বিহুৰ তালে তালে টকা বজাওক। তলৰ টকা বুটামত লাহে লাহে চাপৰ মাৰক।
+          </p>
+        </div>
+
+        <!-- Rhythmic Progress Indicator -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 1.1rem; font-weight: 800; color: #FFE082; margin-bottom: 8px;">
+            তাল সংগতি: <span id="toka-counter-text">০ / ৮</span>
+          </div>
+          <div style="width: 100%; max-width: 480px; height: 16px; background: rgba(255,255,255,0.15); border-radius: 999px; margin: 0 auto; overflow: hidden; border: 2px solid rgba(255,215,140,0.3);">
+            <div id="toka-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #E6A15C, #2E7D32); transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Big Tactile Toka Clapper Pad -->
+        <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+          <button id="btn-tap-toka" style="
+            width: 260px; height: 260px; border-radius: 50%;
+            background: radial-gradient(circle, #8D5B18 0%, #4E270A 100%);
+            border: 8px solid #FFE082; box-shadow: 0 12px 30px rgba(0,0,0,0.5), inset 0 0 25px rgba(255,224,130,0.4);
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+          ">
+            <span style="font-size: 4.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));">🪵</span>
+            <span style="font-size: 1.3rem; font-weight: 800; color: #FFE082; letter-spacing: 0.05em;">টকা বজাওক</span>
+            <span style="font-size: 0.85rem; color: rgba(255,255,255,0.85);">চাপৰ মাৰক (Tap Beat)</span>
+          </button>
+        </div>
+
+        <p style="color: rgba(255,255,255,0.75); font-size: 0.9rem;">
+          💡 কোনো খৰখেদা নাই, আপোনাৰ সুবিধা অনুযায়ী আৰামেৰে চাপৰ মাৰক।
+        </p>
+      </div>
+    `;
+
+    const theater = this.renderFullscreenTheater({
+      innerHtml,
+      title: 'বাঁহৰ টকা তাল সংগতি • Toka Beat Keeper',
+      subtitle: 'Gentle Auditory-Motor Rhythm Pacer for Hand-Eye Coordination',
+      containerId
+    });
+
+    const tokaBtn = theater.querySelector('#btn-tap-toka');
+    const counterText = theater.querySelector('#toka-counter-text');
+    const progressBar = theater.querySelector('#toka-progress-bar');
+
+    if (tokaBtn) {
+      tokaBtn.addEventListener('click', () => {
+        window.VoiceNER.playToka();
+        tokaBtn.style.transform = 'scale(0.92)';
+        setTimeout(() => tokaBtn.style.transform = 'scale(1)', 120);
+
+        beatsHit++;
+        window.AIEngine.recordMove(true);
+
+        if (counterText) counterText.textContent = `${beatsHit} / ${targetBeats}`;
+        if (progressBar) progressBar.style.width = `${(beatsHit / targetBeats) * 100}%`;
+
+        if (beatsHit >= targetBeats) {
+          setTimeout(() => {
+            window.VoiceNER.playChimeSuccess();
+            this.handleGameComplete('Bihu Toka Taal (Toka Beat Pacer)');
+          }, 400);
+        }
+      });
+    }
+
+    this.startTimer();
+    window.VoiceNER.speak('বিহুৰ তালে তালে টকা বুটামত লাহে লাহে চাপৰ মাৰক।');
   }
 
   // -------------------------------------------------------------

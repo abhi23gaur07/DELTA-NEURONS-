@@ -515,6 +515,181 @@ class VoiceNEREngine {
     }
   }
 
+  // 5. GOGONA (Assamese Bamboo Jaw Harp - vibrant twang with mouth cavity resonance)
+  playGogona() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      // Sharp resonant twang
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(215, now + 0.35);
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(650, now);
+      filter.frequency.exponentialRampToValueAtTime(1400, now + 0.08);
+      filter.frequency.exponentialRampToValueAtTime(750, now + 0.35);
+      filter.Q.setValueAtTime(8, now);
+
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.4);
+    } catch (e) {
+      console.warn("Gogona synth error:", e);
+    }
+  }
+
+  // 6. TOKARI (Assamese Folk Plucked String Lute - warm plucked string resonance)
+  playTokari() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      // Two warm string harmonics
+      [196.00, 392.00].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        osc.type = idx === 0 ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, now);
+        filter.frequency.exponentialRampToValueAtTime(400, now + 0.8);
+
+        gain.gain.setValueAtTime(idx === 0 ? 0.45 : 0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.9);
+      });
+    } catch (e) {
+      console.warn("Tokari synth error:", e);
+    }
+  }
+
+  // 7. BAHI (Assamese Bamboo Flute - pastoral serene melodic note)
+  playBahi() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const vibrato = ctx.createOscillator();
+      const vibratoGain = ctx.createGain();
+
+      // Vibrato LFO
+      vibrato.frequency.setValueAtTime(5.5, now);
+      vibratoGain.gain.setValueAtTime(4.5, now);
+      vibrato.connect(vibratoGain);
+      vibratoGain.connect(osc.frequency);
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(659.25, now); // E5 note
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.28, now + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.95);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      vibrato.start(now);
+      osc.start(now);
+      vibrato.stop(now + 1.0);
+      osc.stop(now + 1.0);
+    } catch (e) {
+      console.warn("Bahi synth error:", e);
+    }
+  }
+
+  // 8. KHOL (Devotional Clay Drum - Namghar Ghum & Treble Ring)
+  playKhol() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      // Deep resonant bass "Ghum"
+      const bassOsc = ctx.createOscillator();
+      const bassGain = ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(110, now);
+      bassOsc.frequency.exponentialRampToValueAtTime(62, now + 0.28);
+
+      bassGain.gain.setValueAtTime(0.48, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+
+      bassOsc.connect(bassGain);
+      bassGain.connect(ctx.destination);
+      bassOsc.start(now);
+      bassOsc.stop(now + 0.45);
+
+      // Treble rim slap "Dheen"
+      const rimOsc = ctx.createOscillator();
+      const rimGain = ctx.createGain();
+      rimOsc.type = 'triangle';
+      rimOsc.frequency.setValueAtTime(460, now);
+      rimOsc.frequency.exponentialRampToValueAtTime(280, now + 0.08);
+
+      rimGain.gain.setValueAtTime(0.22, now);
+      rimGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+      rimOsc.connect(rimGain);
+      rimGain.connect(ctx.destination);
+      rimOsc.start(now);
+      rimOsc.stop(now + 0.16);
+    } catch (e) {
+      console.warn("Khol synth error:", e);
+    }
+  }
+
+  // 9. OM SINGING BOWL CHIME (For Yoga & Deep Calming Meditation)
+  playOmChime() {
+    try {
+      const ctx = this.getAudioContext();
+      const now = ctx.currentTime;
+
+      // Singing bowl fundamental 216Hz + warm harmonics
+      [216.0, 432.0, 648.0].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        const amp = 0.25 / (idx + 1);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(amp, now + 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 2.9);
+      });
+    } catch (e) {
+      console.warn("Om Chime error:", e);
+    }
+  }
+
   // Standard Chime Success
   playChimeSuccess() {
     try {

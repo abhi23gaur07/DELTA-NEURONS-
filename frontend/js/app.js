@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeGameBtn = document.querySelector('.game-type-selector-btn.active');
       const gameType = activeGameBtn ? activeGameBtn.dataset.game : 'weaving';
       launchGameByType(gameType);
+    } else if (viewId === 'view-exercise') {
+      if (window.ExerciseSuite) window.ExerciseSuite.renderExerciseGrid('all');
     } else if (viewId === 'view-reminders') {
       window.Reminders.initUI();
     } else if (viewId === 'view-caregiver' || viewId === 'view-doctor') {
@@ -51,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function launchGameByType(gameType) {
     if (gameType === 'weaving') {
       window.GameSuite.startWeavingGame('game-arena-content');
+    } else if (gameType === 'rhythm') {
+      window.GameSuite.startRhythmGame('game-arena-content');
+    } else if (gameType === 'melody-detective') {
+      window.GameSuite.startMelodyDetectiveGame('game-arena-content');
+    } else if (gameType === 'toka-pacer') {
+      window.GameSuite.startTokaBeatKeeperGame('game-arena-content');
     } else if (gameType === 'level1') {
       window.GameSuite.startLevelOneGame('game-arena-content');
     } else if (gameType === 'level2') {
@@ -63,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.GameSuite.startAttentionGame('game-arena-content');
     } else if (gameType === 'recognition') {
       window.GameSuite.startReminiscenceGame('game-arena-content');
-    } else if (gameType === 'rhythm') {
-      window.GameSuite.startRhythmGame('game-arena-content');
     } else if (gameType === 'sorting') {
       window.GameSuite.startSortingGame('game-arena-content');
     } else if (gameType === 'folktale') {
