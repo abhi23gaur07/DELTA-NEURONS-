@@ -300,18 +300,22 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   gap: 16px;
 }
 
-.brand-logo-icon {
-  width: 58px;
-  height: 58px;
-  background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+.brand-logo-icon,
+.brand-logo-img {
+  width: 62px;
+  height: 62px;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  font-size: 1.8rem;
+  object-fit: contain;
+  background: #FFFDF8;
+  border: 2px solid var(--border-subtle);
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-logo-img:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md);
 }
 
 .brand-title {
