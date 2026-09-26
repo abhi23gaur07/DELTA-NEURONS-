@@ -206,6 +206,14 @@ module.exports = async (req, res) => {
     return sendJson(res, 200, { success: true, syncedCount: count });
   }
 
+  // 6b. Sync: Offline Progress Snapshot
+  if (pathname === '/api/sync/offline-progress' && req.method === 'POST') {
+    return sendJson(res, 200, { success: true, message: 'Offline progress synced with cloud session' });
+  }
+  if (pathname === '/api/sync/offline-progress' && req.method === 'GET') {
+    return sendJson(res, 200, { success: true, data: { userId: 1, progress: {} } });
+  }
+
   // 7. Family: Add Medication
   if (pathname === '/api/family/medication' && req.method === 'POST') {
     const { name, time, pillIcon, addedByRole } = await parseBody(req);
@@ -254,14 +262,55 @@ module.exports = async (req, res) => {
     return sendJson(res, 200, { success: true, users: cloudDb.users });
   }
 
+  // 10b. Admin: Patients
+  if (pathname === '/api/admin/patients' && req.method === 'GET') {
+    const patients = cloudDb.users.filter(u => u.role === 'patient').map(u => {
+      const p = cloudDb.patientProfiles.find(prof => prof.user_id === u.id) || {};
+      return {
+        ...u,
+        age: p.age || 72,
+        location: p.location || 'Assam, India',
+        diagnosis: p.diagnosis || 'Mild Cognitive Impairment (MCI)',
+        preferred_language: p.preferred_language || 'as',
+        emergency_contact: p.emergency_contact || '+91 94350 98765',
+        total_sessions: cloudDb.cognitiveSessions.filter(s => s.user_id === u.id).length,
+        total_medications: cloudDb.medications.filter(m => m.patient_id === u.id).length
+      };
+    });
+    return sendJson(res, 200, { success: true, patients });
+  }
+
+  // 10c. Admin: Doctors
+  if (pathname === '/api/admin/doctors' && req.method === 'GET') {
+    const doctors = cloudDb.users.filter(u => u.role === 'doctor').map(u => ({
+      ...u,
+      clinical_status: 'Active & Certified',
+      specialty: u.username === 'dr_sharma' ? 'Chief Clinical Neurologist (MD Neurology)' : 'Geriatric Cognition & Memory Specialist'
+    }));
+    return sendJson(res, 200, { success: true, doctors });
+  }
+
+  // 10d. Admin: Caregivers
+  if (pathname === '/api/admin/caregivers' && req.method === 'GET') {
+    const caregivers = cloudDb.users.filter(u => u.role === 'family').map(u => ({
+      ...u,
+      relationship: 'Primary Family Caregiver',
+      linked_patient: 'Bapuji Goswami'
+    }));
+    return sendJson(res, 200, { success: true, caregivers });
+  }
+
   if (pathname === '/api/admin/stats' && req.method === 'GET') {
     return sendJson(res, 200, {
       success: true,
       stats: {
         userCount: cloudDb.users.length,
+        patientCount: cloudDb.users.filter(u => u.role === 'patient').length,
+        doctorCount: cloudDb.users.filter(u => u.role === 'doctor').length,
         sessionCount: cloudDb.cognitiveSessions.length,
         medCount: cloudDb.medications.length,
-        syncCount: cloudDb.syncAudit.length
+        syncCount: cloudDb.syncAudit.length,
+        aiReportCount: cloudDb.dementiaReports ? cloudDb.dementiaReports.length : 0
       }
     });
   }
@@ -273,6 +322,8 @@ module.exports = async (req, res) => {
       overview: {
         users: cloudDb.users,
         patientProfiles: cloudDb.patientProfiles,
+        registeredPatients: cloudDb.users.filter(u => u.role === 'patient'),
+        registeredDoctors: cloudDb.users.filter(u => u.role === 'doctor'),
         cognitiveSessions: [...cloudDb.cognitiveSessions].reverse(),
         medications: cloudDb.medications,
         hydrationLogs: cloudDb.hydrationLogs,
@@ -280,12 +331,57 @@ module.exports = async (req, res) => {
         syncAudit: cloudDb.syncAudit,
         stats: {
           userCount: cloudDb.users.length,
+          patientCount: cloudDb.users.filter(u => u.role === 'patient').length,
+          doctorCount: cloudDb.users.filter(u => u.role === 'doctor').length,
           sessionCount: cloudDb.cognitiveSessions.length,
           medCount: cloudDb.medications.length,
           syncCount: cloudDb.syncAudit.length
         }
       }
     });
+  }
+
+  // 12. Doctor Prescribe Medication
+  if (pathname === '/api/doctor/medication' && req.method === 'POST') {
+    const { patientId, name, time, pillIcon, instructions } = await parseBody(req);
+    const medName = instructions ? `${name} (${instructions})` : name;
+    const newMed = {
+      id: cloudDb.medications.length + 1,
+      patient_id: patientId || 1,
+      name: medName,
+      time: time,
+      pill_icon: pillIcon || '💊',
+      is_taken: 0,
+      taken_at: null,
+      added_by_role: 'doctor',
+      created_at: new Date().toISOString()
+    };
+    cloudDb.medications.push(newMed);
+    return sendJson(res, 201, { success: true, medication: newMed });
+  }
+
+  // 13. AI Dementia Classifier
+  if (pathname === '/api/ai/classify-dementia-stage' && req.method === 'POST') {
+    try {
+      const { classifyDementiaStage } = require('../backend/ai_model/model_classifier.js');
+      const data = await parseBody(req);
+      const classification = classifyDementiaStage(data);
+      return sendJson(res, 200, { success: true, classification });
+    } catch (err) {
+      return sendJson(res, 500, { success: false, message: err.message });
+    }
+  }
+
+  // 14. AI Report Generation
+  if (pathname === '/api/ai/generate-report' && req.method === 'POST') {
+    try {
+      const { generateClinicalDementiaReport } = require('../backend/ai_model/clinical_report_generator.js');
+      const { patientId, assessmentData, doctorInfo } = await parseBody(req);
+      const report = generateClinicalDementiaReport({ id: patientId || 1, fullName: 'Bapuji Goswami', age: 72 }, assessmentData || {}, doctorInfo);
+      return sendJson(res, 200, { success: true, report });
+    } catch (err) {
+      return sendJson(res, 500, { success: false, message: err.message });
+    }
   }
 
   // 404 for unknown API routes

@@ -28,12 +28,31 @@ function initSchema() {
 
     CREATE TABLE IF NOT EXISTS patient_profiles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
+      user_id INTEGER NOT NULL UNIQUE,
       age INTEGER DEFAULT 72,
       location TEXT DEFAULT 'Guwahati, Assam',
       diagnosis TEXT DEFAULT 'Mild Cognitive Impairment (MCI)',
       preferred_language TEXT DEFAULT 'as',
       emergency_contact TEXT DEFAULT '+91 94350 XXXXX',
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS doctor_profiles (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL UNIQUE,
+      medical_license TEXT DEFAULT 'NER-MC-VERIFIED',
+      specialty TEXT DEFAULT 'Chief Clinical Neurologist (MD Neurology)',
+      hospital_affiliation TEXT DEFAULT 'NER Memory Care Network, Guwahati',
+      years_experience INTEGER DEFAULT 12,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS patient_offline_progress (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL UNIQUE,
+      progress_data TEXT NOT NULL,
+      last_synced TEXT NOT NULL,
       FOREIGN KEY (user_id) REFERENCES users(id)
     );
 
@@ -83,9 +102,30 @@ function initSchema() {
       items_synced INTEGER DEFAULT 1,
       synced_at TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS dementia_ai_reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      patient_id INTEGER NOT NULL,
+      doctor_id INTEGER,
+      predicted_stage INTEGER NOT NULL,
+      stage_name TEXT NOT NULL,
+      confidence_pct REAL NOT NULL,
+      stage_description TEXT NOT NULL,
+      clinical_summary TEXT,
+      cognitive_domain_scores TEXT,
+      risk_factors TEXT,
+      recommended_medications TEXT,
+      recommended_exercises TEXT,
+      recommended_games TEXT,
+      caregiver_guidance TEXT,
+      raw_assessment TEXT,
+      assessed_at TEXT NOT NULL,
+      FOREIGN KEY (patient_id) REFERENCES users(id)
+    );
   `);
 
   seedDefaultData();
+  seedAdditionalRecords();
 }
 
 // Seed Initial Accounts & Mock Clinical Records
@@ -161,7 +201,7 @@ function findUserByUsername(username) {
   return db.prepare('SELECT * FROM users WHERE username = ?').get(username);
 }
 
-function createUser(username, password, fullName, role, phone) {
+function createUser(username, password, fullName, role, phone, extraData = {}) {
   const now = new Date().toISOString();
   const res = db.prepare(`
     INSERT INTO users (username, password, full_name, role, phone, created_at)
@@ -170,12 +210,54 @@ function createUser(username, password, fullName, role, phone) {
 
   const newId = Number(res.lastInsertRowid);
   if (role === 'patient') {
+    const age = Number(extraData.age) || 72;
+    const location = extraData.location || 'Guwahati, Assam';
+    const diagnosis = extraData.diagnosis || 'Mild Cognitive Impairment (MCI)';
+    const preferredLang = extraData.preferredLanguage || extraData.preferred_language || 'as';
+    const emergency = extraData.emergencyContact || extraData.emergency_contact || phone || '+91 94350 XXXXX';
     db.prepare(`
-      INSERT INTO patient_profiles (user_id, age, location, diagnosis, preferred_language)
-      VALUES (?, 70, 'Assam, India', 'Healthy / MCI Care', 'as')
-    `).run(newId);
+      INSERT INTO patient_profiles (user_id, age, location, diagnosis, preferred_language, emergency_contact)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(newId, age, location, diagnosis, preferredLang, emergency);
+  } else if (role === 'doctor') {
+    const license = extraData.medicalLicense || extraData.medical_license || `NER-MC-${Math.floor(10000 + Math.random() * 90000)}`;
+    const specialty = extraData.specialty || 'General Neurology & Memory Care';
+    const hospital = extraData.hospitalAffiliation || extraData.hospital || 'NER Memory Care Network, Guwahati';
+    const exp = Number(extraData.yearsExperience) || 10;
+    db.prepare(`
+      INSERT INTO doctor_profiles (user_id, medical_license, specialty, hospital_affiliation, years_experience, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(newId, license, specialty, hospital, exp, now);
   }
-  return { id: newId, username, full_name: fullName, role };
+  return { id: newId, username, full_name: fullName, role, phone };
+}
+
+// Offline Progress Persistence & Syncing
+function saveOfflineProgress(userId, progressData) {
+  const now = new Date().toISOString();
+  const dataStr = typeof progressData === 'object' ? JSON.stringify(progressData) : String(progressData);
+  db.prepare(`
+    INSERT INTO patient_offline_progress (user_id, progress_data, last_synced)
+    VALUES (?, ?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET
+      progress_data = excluded.progress_data,
+      last_synced = excluded.last_synced
+  `).run(userId, dataStr, now);
+  return { success: true, userId, lastSynced: now };
+}
+
+function getOfflineProgress(userId) {
+  const row = db.prepare('SELECT * FROM patient_offline_progress WHERE user_id = ?').get(userId);
+  if (!row) return null;
+  try {
+    return {
+      userId: row.user_id,
+      lastSynced: row.last_synced,
+      progress: JSON.parse(row.progress_data)
+    };
+  } catch (e) {
+    return { userId: row.user_id, lastSynced: row.last_synced, progress: {} };
+  }
 }
 
 // Clinical Reports (For Doctor)
@@ -297,12 +379,173 @@ function getAllUsers() {
   return db.prepare('SELECT id, username, full_name, role, phone, created_at FROM users ORDER BY id ASC').all();
 }
 
+function seedAdditionalRecords() {
+  const now = new Date().toISOString();
+
+  // Check if doctor 2 exists
+  const doc2 = db.prepare("SELECT id FROM users WHERE username = 'dr_sunita'").get();
+  if (!doc2) {
+    db.prepare(`
+      INSERT INTO users (username, password, full_name, role, phone, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run('dr_sunita', 'doc123', 'Dr. Sunita Borah (MD Geriatric Medicine)', 'doctor', '+91 94350 44556', now);
+  }
+
+  // Check if patient 2 exists
+  const pat2 = db.prepare("SELECT id FROM users WHERE username = 'nirmal_das'").get();
+  if (!pat2) {
+    const res = db.prepare(`
+      INSERT INTO users (username, password, full_name, role, phone, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run('nirmal_das', 'pass123', 'Nirmal Chandra Das (নিৰ্মল দাস)', 'patient', '+91 94352 11223', now);
+    const pId = Number(res.lastInsertRowid);
+    db.prepare(`
+      INSERT INTO patient_profiles (user_id, age, location, diagnosis, preferred_language, emergency_contact)
+      VALUES (?, 76, 'Jorhat, Upper Assam', 'Moderate Dementia (Stage 4)', 'as', '+91 94352 11223')
+    `).run(pId);
+  }
+
+  // Check if patient 3 exists
+  const pat3 = db.prepare("SELECT id FROM users WHERE username = 'kamala_devi'").get();
+  if (!pat3) {
+    const res = db.prepare(`
+      INSERT INTO users (username, password, full_name, role, phone, created_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run('kamala_devi', 'pass123', 'Kamala Devi (কমলা দেৱী)', 'patient', '+91 98641 99887', now);
+    const pId = Number(res.lastInsertRowid);
+    db.prepare(`
+      INSERT INTO patient_profiles (user_id, age, location, diagnosis, preferred_language, emergency_contact)
+      VALUES (?, 81, 'Silchar, Cachar (Assam)', 'Moderately Severe Cognitive Decline (Stage 5)', 'bn', '+91 98641 99887')
+    `).run(pId);
+  }
+}
+
+// Admin: Query Patients Database
+function getRegisteredPatients() {
+  return db.prepare(`
+    SELECT 
+      u.id, 
+      u.username, 
+      u.full_name, 
+      u.phone, 
+      u.created_at,
+      p.age, 
+      p.location, 
+      p.diagnosis, 
+      p.preferred_language, 
+      p.emergency_contact,
+      (SELECT COUNT(*) FROM cognitive_sessions WHERE user_id = u.id) AS total_sessions,
+      (SELECT COUNT(*) FROM medications WHERE patient_id = u.id) AS total_medications
+    FROM users u
+    LEFT JOIN patient_profiles p ON u.id = p.user_id
+    WHERE u.role = 'patient'
+    ORDER BY u.id ASC
+  `).all();
+}
+
+// Admin: Query Doctors Database
+function getRegisteredDoctors() {
+  return db.prepare(`
+    SELECT 
+      u.id, 
+      u.username, 
+      u.full_name, 
+      u.phone, 
+      u.created_at,
+      'Active & Certified' AS clinical_status,
+      COALESCE(dp.specialty, 
+        CASE 
+          WHEN u.username = 'dr_sharma' THEN 'Chief Clinical Neurologist (MD Neurology)'
+          WHEN u.username = 'dr_sunita' THEN 'Geriatric Cognition & Memory Specialist'
+          ELSE 'Medical Specialist / Clinician'
+        END
+      ) AS specialty,
+      COALESCE(dp.medical_license, 'NER-MC-VERIFIED') AS medical_license,
+      COALESCE(dp.hospital_affiliation, 'NER Memory Care Network, Guwahati') AS hospital_affiliation,
+      COALESCE(dp.years_experience, 10) AS years_experience
+    FROM users u
+    LEFT JOIN doctor_profiles dp ON u.id = dp.user_id
+    WHERE u.role = 'doctor'
+    ORDER BY u.id ASC
+  `).all();
+}
+
+// Admin: Query Caregivers Database
+function getRegisteredCaregivers() {
+  return db.prepare(`
+    SELECT 
+      u.id, 
+      u.username, 
+      u.full_name, 
+      u.phone, 
+      u.created_at,
+      'Primary Family Caregiver' AS relationship,
+      'Bapuji Goswami' AS linked_patient
+    FROM users u
+    WHERE u.role = 'family'
+    ORDER BY u.id ASC
+  `).all();
+}
+
+// AI Dementia Staging Reports
+function saveDementiaAIReport(report) {
+  const now = new Date().toISOString();
+  const res = db.prepare(`
+    INSERT INTO dementia_ai_reports (
+      patient_id, doctor_id, predicted_stage, stage_name, confidence_pct,
+      stage_description, clinical_summary, cognitive_domain_scores, risk_factors,
+      recommended_medications, recommended_exercises, recommended_games, caregiver_guidance,
+      raw_assessment, assessed_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    report.patientId || 1,
+    report.doctorId || 2,
+    report.predictedStage,
+    report.stageName,
+    report.confidencePct,
+    report.stageDescription || '',
+    report.clinicalSummary || '',
+    typeof report.cognitiveDomainScores === 'object' ? JSON.stringify(report.cognitiveDomainScores) : (report.cognitiveDomainScores || ''),
+    typeof report.riskFactors === 'object' ? JSON.stringify(report.riskFactors) : (report.riskFactors || ''),
+    typeof report.recommendedMedications === 'object' ? JSON.stringify(report.recommendedMedications) : (report.recommendedMedications || ''),
+    typeof report.recommendedExercises === 'object' ? JSON.stringify(report.recommendedExercises) : (report.recommendedExercises || ''),
+    typeof report.recommendedGames === 'object' ? JSON.stringify(report.recommendedGames) : (report.recommendedGames || ''),
+    typeof report.caregiverGuidance === 'object' ? JSON.stringify(report.caregiverGuidance) : (report.caregiverGuidance || ''),
+    typeof report.rawAssessment === 'object' ? JSON.stringify(report.rawAssessment) : (report.rawAssessment || ''),
+    now
+  );
+  return db.prepare('SELECT * FROM dementia_ai_reports WHERE id = ?').get(Number(res.lastInsertRowid));
+}
+
+function getDementiaAIReports(patientId = null) {
+  if (patientId) {
+    return db.prepare(`
+      SELECT r.*, u.full_name as patient_name, doc.full_name as doctor_name
+      FROM dementia_ai_reports r
+      LEFT JOIN users u ON r.patient_id = u.id
+      LEFT JOIN users doc ON r.doctor_id = doc.id
+      WHERE r.patient_id = ?
+      ORDER BY r.id DESC
+    `).all(patientId);
+  }
+  return db.prepare(`
+    SELECT r.*, u.full_name as patient_name, doc.full_name as doctor_name
+    FROM dementia_ai_reports r
+    LEFT JOIN users u ON r.patient_id = u.id
+    LEFT JOIN users doc ON r.doctor_id = doc.id
+    ORDER BY r.id DESC
+  `).all();
+}
+
 function getDatabaseStats() {
   const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
+  const patientCount = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'patient'").get().count;
+  const doctorCount = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'doctor'").get().count;
   const sessionCount = db.prepare('SELECT COUNT(*) as count FROM cognitive_sessions').get().count;
   const medCount = db.prepare('SELECT COUNT(*) as count FROM medications').get().count;
   const syncCount = db.prepare('SELECT COUNT(*) as count FROM sync_audit').get().count;
-  return { userCount, sessionCount, medCount, syncCount };
+  const aiReportCount = db.prepare('SELECT COUNT(*) as count FROM dementia_ai_reports').get().count;
+  return { userCount, patientCount, doctorCount, sessionCount, medCount, syncCount, aiReportCount };
 }
 
 function logSyncAudit(userId, syncType, itemsCount) {
@@ -317,10 +560,15 @@ function getHeadAdminOverview() {
   return {
     users: db.prepare('SELECT id, username, full_name, role, phone, created_at FROM users ORDER BY id ASC').all(),
     patientProfiles: db.prepare('SELECT * FROM patient_profiles').all(),
+    doctorProfiles: db.prepare('SELECT * FROM doctor_profiles').all(),
+    registeredPatients: getRegisteredPatients(),
+    registeredDoctors: getRegisteredDoctors(),
     cognitiveSessions: db.prepare('SELECT * FROM cognitive_sessions ORDER BY id DESC LIMIT 50').all(),
     medications: db.prepare('SELECT * FROM medications ORDER BY id ASC').all(),
     hydrationLogs: db.prepare('SELECT * FROM hydration_logs ORDER BY id DESC LIMIT 20').all(),
     familyNotes: db.prepare('SELECT * FROM family_notes ORDER BY id DESC LIMIT 20').all(),
+    dementiaAIReports: getDementiaAIReports(),
+    offlineProgress: db.prepare('SELECT * FROM patient_offline_progress').all(),
     syncAudit: db.prepare('SELECT * FROM sync_audit ORDER BY id DESC LIMIT 30').all(),
     stats: getDatabaseStats()
   };
@@ -333,6 +581,8 @@ module.exports = {
   db,
   findUserByUsername,
   createUser,
+  saveOfflineProgress,
+  getOfflineProgress,
   getClinicalReport,
   getMedications,
   toggleMedication,
@@ -342,6 +592,11 @@ module.exports = {
   addFamilyNote,
   saveGameSession,
   getAllUsers,
+  getRegisteredPatients,
+  getRegisteredDoctors,
+  getRegisteredCaregivers,
+  saveDementiaAIReport,
+  getDementiaAIReports,
   getDatabaseStats,
   logSyncAudit,
   getHeadAdminOverview

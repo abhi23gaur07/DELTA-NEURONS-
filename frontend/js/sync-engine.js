@@ -7,6 +7,7 @@
 class OfflineSyncEngine {
   constructor() {
     this.queueKey = 'delta_neurons_sync_queue';
+    this.progressKey = 'delta_neurons_offline_patient_progress';
     this.apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
     this.isOnline = navigator.onLine;
     this.isSyncing = false;
@@ -61,17 +62,75 @@ class OfflineSyncEngine {
     } catch (e) {}
   }
 
+  // Save consolidated offline progress snapshot
+  saveOfflineSnapshot(meta = {}) {
+    try {
+      const existing = this.getOfflineSnapshot() || {};
+      const user = window.AuthEngine ? window.AuthEngine.currentUser : { id: 1, username: 'bapuji' };
+      const snapshot = {
+        userId: user ? user.id : 1,
+        username: user ? user.username : 'bapuji',
+        lastUpdated: new Date().toISOString(),
+        gameScores: meta.gameScores || existing.gameScores || {},
+        completedGamesCount: (existing.completedGamesCount || 0) + (meta.completedGame ? 1 : 0),
+        hydrationGlasses: window.Reminders ? window.Reminders.state.waterGlasses : (existing.hydrationGlasses || 0),
+        medicationsState: window.Reminders ? window.Reminders.state.medicines : (existing.medicationsState || []),
+        exerciseSessionsCompleted: (existing.exerciseSessionsCompleted || 0) + (meta.completedExercise ? 1 : 0),
+        lastActivity: meta.activityName || existing.lastActivity || 'Active Progress Recorded',
+        clientOfflineVersion: '2.0.0'
+      };
+      localStorage.setItem(this.progressKey, JSON.stringify(snapshot));
+      return snapshot;
+    } catch (e) {
+      console.warn("Could not save local offline snapshot:", e);
+      return null;
+    }
+  }
+
+  getOfflineSnapshot() {
+    try {
+      const saved = localStorage.getItem(this.progressKey);
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  exportOfflineBackup() {
+    const data = {
+      exportedAt: new Date().toISOString(),
+      offlineSnapshot: this.getOfflineSnapshot(),
+      syncQueue: this.getQueue(),
+      currentUser: window.AuthEngine ? window.AuthEngine.currentUser : null
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `delta_neurons_offline_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    if (window.VoiceNER) window.VoiceNER.speak("অফলাইন ডাটা সংৰক্ষিত হ’ল আৰু ডাউনলোড কৰা হ’ল।");
+  }
+
   // Add event to queue
   enqueue(type, payload) {
     const queue = this.getQueue();
     const eventItem = {
       id: Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-      type, // 'GAME_SESSION' | 'MED_TOGGLE' | 'HYDRATION'
+      type, // 'GAME_SESSION' | 'EXERCISE_SESSION' | 'MED_TOGGLE' | 'MED_ADD' | 'HYDRATION' | 'OFFLINE_PROGRESS'
       payload,
       timestamp: new Date().toISOString()
     };
     queue.push(eventItem);
     this.saveQueue(queue);
+
+    // Record local offline snapshot automatically
+    this.saveOfflineSnapshot({
+      activityName: type,
+      completedGame: (type === 'GAME_SESSION') ? 1 : 0,
+      completedExercise: (type === 'EXERCISE_SESSION') ? 1 : 0
+    });
 
     this.updateStatusBadge(this.isOnline ? 'syncing' : 'queued');
 
@@ -110,6 +169,16 @@ class OfflineSyncEngine {
         this.saveQueue([]);
         this.updateStatusBadge('online');
         this.notifySync(data);
+
+        // Also sync full offline progress snapshot
+        const snapshot = this.getOfflineSnapshot();
+        if (snapshot) {
+          fetch(`${this.apiBase}/api/sync/offline-progress`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: currentUser ? currentUser.id : 1, progress: snapshot })
+          }).catch(() => {});
+        }
 
         // Refresh clinical reports if Doctor or Caregiver view is open
         if (window.DoctorPortal && typeof window.DoctorPortal.refreshReport === 'function') {

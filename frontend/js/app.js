@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Switch Views
   function showView(viewId) {
+    // RBAC Security Check
+    if (window.AuthEngine && typeof window.AuthEngine.isAllowedView === 'function') {
+      if (!window.AuthEngine.isAllowedView(viewId)) {
+        const u = window.AuthEngine.currentUser;
+        alert(`Access Restricted: The ${viewId.replace('view-', '')} section is not accessible for role "${u ? u.role : 'patient'}".`);
+        const fallback = (u && u.role === 'doctor') ? 'view-doctor' : (u && (u.role === 'admin' || u.role === 'head_admin')) ? 'view-admin' : 'view-dashboard';
+        return showView(fallback);
+      }
+    }
+
     viewSections.forEach(section => section.classList.remove('active'));
 
     const targetSection = document.getElementById(viewId);
@@ -33,9 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (viewId === 'view-exercise') {
       if (window.ExerciseSuite) window.ExerciseSuite.renderExerciseGrid('all');
     } else if (viewId === 'view-reminders') {
-      window.Reminders.initUI();
+      if (window.Reminders) window.Reminders.initUI();
     } else if (viewId === 'view-caregiver' || viewId === 'view-doctor') {
-      if (window.DoctorPortal) window.DoctorPortal.refreshReport();
+      if (window.DoctorPortal) {
+        window.DoctorPortal.refreshReport();
+      }
       if (window.Caregiver) window.Caregiver.init();
     } else if (viewId === 'view-family') {
       if (window.FamilyPortal) window.FamilyPortal.refresh();
@@ -206,13 +218,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Language Selector
   const langSelect = document.getElementById('language-select');
   if (langSelect) {
+    if (window.I18nEngine) {
+      langSelect.value = window.I18nEngine.currentLang;
+    }
     langSelect.addEventListener('change', (e) => {
       const selected = e.target.value;
-      window.VoiceNER.setLanguage(selected);
+      if (window.I18nEngine) {
+        window.I18nEngine.setLanguage(selected);
+      }
+      if (window.VoiceNER) {
+        window.VoiceNER.setLanguage(selected);
+        window.VoiceNER.speak(window.I18nEngine ? window.I18nEngine.t('welcomeGreeting') : '');
+      }
       updateUILocalizations();
-      window.VoiceNER.speak(window.VoiceNER.t('welcomeGreeting'));
     });
   }
+
+  window.addEventListener('deltaNeuronsLanguageChanged', () => {
+    updateUILocalizations();
+  });
 
   // Read Screen Aloud
   const narrateScreenBtn = document.getElementById('btn-narrate-screen');
@@ -335,4 +359,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   applyFontSize();
   updateUILocalizations();
+
+  // Apply I18n translations & Role-Based Access Control
+  if (window.I18nEngine) {
+    window.I18nEngine.applyTranslations();
+  }
+  if (window.AuthEngine) {
+    window.AuthEngine.updateUserUI();
+    const currentRole = window.AuthEngine.currentUser ? window.AuthEngine.currentUser.role : 'patient';
+    window.AuthEngine.routeUserByRole(currentRole);
+  }
+  if (window.DoctorPortal && typeof window.DoctorPortal.init === 'function') {
+    window.DoctorPortal.init();
+  }
+  if (window.AdminPortal && typeof window.AdminPortal.refresh === 'function') {
+    window.AdminPortal.refresh();
+  }
 });

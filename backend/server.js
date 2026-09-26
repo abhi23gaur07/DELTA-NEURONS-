@@ -9,6 +9,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const url = require('node:url');
 const db = require('./database.js');
+const { classifyDementiaStage } = require('./ai_model/model_classifier.js');
+const { generateClinicalDementiaReport } = require('./ai_model/clinical_report_generator.js');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'frontend');
@@ -102,7 +104,8 @@ const server = http.createServer(async (req, res) => {
   // 2. Auth: Register
   if (pathname === '/api/auth/register' && req.method === 'POST') {
     try {
-      const { username, password, fullName, role, phone } = await parseBody(req);
+      const body = await parseBody(req);
+      const { username, password, fullName, role, phone, ...extraData } = body;
 
       if (!username || !password || !fullName || !role) {
         return sendJson(res, 400, { success: false, message: 'Missing required registration fields' });
@@ -113,11 +116,11 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 409, { success: false, message: 'ব্যৱহাৰকাৰী নাম ইতিমধ্যে ব্যৱহৃত (Username already exists)' });
       }
 
-      const newUser = db.createUser(username, password, fullName, role, phone);
+      const newUser = db.createUser(username, password, fullName, role, phone, extraData);
       return sendJson(res, 201, {
         success: true,
         user: newUser,
-        message: 'সফলভাৱে পঞ্জীয়ন হ’ল (Registered successfully)'
+        message: 'সফলভাৱে পঞ্জীয়ন হ’ল (Registered successfully in Delta Neurons Database)'
       });
     } catch (e) {
       return sendJson(res, 500, { success: false, message: e.message });
@@ -143,21 +146,33 @@ const server = http.createServer(async (req, res) => {
 
       let count = 0;
       queue.forEach(item => {
-        if (item.type === 'GAME_SESSION') {
+        if (item.type === 'GAME_SESSION' || item.type === 'EXERCISE_SESSION') {
           db.saveGameSession(
             userId || item.payload.userId || 1,
             item.payload.gameName,
-            item.payload.score,
-            item.payload.latencySec,
-            item.payload.accuracyPct,
-            item.payload.hintsUsed
+            item.payload.score || 80,
+            item.payload.latencySec || 5.0,
+            item.payload.accuracyPct || 85,
+            item.payload.hintsUsed || 0
           );
           count++;
         } else if (item.type === 'MED_TOGGLE') {
           db.toggleMedication(item.payload.id, item.payload.isTaken);
           count++;
+        } else if (item.type === 'MED_ADD') {
+          db.addMedication(
+            item.payload.patientId || userId || 1,
+            item.payload.name,
+            item.payload.time,
+            item.payload.pillIcon || '💊',
+            item.payload.instructions || ''
+          );
+          count++;
         } else if (item.type === 'HYDRATION') {
           db.recordHydration(userId || 1, item.payload.glassesCount);
+          count++;
+        } else if (item.type === 'OFFLINE_PROGRESS') {
+          db.saveOfflineProgress(userId || item.payload.userId || 1, item.payload.progress || item.payload);
           count++;
         }
       });
@@ -167,8 +182,29 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, {
         success: true,
         syncedCount: count,
-        message: `${count} টা তথ্য কেন্দ্ৰীয় ডাটাবেছত সংৰক্ষিত হ’ল (Successfully synced with server)`
+        message: `${count} টা অফলাইন তথ্য কেন্দ্ৰীয় ডাটাবেছত সংৰক্ষিত হ’ল (Successfully synced with server)`
       });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  // 4b. Sync: Offline Progress Snapshot
+  if (pathname === '/api/sync/offline-progress' && req.method === 'POST') {
+    try {
+      const { userId, progress } = await parseBody(req);
+      const resData = db.saveOfflineProgress(userId || 1, progress || {});
+      return sendJson(res, 200, { success: true, ...resData });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  if (pathname === '/api/sync/offline-progress' && req.method === 'GET') {
+    try {
+      const uId = parsedUrl.searchParams.get('userId') || 1;
+      const progress = db.getOfflineProgress(Number(uId));
+      return sendJson(res, 200, { success: true, data: progress });
     } catch (e) {
       return sendJson(res, 500, { success: false, message: e.message });
     }
@@ -238,6 +274,24 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, { success: true, users });
   }
 
+  // 10b. Admin: Get Registered Patients Database
+  if (pathname === '/api/admin/patients' && req.method === 'GET') {
+    const patients = db.getRegisteredPatients();
+    return sendJson(res, 200, { success: true, patients });
+  }
+
+  // 10c. Admin: Get Registered Doctors Database
+  if (pathname === '/api/admin/doctors' && req.method === 'GET') {
+    const doctors = db.getRegisteredDoctors();
+    return sendJson(res, 200, { success: true, doctors });
+  }
+
+  // 10d. Admin: Get Registered Caregivers Database
+  if (pathname === '/api/admin/caregivers' && req.method === 'GET') {
+    const caregivers = db.getRegisteredCaregivers();
+    return sendJson(res, 200, { success: true, caregivers });
+  }
+
   if (pathname === '/api/admin/stats' && req.method === 'GET') {
     const stats = db.getDatabaseStats();
     return sendJson(res, 200, { success: true, stats });
@@ -247,6 +301,97 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/headadmin/overview' && req.method === 'GET') {
     const overview = db.getHeadAdminOverview();
     return sendJson(res, 200, { success: true, overview });
+  }
+
+  // 12. Doctor Portal: Prescribe / Add Medication
+  if (pathname === '/api/doctor/medication' && req.method === 'POST') {
+    try {
+      const { patientId, name, time, pillIcon, instructions } = await parseBody(req);
+      if (!name || !time) {
+        return sendJson(res, 400, { success: false, message: 'Medication name and time are required' });
+      }
+      const medName = instructions ? `${name} (${instructions})` : name;
+      const newMed = db.addMedication(patientId || 1, medName, time, pillIcon || '💊', 'doctor');
+      return sendJson(res, 201, { success: true, medication: newMed, message: 'Prescription added successfully' });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  // 13. Doctor Portal: Delete / Discontinue Medication
+  if (pathname === '/api/doctor/medication' && req.method === 'DELETE') {
+    try {
+      const { id } = await parseBody(req);
+      if (!id) {
+        return sendJson(res, 400, { success: false, message: 'Medication ID required' });
+      }
+      db.deleteMedication(id);
+      return sendJson(res, 200, { success: true, message: 'Medication discontinued' });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  // 14. AI Engine: 7-Stage Dementia Classifier
+  if (pathname === '/api/ai/classify-dementia-stage' && req.method === 'POST') {
+    try {
+      const assessmentData = await parseBody(req);
+      const classification = classifyDementiaStage(assessmentData);
+      return sendJson(res, 200, { success: true, classification });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  // 15. AI Engine: Generate & Save Clinical Dementia Staging Report
+  if (pathname === '/api/ai/generate-report' && req.method === 'POST') {
+    try {
+      const { patientId, assessmentData, doctorInfo, saveToDb } = await parseBody(req);
+      const pId = Number(patientId) || 1;
+      
+      // Get patient details from DB
+      const patientRecord = db.getClinicalReport(pId).patient || { id: pId, full_name: 'Bapuji Goswami', age: 72 };
+      const patient = {
+        id: patientRecord.user_id || patientRecord.id || pId,
+        fullName: patientRecord.full_name || 'Bapuji Goswami',
+        age: patientRecord.age || 72,
+        location: patientRecord.location || 'Dispur, Guwahati (Assam)',
+        emergencyContact: patientRecord.emergency_contact || '+91 94350 98765'
+      };
+
+      const report = generateClinicalDementiaReport(patient, assessmentData || {}, doctorInfo);
+
+      if (saveToDb !== false) {
+        const saved = db.saveDementiaAIReport({
+          patientId: pId,
+          doctorId: doctorInfo ? doctorInfo.id : 2,
+          predictedStage: report.staging.stageNumber,
+          stageName: report.staging.stageName,
+          confidencePct: report.staging.confidencePct,
+          stageDescription: report.staging.stageDescription,
+          clinicalSummary: `Stage ${report.staging.stageNumber}: ${report.staging.stageName} (${report.staging.gdsEquivalent}) - Evaluated for ${patient.fullName}`,
+          cognitiveDomainScores: report.domainAnalysis,
+          riskFactors: report.riskFactors,
+          recommendedMedications: report.carePlan.pharmacologicalRecommendations,
+          recommendedExercises: report.carePlan.prescribedChairYogaBreathing,
+          recommendedGames: report.carePlan.prescribedCognitiveGames,
+          caregiverGuidance: report.carePlan.caregiverGuidance,
+          rawAssessment: assessmentData
+        });
+        report.savedRecordId = saved ? saved.id : null;
+      }
+
+      return sendJson(res, 200, { success: true, report });
+    } catch (e) {
+      return sendJson(res, 500, { success: false, message: e.message });
+    }
+  }
+
+  // 16. AI Engine: Fetch Past Dementia Reports
+  if (pathname === '/api/ai/reports' && req.method === 'GET') {
+    const patientId = parsedUrl.searchParams.get('patientId');
+    const reports = db.getDementiaAIReports(patientId ? Number(patientId) : null);
+    return sendJson(res, 200, { success: true, reports });
   }
 
   // -----------------------------------------------------------

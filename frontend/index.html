@@ -26,41 +26,43 @@
       <button id="btn-toggle-contrast" class="pill-btn" aria-label="Toggle high contrast mode">
         👁️ স্পষ্টতা (Contrast)
       </button>
-      <button class="pill-btn btn-open-breathing" aria-label="Open guided calming breathing">
+      <button class="pill-btn btn-open-breathing" aria-label="Open guided calming breathing" data-i18n="breatheBtn">
         🧘 উশাহ (Breathe)
       </button>
-      <button id="btn-narrate-screen" class="pill-btn" aria-label="Read screen aloud">
+      <button id="btn-narrate-screen" class="pill-btn" aria-label="Read screen aloud" data-i18n="readScreenBtn">
         🔊 পঢ়ক (Read)
       </button>
-      <button id="btn-toggle-cultural-motion" class="pill-btn active" aria-label="Toggle cultural animations">
+      <button id="btn-toggle-cultural-motion" class="pill-btn active" aria-label="Toggle cultural animations" data-i18n="motionBtn">
         🎭 সাংস্কৃতিক দৃশ্য (Motion)
       </button>
     </div>
 
     <div class="access-group">
-      <label for="language-select" class="access-label">ভাষা:</label>
+      <label for="language-select" class="access-label" data-i18n="langLabel">ভাষা:</label>
       <select id="language-select" class="lang-select" aria-label="Select regional language">
         <option value="as" selected>অসমীয়া (Assamese)</option>
+        <option value="en">English (Global)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
         <option value="bn">বাংলা (Bengali)</option>
         <option value="mni">মৈতৈলোন্ (Manipuri)</option>
         <option value="kha">Khasi (Meghalaya)</option>
         <option value="brx">बर' (Bodo)</option>
-        <option value="hi">हिन्दी (Hindi)</option>
-        <option value="en">English</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="fr">Français (French)</option>
+        <option value="de">Deutsch (German)</option>
       </select>
     </div>
 
-    <!-- User Profile & Auth Switcher -->
     <!-- User Profile & Auth Switcher -->
     <div class="access-group">
       <div id="top-user-pill" class="user-profile-pill">
         <span style="font-weight: 800;">Bapuji Goswami</span>
         <span class="role-pill patient">🧓 ৰোগী</span>
       </div>
-      <button class="pill-btn" onclick="window.location.href='login.html'" title="Switch account / Login portal">
+      <button class="pill-btn" onclick="window.location.href='login.html'" title="Switch account / Login portal" data-i18n="loginBtn">
         🔑 পৰ্টেল (Login)
       </button>
-      <button class="pill-btn" onclick="window.AuthEngine.logout()" title="Logout and return to Login Portal">
+      <button class="pill-btn" onclick="window.AuthEngine.logout()" title="Logout and return to Login Portal" data-i18n="logoutBtn">
         🚪 প্ৰস্থান (Logout)
       </button>
     </div>
@@ -82,9 +84,9 @@
     <div style="display: flex; align-items: center; gap: 10px;">
       <div id="sync-status-badge" class="header-status-badge status-online">
         <span class="pulse-dot"></span>
-        <span>🟢 অনলাইন (ডাটা সংৰক্ষিত / Synced)</span>
+        <span data-i18n="syncStatusOnline">🟢 অনলাইন (ডাটা সংৰক্ষিত / Synced)</span>
       </div>
-      <button class="pill-btn" onclick="window.SyncEngine.flushQueue()" title="Force auto-sync with SQLite backend">
+      <button class="pill-btn" onclick="window.SyncEngine.flushQueue()" title="Force auto-sync with SQLite backend" data-i18n="forceSyncBtn">
         🔄 ছিংক (Sync)
       </button>
     </div>
@@ -96,35 +98,35 @@
   <nav class="primary-nav" role="navigation" aria-label="Main Navigation">
     <button class="nav-item-btn active" data-view="view-dashboard">
       <span>🏠</span>
-      <span>মুখ্য পৃষ্ঠা (Patient Home)</span>
+      <span data-i18n="navHome">মুখ্য পৃষ্ঠা (Patient Home)</span>
     </button>
     <button class="nav-item-btn" data-view="view-games">
       <span>🧠</span>
-      <span>মগজু আৰু সংগীতৰ খেল (Games & Music)</span>
+      <span data-i18n="navGames">মগজু আৰু সংগীতৰ খেল (Games & Music)</span>
     </button>
     <button class="nav-item-btn" data-view="view-exercise">
       <span>🧘</span>
-      <span>ব্যায়াম আৰু যোগ (Exercise & Yoga)</span>
+      <span data-i18n="navExercise">ব্যায়াম আৰু যোগ (Exercise & Yoga)</span>
     </button>
     <button class="nav-item-btn" data-view="view-reminders">
       <span>💊</span>
-      <span>ঔষধ আৰু পানী (Patient Care)</span>
+      <span data-i18n="navReminders">ঔষধ আৰু পানী (Patient Care)</span>
     </button>
     <button class="nav-item-btn" data-view="view-doctor">
       <span>🩺</span>
-      <span>চিকিৎসক প্ৰতিবেদন (Doctor Portal)</span>
+      <span data-i18n="navDoctor">চিকিৎসক প্ৰতিবেদন (Doctor Portal)</span>
     </button>
     <button class="nav-item-btn" data-view="view-family">
       <span>👨‍👩‍👧</span>
-      <span>পৰিয়াল পৰিচৰ্যা (Family Portal)</span>
+      <span data-i18n="navFamily">পৰিয়াল পৰিচৰ্যা (Family Portal)</span>
     </button>
     <button class="nav-item-btn" data-view="view-admin">
       <span>🛡️</span>
-      <span>প্ৰশাসক (Admin Console)</span>
+      <span data-i18n="navAdmin">প্ৰশাসক (Admin Console)</span>
     </button>
     <button class="nav-item-btn" data-view="view-head-admin">
       <span>👑</span>
-      <span>মুখ্য প্ৰশাসক (Head Admin Deck)</span>
+      <span data-i18n="navHeadAdmin">মুখ্য প্ৰশাসক (Head Admin Deck)</span>
     </button>
   </nav>
 
@@ -379,6 +381,41 @@
          VIEW 3: PATIENT ROUTINE & WATER
          ----------------------------------------------------- -->
     <section id="view-reminders" class="view-section">
+      <!-- Multilingual Voice AI Medicine Reminder Station Bar -->
+      <div style="background: linear-gradient(135deg, #EBF5FB, #E8F8F5); border: 2px solid var(--accent-blue); border-radius: var(--radius-md); padding: 18px 24px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 2.2rem;">🔊</span>
+          <div>
+            <strong style="color: var(--primary); font-size: 1.15rem;">AI বহুভাষিক ঔষধৰ মাত সোঁৱৰণী (Multilingual Voice AI Reminder System)</strong>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 2px;">
+              ঔষধৰ সময় হ’লে AI-য়ে আপোনাৰ নিজৰ আঞ্চলিক ভাষাত মৰমেৰে মাতি সোঁৱৰাই দিয়ে আৰু সোঁৱৰণী পপ-আপ প্ৰদৰ্শন কৰে।
+            </p>
+          </div>
+        </div>
+        <button id="btn-test-voice-reminder" class="pill-btn active" style="min-height: 52px; padding: 10px 22px; font-weight: 800; background: var(--accent-blue); border-color: var(--accent-blue);">
+          🔔 এতিয়াই মাত পৰীক্ষা কৰক (Test Voice Reminder)
+        </button>
+      </div>
+
+      <!-- Offline Progress Saving & Auto-Sync Bar -->
+      <div style="background: #FFFDF0; border: 2px solid #F1C40F; border-radius: var(--radius-md); padding: 14px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.8rem;">💾</span>
+          <div>
+            <strong style="color: #7D6608; font-size: 1rem;">অফলাইন অগ্ৰগতি সংৰক্ষণ (Offline Progress Saving & Auto-Sync)</strong>
+            <span style="font-size: 0.85rem; color: #7F8C8D; display: block;">ইন্টাৰনেট নাথাকিলেও খেলৰ স্ক’ৰ, ঔষধ আৰু পানীৰ সকলো অগ্ৰগতি অফলাইনত সংৰক্ষিত হৈ থাকে আৰু নেটৱৰ্ক পালে স্বয়ংক্ৰিয়ভাৱে সংমিশ্ৰিত হয়।</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="pill-btn-sm" onclick="window.SyncEngine.saveOfflineSnapshot({ activityName: 'Manual Snapshot' }); alert('✅ আজিৰ সকলো খেল আৰু ঔষধৰ অগ্ৰগতি অফলাইনত সংৰক্ষিত হ’ল!');" style="font-weight: 700; background: #FFF; border-color: #F1C40F; color: #7D6608;">
+            💾 Save Offline Snapshot
+          </button>
+          <button class="pill-btn-sm" onclick="window.SyncEngine.exportOfflineBackup()" style="font-weight: 700; background: #FFF; border-color: #27AE60; color: #1E6B47;">
+            📥 Download Backup (JSON)
+          </button>
+        </div>
+      </div>
+
       <div class="reminders-layout">
         
         <!-- Hydration Tracker Panel -->
@@ -478,46 +515,228 @@
     <section id="view-doctor" class="view-section">
       <div class="caregiver-hero" style="background: linear-gradient(135deg, #163624, #0E291C);">
         <div>
-          <h2>🩺 চিকিৎসক পৰীক্ষণ আৰু নিদান কেন্দ্ৰ (Doctor Clinical Center)</h2>
-          <p>পৰ্যবেক্ষণকাৰী চিকিৎসক: <strong>Dr. Hirendra Sharma (MD Neurology)</strong> • ৰোগী: বাপুজী গোস্বামী (৭২ বছৰ)</p>
+          <h2 data-i18n="docPortalTitle">🩺 চিকিৎসক পৰীক্ষণ আৰু নিদান কেন্দ্ৰ (Doctor Clinical Center)</h2>
+          <p id="doc-patient-header-info" data-i18n="docPortalSub">পৰ্যবেক্ষণকাৰী চিকিৎসক: <strong>Dr. Hirendra Sharma (MD Neurology)</strong> • ৰোগী: বাপুজী গোস্বামী (৭২ বছৰ)</p>
         </div>
-        <button class="btn-export-report" onclick="window.print()">
+        <button class="btn-export-report" onclick="window.print()" data-i18n="exportPdfBtn">
           <span>📄</span>
           <span>চিকিৎসা প্ৰতিবেদন প্ৰিণ্ট কৰক (Export PDF)</span>
         </button>
       </div>
 
+      <!-- Patient Selector Dropdown -->
+      <div style="background: #FFFFFF; border: 2px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 2rem;">👤</span>
+          <div>
+            <label for="doc-patient-selector" style="font-size: 0.85rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; display: block;" data-i18n="selectPatientLabel">Select Patient Under Care:</label>
+            <select id="doc-patient-selector" class="auth-form-control" style="font-weight: 700; min-width: 280px; padding: 8px 14px; margin-top: 4px; font-size: 1rem;">
+              <option value="1">Bapuji Goswami (72 yrs • MCI)</option>
+              <option value="2">Nirmal Chandra Das (76 yrs • Moderate Dementia)</option>
+              <option value="3">Kamala Devi (81 yrs • Moderately Severe)</option>
+            </select>
+          </div>
+        </div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
+          Clinical Portal: Role-Restricted Access (Physicians & Neurologists)
+        </div>
+      </div>
+
       <!-- KPI Metrics -->
       <div class="kpi-row">
         <div class="kpi-card">
-          <div class="kpi-label">MMSE আনুমানিক সূচক</div>
+          <div class="kpi-label" data-i18n="kpiMmse">MMSE আনুমানিক সূচক</div>
           <div class="kpi-value" id="doc-kpi-mmse">25 / 30</div>
           <div class="kpi-subtext">মৃদু লক্ষণ (Mild Cognitive Impairment)</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-label">মগজুৰ সক্ৰিয়তা (Agility)</div>
+          <div class="kpi-label" data-i18n="kpiAgility">মগজুৰ সক্ৰিয়তা (Agility)</div>
           <div class="kpi-value" id="doc-kpi-agility">82%</div>
           <div class="kpi-subtext">অফলাইন-অনলাইন স্বয়ংক্ৰিয় সংমিশ্ৰিত</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-label">ঔষধ পালন হাৰ (Adherence)</div>
+          <div class="kpi-label" data-i18n="kpiAdherence">ঔষধ পালন হাৰ (Adherence)</div>
           <div class="kpi-value" id="doc-kpi-adherence">92%</div>
           <div class="kpi-subtext">সময়মতে দৰৱ গ্ৰহণ</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-label">মুঠ খেল সম্পন্ন</div>
-          <div class="kpi-value" id="doc-kpi-games">6 খেল</div>
+          <div class="kpi-label" data-i18n="kpiGames">মুঠ খেল সম্পন্ন</div>
+          <div class="kpi-value" id="doc-kpi-games">6 Sessions</div>
           <div class="kpi-subtext">বিগত সপ্তাহৰ সক্ৰিয়তা</div>
         </div>
+      </div>
+
+      <!-- =======================================================
+           AI 7-STAGE DEMENTIA CLASSIFICATION & REPORT GENERATOR
+           (Trained on Reisberg Global Deterioration Scale)
+           ======================================================= -->
+      <div class="routine-panel" style="margin-bottom: 28px; border: 3px solid #27AE60; background: #FBFCFB;">
+        <div class="panel-header" style="background: linear-gradient(135deg, #1E6B47, #134B30); color: #FFF; padding: 16px 20px; border-radius: 10px 10px 0 0;">
+          <div>
+            <h3 class="panel-title" style="color: #FFF; font-size: 1.35rem;" data-i18n="aiStagingTitle">
+              🤖 AI 7-Stage Dementia Classification & Clinical Diagnostic Report
+            </h3>
+            <p style="font-size: 0.9rem; color: #D1E7DD; margin-top: 4px;" data-i18n="aiStagingSub">
+              Trained on Reisberg Global Deterioration Scale (GDS) to classify patient into the 7 Stages of Dementia and generate diagnostic reports.
+            </p>
+          </div>
+          <button id="btn-autofill-telemetry" class="pill-btn" style="background: #FFF; color: #1E6B47; font-weight: 800; border: none;" data-i18n="aiAutoFillBtn">
+            ⚡ Auto-Fill Telemetry from Patient Game Data
+          </button>
+        </div>
+
+        <div style="padding: 24px;">
+          <!-- 7 Stages Visual Reference Guide matching the image -->
+          <div style="background: #FFFFFF; border: 2px solid var(--border-subtle); border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+            <strong style="color: var(--primary); font-size: 1.05rem; display: block; margin-bottom: 12px;">
+              📋 7 Stages of Dementia Clinical Reference (Reisberg GDS Scale):
+            </strong>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+              <div style="border-left: 4px solid #27AE60; padding: 6px 12px; background: #F8FBF9; border-radius: 0 6px 6px 0;">
+                <strong style="color: #27AE60;">1. No Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">No noticeable symptoms or memory problems</span>
+              </div>
+              <div style="border-left: 4px solid #2980B9; padding: 6px 12px; background: #F8FAFC; border-radius: 0 6px 6px 0;">
+                <strong style="color: #2980B9;">2. Very Mild Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Subtle memory lapses, generally not detected</span>
+              </div>
+              <div style="border-left: 4px solid #16A085; padding: 6px 12px; background: #F6FBF9; border-radius: 0 6px 6px 0;">
+                <strong style="color: #16A085;">3. Mild Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Increased forgetfulness, slight concentration problems</span>
+              </div>
+              <div style="border-left: 4px solid #E67E22; padding: 6px 12px; background: #FDF9F5; border-radius: 0 6px 6px 0;">
+                <strong style="color: #E67E22;">4. Moderate Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Clear-cut memory loss, difficulty with complex tasks</span>
+              </div>
+              <div style="border-left: 4px solid #D35400; padding: 6px 12px; background: #FDF7F4; border-radius: 0 6px 6px 0;">
+                <strong style="color: #D35400;">5. Moderately Severe Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Assistance with daily activities often needed</span>
+              </div>
+              <div style="border-left: 4px solid #C0392B; padding: 6px 12px; background: #FCF6F6; border-radius: 0 6px 6px 0;">
+                <strong style="color: #C0392B;">6. Severe Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Significant memory issues, personality changes</span>
+              </div>
+              <div style="border-left: 4px solid #8E44AD; padding: 6px 12px; background: #FBF7FD; border-radius: 0 6px 6px 0;">
+                <strong style="color: #8E44AD;">7. Very Severe Cognitive Decline:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-secondary); display:block;">Loss of verbal abilities, total dependence on caregivers</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinical Assessment Sliders & Inputs -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+            <div class="auth-form-group">
+              <label for="ai-input-mmse" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiMmseLabel">MMSE Score (0-30):</label>
+              <input type="number" id="ai-input-mmse" class="auth-form-control" min="0" max="30" value="21" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-memory" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiMemoryLabel">Memory Recall & Retention (0-100%):</label>
+              <input type="number" id="ai-input-memory" class="auth-form-control" min="0" max="100" value="52" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-attention" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiAttentionLabel">Attention & Concentration (0-100%):</label>
+              <input type="number" id="ai-input-attention" class="auth-form-control" min="0" max="100" value="48" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-iadl" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiIadlLabel">Instrumental Daily Living (IADL: 0-10):</label>
+              <input type="number" id="ai-input-iadl" class="auth-form-control" min="0" max="10" step="0.5" value="5.0" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-badl" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiBadlLabel">Basic Daily Living (BADL: 0-10):</label>
+              <input type="number" id="ai-input-badl" class="auth-form-control" min="0" max="10" step="0.5" value="9.0" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-speech" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiSpeechLabel">Verbal Fluency & Language (0-100%):</label>
+              <input type="number" id="ai-input-speech" class="auth-form-control" min="0" max="100" value="60" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-orientation" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiOrientationLabel">Orientation to Time/Place (0-10):</label>
+              <input type="number" id="ai-input-orientation" class="auth-form-control" min="0" max="10" step="0.5" value="7.0" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-behavior" style="font-weight: 700; font-size: 0.9rem;" data-i18n="aiBehaviorLabel">Behavioral Symptoms & Agitation (0-10):</label>
+              <input type="number" id="ai-input-behavior" class="auth-form-control" min="0" max="10" step="0.5" value="3.0" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-accuracy" style="font-weight: 700; font-size: 0.9rem;">Game Accuracy % (0-100%):</label>
+              <input type="number" id="ai-input-accuracy" class="auth-form-control" min="0" max="100" value="62" required>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="ai-input-reaction" style="font-weight: 700; font-size: 0.9rem;">Reaction Latency (Seconds):</label>
+              <input type="number" id="ai-input-reaction" class="auth-form-control" min="1.0" max="30.0" step="0.1" value="7.8" required>
+            </div>
+          </div>
+
+          <div style="margin-top: 18px; text-align: center;">
+            <button id="btn-run-ai-staging" class="btn-auth-submit" style="min-height: 54px; max-width: 440px; margin: 0 auto; font-size: 1.15rem; background: linear-gradient(135deg, #1E6B47, #155724); box-shadow: 0 4px 15px rgba(30,107,71,0.3);" data-i18n="btnRunAiStaging">
+              🤖 Run AI Dementia Classification & Generate Report ➔
+            </button>
+          </div>
+
+          <!-- Dynamic Assessment Output Container -->
+          <div id="ai-staging-result-container" style="display: none;"></div>
+        </div>
+      </div>
+
+      <!-- =======================================================
+           DOCTOR PRESCRIPTION & MEDICATION MANAGEMENT FORM
+           ======================================================= -->
+      <div class="routine-panel" style="margin-bottom: 28px; border: 2px solid var(--primary-border);">
+        <div class="panel-header" style="background: var(--primary-light);">
+          <h3 class="panel-title" style="color: var(--primary);" data-i18n="prescribeFormTitle">
+            ➕ Prescribe & Add New Medication (Doctor Access)
+          </h3>
+          <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">Direct SQLite Persistence</span>
+        </div>
+        <form id="doc-prescribe-form" style="padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: flex-end;">
+          <div class="auth-form-group" style="margin-bottom: 0;">
+            <label for="doc-prescribe-name" style="font-weight: 700; font-size: 0.85rem;" data-i18n="prescribeMedName">Medication Name:</label>
+            <input type="text" id="doc-prescribe-name" class="auth-form-control" placeholder="e.g. Donepezil / Memantine / Rivastigmine" required>
+          </div>
+
+          <div class="auth-form-group" style="margin-bottom: 0;">
+            <label for="doc-prescribe-time" style="font-weight: 700; font-size: 0.85rem;" data-i18n="prescribeTime">Scheduled Time:</label>
+            <input type="text" id="doc-prescribe-time" class="auth-form-control" placeholder="e.g. 08:00 AM (Morning) / 08:00 PM" required>
+          </div>
+
+          <div class="auth-form-group" style="margin-bottom: 0;">
+            <label for="doc-prescribe-inst" style="font-weight: 700; font-size: 0.85rem;" data-i18n="prescribeInstructions">Dosage & Instructions:</label>
+            <input type="text" id="doc-prescribe-inst" class="auth-form-control" placeholder="e.g. 5mg once daily with water">
+          </div>
+
+          <div class="auth-form-group" style="margin-bottom: 0;">
+            <label for="doc-prescribe-icon" style="font-weight: 700; font-size: 0.85rem;" data-i18n="prescribeIcon">Pill Icon / Type:</label>
+            <select id="doc-prescribe-icon" class="auth-form-control">
+              <option value="💊">💊 Capsule / Tablet</option>
+              <option value="🔴">🔴 High Priority (Donepezil/BP)</option>
+              <option value="🟡">🟡 Vitamin / Neuro-Support</option>
+              <option value="🔵">🔵 Memory Enhancer</option>
+              <option value="⚪">⚪ Sleep & Relaxation</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-auth-submit" style="min-height: 48px; background: var(--primary); margin-bottom: 0;" data-i18n="btnPrescribeSubmit">
+            💊 Prescribe Medication
+          </button>
+        </form>
       </div>
 
       <!-- 1. Detailed Medication Taken / Not Taken Adherence Table -->
       <div class="routine-panel" style="margin-bottom: 28px;">
         <div class="panel-header">
-          <h3 class="panel-title">💊 ঔষধ গ্ৰহণৰ সবিশেষ পৰ্যবেক্ষণ তালিকা (Medication Taken / Missed History)</h3>
+          <h3 class="panel-title" data-i18n="docMedTableTitle">💊 ঔষধ গ্ৰহণৰ সবিশেষ পৰ্যবেক্ষণ তালিকা (Medication Taken / Missed History)</h3>
           <span style="font-size: 0.85rem; color: var(--primary); font-weight: 700;">SQLite Real-Time Data</span>
         </div>
         <div class="data-table-wrapper">
@@ -529,6 +748,7 @@
                 <th>স্থিতি (Status)</th>
                 <th>গ্ৰহণ কৰা সময় (Taken At)</th>
                 <th>সংযোজনকাৰী (Added By)</th>
+                <th>কাৰ্য্য (Action)</th>
               </tr>
             </thead>
             <tbody id="doc-medication-adherence-tbody">
@@ -647,28 +867,34 @@
     </section>
 
     <!-- -----------------------------------------------------
-         VIEW 7: ADMIN CONSOLE
+         VIEW 7: ADMIN CONSOLE (Patients DB, Doctors DB & Inspector)
          ----------------------------------------------------- -->
     <section id="view-admin" class="view-section">
       <div class="caregiver-hero" style="background: linear-gradient(135deg, #371C4B, #1B0C26);">
         <div>
-          <h2>🛡️ প্ৰশাসনিক নিয়ন্ত্ৰণ কক্ষ (Delta Neurons Admin Console)</h2>
-          <p>প্ৰশাসক: <strong>System Administrator</strong> • কেন্দ্ৰীয় SQLite ডাটাবেছ আৰু ব্যৱহাৰকাৰী পৰিচালনা</p>
+          <h2 data-i18n="adminTitle">🛡️ প্ৰশাসনিক নিয়ন্ত্ৰণ কক্ষ (Delta Neurons Admin Console)</h2>
+          <p data-i18n="adminSub">প্ৰশাসক: <strong>System Administrator</strong> • কেন্দ্ৰীয় SQLite ডাটাবেছ, পঞ্জীকৃত ৰোগী আৰু চিকিৎসক পৰিচালনা</p>
         </div>
-        <button class="btn-export-report" onclick="window.AdminPortal.refresh()">
-          <span>🔄</span>
-          <span>তথ্য পুনৰুদ্ধাৰ (Refresh Database)</span>
-        </button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-export-report" onclick="window.AdminPortal.refresh()">
+            <span>🔄</span>
+            <span>তথ্য পুনৰুদ্ধাৰ (Refresh)</span>
+          </button>
+        </div>
       </div>
 
       <!-- Database Statistics Grid -->
       <div class="admin-stats-grid">
         <div class="stat-tile">
-          <div class="stat-tile-val" id="stat-total-users">4</div>
-          <div class="stat-tile-label">পঞ্জীকৃত সদস্য (Registered Users)</div>
+          <div class="stat-tile-val" id="stat-total-patients">3</div>
+          <div class="stat-tile-label">পঞ্জীকৃত ৰোগী (Registered Patients)</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-tile-val" id="stat-total-sessions">6</div>
+          <div class="stat-tile-val" id="stat-total-doctors" style="color:#2980B9;">2</div>
+          <div class="stat-tile-label">পঞ্জীকৃত চিকিৎসক (Registered Doctors)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-val" id="stat-total-sessions">12</div>
           <div class="stat-tile-label">খেল অধিবেশন (Cognitive Sessions)</div>
         </div>
         <div class="stat-tile">
@@ -676,30 +902,132 @@
           <div class="stat-tile-label">ঔষধ তালিকা (Scheduled Meds)</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-tile-val" id="stat-total-syncs">1</div>
+          <div class="stat-tile-val" id="stat-total-syncs">3</div>
           <div class="stat-tile-label">স্বয়ংক্ৰিয় ছিংক (Auto-Sync Events)</div>
         </div>
       </div>
 
-      <!-- User Registry Table -->
-      <div class="routine-panel">
-        <div class="panel-header">
-          <h3 class="panel-title">👥 ব্যৱহাৰকাৰী পঞ্জীয়ন তালিকা (User Registry & Roles)</h3>
+      <!-- Admin Tab Switcher -->
+      <div style="display:flex; gap:12px; margin-bottom:20px; border-bottom:3px solid var(--border-subtle); padding-bottom:12px; flex-wrap:wrap;">
+        <button class="portal-tab-btn admin-tab-btn active" data-tab="patients" onclick="window.AdminPortal.switchTab('patients')" data-i18n="adminTabPatients">
+          👥 Registered Patients Database
+        </button>
+        <button class="portal-tab-btn admin-tab-btn" data-tab="doctors" onclick="window.AdminPortal.switchTab('doctors')" data-i18n="adminTabDoctors">
+          🩺 Registered Doctors Database
+        </button>
+        <button class="portal-tab-btn admin-tab-btn" data-tab="caregivers" onclick="window.AdminPortal.switchTab('caregivers')" data-i18n="adminTabCaregivers">
+          👨‍👩‍👧 Registered Caregivers Database
+        </button>
+        <button class="portal-tab-btn admin-tab-btn" data-tab="database" onclick="window.AdminPortal.switchTab('database')" data-i18n="adminTabDatabase">
+          🗄️ Master Database Inspector ("All Things")
+        </button>
+      </div>
+
+      <!-- TAB 1: Registered Patients Database -->
+      <div id="admin-panel-patients" class="routine-panel">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <h3 class="panel-title">👥 পঞ্জীকৃত লোক আৰু ৰোগীসকলৰ তালিকা (Registered Patients Database)</h3>
+          <input type="text" id="admin-patient-search" class="auth-form-control" placeholder="🔍 Search patients by name, username, diagnosis..." style="max-width:320px; padding:6px 14px;">
         </div>
         <div class="data-table-wrapper">
           <table class="data-table">
             <thead>
               <tr>
                 <th>আইডি (ID)</th>
-                <th>ব্যৱহাৰকাৰী নাম (Username)</th>
-                <th>সম্পূৰ্ণ নাম (Full Name)</th>
-                <th>ভূমিকা (Role)</th>
+                <th>ৰোগীৰ নাম (Patient Name)</th>
+                <th>বয়স (Age)</th>
+                <th>স্থান (Location)</th>
+                <th>ৰোগ নিদান (Diagnosis)</th>
+                <th>যোগাযোগ / জৰুৰীকালীন (Emergency Contact)</th>
+                <th>অধিবেশন / দৰৱ (Activity)</th>
+                <th>কাৰ্য্য (Action)</th>
+              </tr>
+            </thead>
+            <tbody id="admin-patients-tbody">
+              <!-- Populated dynamically by AdminPortal -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: Registered Doctors Database -->
+      <div id="admin-panel-doctors" class="routine-panel" style="display:none;">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <h3 class="panel-title">🩺 পঞ্জীকৃত চিকিৎসকসকলৰ তালিকা (Registered Doctors Database)</h3>
+          <input type="text" id="admin-doctor-search" class="auth-form-control" placeholder="🔍 Search doctors by name, specialty..." style="max-width:320px; padding:6px 14px;">
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>আইডি (ID)</th>
+                <th>চিকিৎসকৰ নাম (Doctor Name)</th>
+                <th>বিশেষজ্ঞতা (Clinical Specialty)</th>
+                <th>ফোন নম্বৰ (Phone)</th>
+                <th>পঞ্জীয়ন স্থিতি (Clinical Status)</th>
+                <th>পঞ্জীয়ন তাৰিখ (Joined)</th>
+                <th>প্ৰমাণীকৰণ (Verification)</th>
+              </tr>
+            </thead>
+            <tbody id="admin-doctors-tbody">
+              <!-- Populated dynamically by AdminPortal -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: Registered Caregivers Database -->
+      <div id="admin-panel-caregivers" class="routine-panel" style="display:none;">
+        <div class="panel-header">
+          <h3 class="panel-title">👨‍👩‍👧 পঞ্জীকৃত পৰিয়াল আৰু সেৱকসকলৰ ডাটাবেছ (Family Caregivers Registry)</h3>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>আইডি (ID)</th>
+                <th>সেৱকৰ নাম (Caregiver Name)</th>
+                <th>সম্পৰ্ক (Relationship)</th>
+                <th>সংলগ্ন ৰোগী (Linked Patient)</th>
                 <th>ফোন নম্বৰ (Phone)</th>
                 <th>পঞ্জীয়ন তাৰিখ (Registered Date)</th>
               </tr>
             </thead>
-            <tbody id="admin-users-tbody">
-              <!-- Populated by js/portals.js -->
+            <tbody id="admin-caregivers-tbody">
+              <!-- Populated dynamically by AdminPortal -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: Master Database Inspector ("All Things") -->
+      <div id="admin-panel-database" class="routine-panel" style="display:none;">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <h3 class="panel-title">🗄️ কেন্দ্ৰীয় SQLite ডাটাবেছ পৰিদৰ্শক (Master SQLite Inspector - All Tables)</h3>
+          <button class="pill-btn" onclick="window.HeadAdminPortal.exportCurrentTableCSV()" style="font-weight:700;">
+            📥 Export Table as CSV
+          </button>
+        </div>
+
+        <div style="padding:14px 20px; background:var(--bg-app); border-bottom:2px solid var(--border-subtle); display:flex; gap:8px; flex-wrap:wrap;">
+          <span style="font-weight:800; font-size:0.9rem; align-self:center;">Select SQLite Table:</span>
+          <button class="pill-btn ha-table-tab-btn active" data-table="users" onclick="window.HeadAdminPortal.switchTable('users')">users</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="patient_profiles" onclick="window.HeadAdminPortal.switchTable('patient_profiles')">patient_profiles</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="cognitive_sessions" onclick="window.HeadAdminPortal.switchTable('cognitive_sessions')">cognitive_sessions</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="medications" onclick="window.HeadAdminPortal.switchTable('medications')">medications</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="hydration_logs" onclick="window.HeadAdminPortal.switchTable('hydration_logs')">hydration_logs</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="family_notes" onclick="window.HeadAdminPortal.switchTable('family_notes')">family_notes</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="dementia_ai_reports" onclick="window.HeadAdminPortal.switchTable('dementia_ai_reports')">dementia_ai_reports</button>
+          <button class="pill-btn ha-table-tab-btn" data-table="sync_audit" onclick="window.HeadAdminPortal.switchTable('sync_audit')">sync_audit</button>
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead id="ha-inspector-thead">
+              <!-- Populated by HeadAdminPortal -->
+            </thead>
+            <tbody id="ha-inspector-tbody">
+              <!-- Populated by HeadAdminPortal -->
             </tbody>
           </table>
         </div>
@@ -986,7 +1314,91 @@
   </div>
 
   <!-- =========================================================
-       8. Footer
+       8. Medicine Reminder Alarm Modal (Multilingual Voice AI)
+       ========================================================= -->
+  <div id="medicine-alarm-modal" class="calm-modal-overlay" role="dialog" aria-modal="true" style="display: none; z-index: 10000;">
+    <div class="calm-modal-box" style="border: 4px solid var(--accent-blue); max-width: 560px; box-shadow: 0 12px 48px rgba(0,0,0,0.35); text-align: center;">
+      <div style="font-size: 3.8rem; animation: pulseGlow 1.5s infinite alternate;" id="med-alarm-pill-icon">💊</div>
+      <div style="background: var(--primary-light); padding: 5px 14px; border-radius: 20px; display: inline-block; font-weight: 800; font-size: 0.9rem; color: var(--primary); margin: 8px 0;">
+        🔔 AI ঔষধ সোঁৱৰণী (Medicine Voice Alert)
+      </div>
+      <h3 id="med-alarm-name" class="modal-title" style="color: var(--primary); font-size: 1.65rem; margin-top: 4px; line-height: 1.2;">
+        স্মৃতি শক্তিবৰ্ধক ঔষধি (Donepezil 5mg)
+      </h3>
+      <div id="med-alarm-time" style="font-weight: 700; color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 12px;">
+        ⏰ নিৰ্ধাৰিত সময়: সন্ধিয়া ৭:৩০
+      </div>
+      <div id="med-alarm-speech-text" style="background: #F8FBF9; border: 2px dashed var(--primary-border); border-radius: 12px; padding: 14px; font-size: 1.05rem; color: var(--text-primary); line-height: 1.45; margin-bottom: 18px; text-align: left;">
+        প্ৰণাম আইতা-ককা! এতিয়া আপোনাৰ ঔষধ খোৱাৰ সময় হৈছে। অনুগ্ৰহ কৰি এঢোক বিশুদ্ধ পানীৰ সৈতে ঔষধখিনি লওক।
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="pill-btn" onclick="window.Reminders.replayActiveVoice()" style="font-weight: 800; background: #FFF; border: 2px solid var(--border-subtle); min-height: 48px;">
+          🔊 পুনৰ শুনক (Listen Again)
+        </button>
+        <button class="pill-btn" onclick="window.Reminders.takeMedicineFromModal()" style="font-weight: 800; background: #2E7D32; color: #FFF; min-height: 52px; padding: 10px 22px; font-size: 1.05rem;">
+          ✅ মই ঔষধ খালোঁ (I Took It)
+        </button>
+        <button class="pill-btn" onclick="window.Reminders.snoozeReminder(5)" style="font-weight: 700; background: #FFF; border: 2px solid #E67E22; color: #D35400; min-height: 48px;">
+          ⏰ ৫ মিনিট পিছুৱাওক (Snooze 5 Min)
+        </button>
+        <button class="pill-btn" onclick="window.Reminders.addWaterGlass(); window.Reminders.closeReminderModal();" style="font-weight: 700; background: var(--accent-blue); color: #FFF; min-height: 48px;">
+          💧 এগিলাচ পানী খালোঁ (Drink Water)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       9. Floating Dementia Care AI Companion Launcher & Dialog
+       ========================================================= -->
+  <button id="floating-companion-btn" class="floating-companion-trigger" onclick="window.DementiaAICompanion.openCompanionModal()" title="আইতা-ককা সহায়িকা (Dementia Care AI Companion)">
+    <span class="companion-btn-icon">🌿</span>
+    <span class="companion-btn-label">আইতা-ককা সহায়িকা (AI Companion)</span>
+  </button>
+
+  <div id="dementia-companion-modal" class="calm-modal-overlay" role="dialog" aria-modal="true" style="display: none; z-index: 10001;">
+    <div class="calm-modal-box companion-dialog-box" style="max-width: 620px; width: 92%; padding: 24px; border: 3px solid var(--primary-border); border-radius: 20px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 2.2rem; background: var(--primary-light); border-radius: 50%; width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;">🌿</span>
+          <div>
+            <h3 style="margin: 0; color: var(--primary); font-size: 1.35rem;">আইতা-ককা সহায়িকা (AI Dementia Companion)</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Validation Therapy • Reminiscence • Calming Voice AI</span>
+          </div>
+        </div>
+        <button onclick="window.DementiaAICompanion.closeCompanionModal()" class="pill-btn-sm" style="font-size: 1.2rem; border: none; background: none; cursor: pointer; padding: 4px 8px;">✕</button>
+      </div>
+
+      <!-- Quick 1-Tap Elderly Comfort Prompts -->
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+        <button class="pill-btn-sm" onclick="window.DementiaAICompanion.handleUserInput('কʼত আছোঁ? ঘৰলৈ যাম')">🏠 মই ক’ত আছোঁ?</button>
+        <button class="pill-btn-sm" onclick="window.DementiaAICompanion.handleUserInput('মন অস্থিৰ লাগিছে, ভয় খাইছোঁ')">🧘 মন শান্ত কৰক</button>
+        <button class="pill-btn-sm" onclick="window.DementiaAICompanion.handleUserInput('মোৰ ঔষধ খোৱা হʼলনে?')">💊 ঔষধৰ খবৰ</button>
+        <button class="pill-btn-sm" onclick="window.DementiaAICompanion.handleUserInput('চাহ বাগিচা আৰু বিহুৰ পুৰণি স্মৃতি কওক')">🌸 পুৰণি স্মৃতি</button>
+        <button class="pill-btn-sm" onclick="window.DementiaAICompanion.handleUserInput('এটা চুটি সাধু কওক')">📖 সাধু শুনক</button>
+      </div>
+
+      <!-- Conversation Chat Feed -->
+      <div id="companion-chat-feed" style="max-height: 280px; min-height: 180px; overflow-y: auto; background: var(--bg-app); border: 2px solid var(--border-subtle); border-radius: 12px; padding: 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Input Bar (Voice + Text) -->
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="companion-mic-btn" class="pill-btn active" onclick="window.DementiaAICompanion.toggleMic()" style="min-height: 48px; background: var(--primary); border: none; font-weight: 800; white-space: nowrap;">
+          🎤 মুখেৰে কওক (Speak)
+        </button>
+        <input type="text" id="companion-text-input" class="auth-form-control" placeholder="যিকোনো কথা সোধক বা কওক..." style="margin-bottom: 0; min-height: 48px;" onkeydown="if(event.key==='Enter'){ window.DementiaAICompanion.handleUserInput(this.value); this.value=''; }">
+        <button class="pill-btn" onclick="const input = document.getElementById('companion-text-input'); window.DementiaAICompanion.handleUserInput(input.value); input.value='';" style="min-height: 48px; font-weight: 800; background: var(--accent-blue); color: #FFF; border: none; white-space: nowrap;">
+          পঠিয়াওক ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       10. Footer
        ========================================================= -->
   <footer class="main-footer">
     <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;">
@@ -1003,8 +1415,11 @@
   </footer>
 
   <!-- Core Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/model-classifier.js"></script>
   <script src="js/voice-ner.js"></script>
   <script src="js/ai-engine.js"></script>
+  <script src="js/dementia-ai-companion.js"></script>
   <script src="js/sync-engine.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/portals.js"></script>

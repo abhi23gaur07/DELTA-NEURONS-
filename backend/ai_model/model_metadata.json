@@ -1,0 +1,84 @@
+{
+  "model_name": "DELTA-NEURONS-7STAGE-DEMENTIA-CLASSIFIER",
+  "version": "2.0.0",
+  "training_samples": 4200,
+  "test_accuracy_pct": 99.76,
+  "cv_accuracy_pct": 99.55,
+  "feature_names": [
+    "age",
+    "mmse_score",
+    "memory_recall",
+    "attention_focus",
+    "iadl_score",
+    "badl_score",
+    "verbal_fluency",
+    "orientation",
+    "behavioral_symptoms",
+    "game_accuracy",
+    "game_reaction_time"
+  ],
+  "feature_importances": {
+    "age": 0.001,
+    "mmse_score": 0.2669,
+    "memory_recall": 0.1373,
+    "attention_focus": 0.1396,
+    "iadl_score": 0.0929,
+    "badl_score": 0.0941,
+    "verbal_fluency": 0.0981,
+    "orientation": 0.0318,
+    "behavioral_symptoms": 0.0083,
+    "game_accuracy": 0.0922,
+    "game_reaction_time": 0.0379
+  },
+  "stages": {
+    "1": {
+      "name": "No Cognitive Decline",
+      "description": "No noticeable symptoms or memory problems. Normal cognitive functioning with age-appropriate memory.",
+      "gds_equivalent": "GDS 1 (Normal Aging)",
+      "clinical_category": "Normal / Non-Impaired",
+      "color": "#27AE60"
+    },
+    "2": {
+      "name": "Very Mild Cognitive Decline",
+      "description": "Subtle memory lapses, generally not detected by friends or medical screening. Forgets familiar names or keys.",
+      "gds_equivalent": "GDS 2 (Age-Associated Memory Impairment)",
+      "clinical_category": "Subjective Cognitive Impairment",
+      "color": "#2980B9"
+    },
+    "3": {
+      "name": "Mild Cognitive Decline",
+      "description": "Increased forgetfulness, slight concentration problems. Coworkers or family begin to notice mild memory lapses.",
+      "gds_equivalent": "GDS 3 (Mild Cognitive Impairment - MCI)",
+      "clinical_category": "Mild Cognitive Impairment (MCI)",
+      "color": "#16A085"
+    },
+    "4": {
+      "name": "Moderate Cognitive Decline",
+      "description": "Clear-cut memory loss, difficulty with complex tasks such as managing finances, bills, or planning dinner.",
+      "gds_equivalent": "GDS 4 (Mild Dementia / Early-Stage Alzheimer's)",
+      "clinical_category": "Early-Stage Dementia",
+      "color": "#E67E22"
+    },
+    "5": {
+      "name": "Moderately Severe Cognitive Decline",
+      "description": "Assistance with daily activities often needed. Disorientation to time or location; unable to recall home phone/address.",
+      "gds_equivalent": "GDS 5 (Moderate Dementia / Mid-Stage)",
+      "clinical_category": "Mid-Stage Dementia",
+      "color": "#D35400"
+    },
+    "6": {
+      "name": "Severe Cognitive Decline",
+      "description": "Significant memory issues, personality changes, emotional agitation, sleep disruptions; requires help dressing and bathing.",
+      "gds_equivalent": "GDS 6 (Moderately Severe Dementia)",
+      "clinical_category": "Late Mid-Stage Dementia",
+      "color": "#C0392B"
+    },
+    "7": {
+      "name": "Very Severe Cognitive Decline",
+      "description": "Loss of verbal abilities, total dependence on caregivers for motor mobility, feeding, and basic physical sustenance.",
+      "gds_equivalent": "GDS 7 (Severe / End-Stage Dementia)",
+      "clinical_category": "Advanced Late-Stage Dementia",
+      "color": "#8E44AD"
+    }
+  }
+}

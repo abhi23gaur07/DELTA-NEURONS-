@@ -118,21 +118,38 @@
 <body class="font-normal">
 
   <div class="portal-container">
+    <!-- Language Switcher Bar -->
+    <div style="display:flex; justify-content: flex-end; margin-bottom: 12px; gap: 8px; align-items:center;">
+      <label for="language-select" style="font-weight:700; font-size:0.9rem;" data-i18n="langLabel">ভাষা (Language):</label>
+      <select id="language-select" class="lang-select" style="padding:6px 14px; border-radius:8px; border:2px solid var(--border-subtle); font-weight:700; background:#FFF; font-size:0.95rem;">
+        <option value="as" selected>অসমীয়া (Assamese)</option>
+        <option value="en">English (Global)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="mni">মৈতৈলোন্ (Manipuri)</option>
+        <option value="kha">Khasi (Meghalaya)</option>
+        <option value="brx">बर' (Bodo)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="fr">Français (French)</option>
+        <option value="de">Deutsch (German)</option>
+      </select>
+    </div>
+
     <!-- Brand Title -->
     <div class="portal-brand-header">
       <img src="assets/logo.png" alt="DELTA NEURONS Logo" style="width: 140px; height: auto; max-height: 140px; border-radius: 20px; box-shadow: var(--shadow-md); margin-bottom: 12px; background: #FFFFFF; padding: 6px; border: 2px solid var(--border-subtle); object-fit: contain;">
       <h1 class="portal-title">DELTA NEURONS</h1>
-      <p class="portal-sub">NER MEMORY CARE • পৰিচয় প্ৰৱেশ কেন্দ্ৰ (Healthcare Identity Portal)</p>
+      <p class="portal-sub" data-i18n="loginSub">NER MEMORY CARE • পৰিচয় প্ৰৱেশ কেন্দ্ৰ (Healthcare Identity Portal)</p>
     </div>
 
     <!-- Main Card -->
     <div class="portal-card">
       <!-- Tabs -->
       <div class="portal-tabs">
-        <button id="tab-login" class="portal-tab-btn active" onclick="showTab('login')">
+        <button id="tab-login" class="portal-tab-btn active" onclick="showTab('login')" data-i18n="tabLogin">
           প্ৰৱেশ (Login)
         </button>
-        <button id="tab-register" class="portal-tab-btn" onclick="showTab('register')">
+        <button id="tab-register" class="portal-tab-btn" onclick="showTab('register')" data-i18n="tabRegister">
           নতুন পঞ্জীয়ন (Register)
         </button>
       </div>
@@ -140,16 +157,16 @@
       <!-- Form 1: Login -->
       <form id="login-form" onsubmit="handleLoginSubmit(event)">
         <div class="auth-form-group">
-          <label for="input-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+          <label for="input-username" data-i18n="lblUsername">ব্যৱহাৰকাৰী নাম (Username):</label>
           <input type="text" id="input-username" class="auth-form-control" placeholder="যেনে: bapuji / dr_sharma / head_admin" required autofocus>
         </div>
 
         <div class="auth-form-group">
-          <label for="input-password">পাছৱৰ্ড (Password):</label>
+          <label for="input-password" data-i18n="lblPassword">পাছৱৰ্ড (Password):</label>
           <input type="password" id="input-password" class="auth-form-control" placeholder="পাছৱৰ্ড লিখক" required>
         </div>
 
-        <button type="submit" id="btn-login-submit" class="btn-auth-submit" style="min-height: 56px;">
+        <button type="submit" id="btn-login-submit" class="btn-auth-submit" style="min-height: 56px;" data-i18n="btnLoginSubmit">
           প্ৰৱেশ কৰক (Secure Login) ➔
         </button>
       </form>
@@ -157,13 +174,13 @@
       <!-- Form 2: Register -->
       <form id="register-form" style="display: none;" onsubmit="handleRegisterSubmit(event)">
         <div class="auth-form-group">
-          <label for="reg-fullname">সম্পূৰ্ণ নাম (Full Name):</label>
+          <label for="reg-fullname" data-i18n="lblFullName">সম্পূৰ্ণ নাম (Full Name):</label>
           <input type="text" id="reg-fullname" class="auth-form-control" placeholder="যেনে: Dr. Hemanta Baruah / Anita Goswami" required>
         </div>
 
         <div class="auth-form-group">
-          <label for="reg-role">ভূমিকা বাছক (Select Role):</label>
-          <select id="reg-role" class="auth-form-control" required>
+          <label for="reg-role" data-i18n="lblRole">ভূমিকা বাছক (Select Role):</label>
+          <select id="reg-role" class="auth-form-control" required onchange="handleRoleChange(this.value)">
             <option value="patient" selected>🧓 ৰোগী (Patient - Dementia Care)</option>
             <option value="doctor">🩺 চিকিৎসক (Doctor / Clinician)</option>
             <option value="family">👨‍👩‍👧 পৰিয়াল / সেৱক (Family Caregiver)</option>
@@ -172,22 +189,59 @@
           </select>
         </div>
 
+        <!-- Dynamic Patient Fields -->
+        <div id="reg-patient-fields" style="display: block;">
+          <div class="auth-form-group">
+            <label for="reg-age">ৰোগীৰ বয়স (Age):</label>
+            <input type="number" id="reg-age" class="auth-form-control" placeholder="72" value="72">
+          </div>
+          <div class="auth-form-group">
+            <label for="reg-location">বাসস্থান / জিলা (Location / City):</label>
+            <input type="text" id="reg-location" class="auth-form-control" placeholder="যেনে: Dispur, Guwahati" value="Guwahati, Assam">
+          </div>
+          <div class="auth-form-group">
+            <label for="reg-emergency">জৰুৰীকালীন অভিভাৱকৰ ফোন (Emergency Contact):</label>
+            <input type="tel" id="reg-emergency" class="auth-form-control" placeholder="+91 94350 98765">
+          </div>
+        </div>
+
+        <!-- Dynamic Doctor Fields -->
+        <div id="reg-doctor-fields" style="display: none;">
+          <div class="auth-form-group">
+            <label for="reg-license">চিকিৎসা অনুজ্ঞাপত্ৰ নং (Medical License #):</label>
+            <input type="text" id="reg-license" class="auth-form-control" placeholder="যেনে: NER-MC-04921-ASSAM">
+          </div>
+          <div class="auth-form-group">
+            <label for="reg-specialty">বিশেষজ্ঞতা (Clinical Specialty):</label>
+            <select id="reg-specialty" class="auth-form-control">
+              <option value="Chief Clinical Neurologist (MD Neurology)" selected>Chief Clinical Neurologist (MD Neurology)</option>
+              <option value="Geriatric Cognition & Memory Specialist">Geriatric Cognition & Memory Specialist</option>
+              <option value="Neuropsychiatrist & Behavioral Health">Neuropsychiatrist & Behavioral Health</option>
+              <option value="General Geriatric Care Physician">General Geriatric Care Physician</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label for="reg-hospital">চিকিৎসালয় / প্ৰতিষ্ঠান (Hospital / Clinic):</label>
+            <input type="text" id="reg-hospital" class="auth-form-control" placeholder="Dispur Neuro Institute" value="NER Memory Care Network, Guwahati">
+          </div>
+        </div>
+
         <div class="auth-form-group">
-          <label for="reg-username">ব্যৱহাৰকাৰী নাম (Username):</label>
+          <label for="reg-username" data-i18n="lblUsername">ব্যৱহাৰকাৰী নাম (Username):</label>
           <input type="text" id="reg-username" class="auth-form-control" placeholder="unique_username" required>
         </div>
 
         <div class="auth-form-group">
-          <label for="reg-password">পাছৱৰ্ড (Password):</label>
+          <label for="reg-password" data-i18n="lblPassword">পাছৱৰ্ড (Password):</label>
           <input type="password" id="reg-password" class="auth-form-control" placeholder="পাছৱৰ্ড" required>
         </div>
 
         <div class="auth-form-group">
-          <label for="reg-phone">ফোন নম্বৰ (Phone):</label>
+          <label for="reg-phone" data-i18n="lblPhone">ফোন নম্বৰ (Phone):</label>
           <input type="tel" id="reg-phone" class="auth-form-control" placeholder="+91 94350 XXXXX">
         </div>
 
-        <button type="submit" class="btn-auth-submit" style="background: var(--accent-blue); min-height: 56px;">
+        <button type="submit" class="btn-auth-submit" style="background: var(--accent-blue); min-height: 56px;" data-i18n="btnRegisterSubmit">
           একাউন্ট পঞ্জীয়ন কৰক (Create Account) ➔
         </button>
       </form>
@@ -195,47 +249,47 @@
       <!-- 1-Click Quick Demo Role Shortcuts -->
       <div class="demo-shortcuts-box" style="margin-top: 28px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="color: var(--primary); font-size: 1rem;">
+          <strong style="color: var(--primary); font-size: 1rem;" data-i18n="demoShortcutsTitle">
             ⚡ দ্ৰুত পৰীক্ষণৰ বাবে ১-ক্লিক প্ৰৱেশ (1-Click Demo Shortcuts):
           </strong>
         </div>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
-          যিকোনো এটা ভূমিকা নিৰ্বাচন কৰক আৰু পোনপটীয়াকৈ সেই কামৰ ড্যাশবৰ্ডলৈ যাওক।
+          Select any role to immediately test its dedicated permissions and views.
         </p>
 
         <div class="demo-role-grid">
           <!-- 1. Patient -->
           <div class="demo-role-tile" onclick="quickLogin('bapuji', 'pass123')">
             <div style="font-size: 1.4rem;">🧓</div>
-            <strong style="font-size: 0.95rem;">ৰোগী (Patient)</strong>
+            <strong style="font-size: 0.95rem;" data-i18n="rolePatient">ৰোগী (Patient)</strong>
             <div style="font-size: 0.8rem; color: var(--text-muted);">User: bapuji</div>
           </div>
 
           <!-- 2. Doctor -->
           <div class="demo-role-tile" onclick="quickLogin('dr_sharma', 'doc123')">
             <div style="font-size: 1.4rem;">🩺</div>
-            <strong style="font-size: 0.95rem;">চিকিৎসক (Doctor)</strong>
+            <strong style="font-size: 0.95rem;" data-i18n="roleDoctor">চিকিৎসক (Doctor)</strong>
             <div style="font-size: 0.8rem; color: var(--text-muted);">User: dr_sharma</div>
           </div>
 
           <!-- 3. Family -->
           <div class="demo-role-tile" onclick="quickLogin('anita_family', 'family123')">
             <div style="font-size: 1.4rem;">👨‍👩‍👧</div>
-            <strong style="font-size: 0.95rem;">পৰিয়াল (Family)</strong>
+            <strong style="font-size: 0.95rem;" data-i18n="roleFamily">পৰিয়াল (Family)</strong>
             <div style="font-size: 0.8rem; color: var(--text-muted);">User: anita_family</div>
           </div>
 
           <!-- 4. Admin -->
           <div class="demo-role-tile" onclick="quickLogin('admin', 'admin123')">
             <div style="font-size: 1.4rem;">🛡️</div>
-            <strong style="font-size: 0.95rem;">প্ৰশাসক (Admin)</strong>
+            <strong style="font-size: 0.95rem;" data-i18n="roleAdmin">প্ৰশাসক (Admin)</strong>
             <div style="font-size: 0.8rem; color: var(--text-muted);">User: admin</div>
           </div>
 
           <!-- 5. Head Admin (Universal Detail Access) -->
           <div class="demo-role-tile head-admin-tile" onclick="quickLogin('head_admin', 'head123')">
             <div style="font-size: 1.4rem;">👑</div>
-            <strong style="font-size: 0.95rem; color: #8C6200;">মুখ্য প্ৰশাসক (Head Admin)</strong>
+            <strong style="font-size: 0.95rem; color: #8C6200;" data-i18n="roleHeadAdmin">মুখ্য প্ৰশাসক (Head Admin)</strong>
             <div style="font-size: 0.8rem; color: var(--text-muted);">User: head_admin</div>
           </div>
         </div>
@@ -244,7 +298,21 @@
     </div>
   </div>
 
+  <script src="js/i18n.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.I18nEngine) {
+        window.I18nEngine.applyTranslations();
+        const langSelect = document.getElementById('language-select');
+        if (langSelect) {
+          langSelect.value = window.I18nEngine.currentLang;
+          langSelect.addEventListener('change', (e) => {
+            window.I18nEngine.setLanguage(e.target.value);
+          });
+        }
+      }
+    });
+
     function showTab(tab) {
       const loginForm = document.getElementById('login-form');
       const registerForm = document.getElementById('register-form');
@@ -264,6 +332,13 @@
       }
     }
 
+    function handleRoleChange(role) {
+      const patientFields = document.getElementById('reg-patient-fields');
+      const doctorFields = document.getElementById('reg-doctor-fields');
+      if (patientFields) patientFields.style.display = (role === 'patient') ? 'block' : 'none';
+      if (doctorFields) doctorFields.style.display = (role === 'doctor') ? 'block' : 'none';
+    }
+
     async function handleLoginSubmit(e) {
       e.preventDefault();
       const u = document.getElementById('input-username').value.trim();
@@ -279,11 +354,23 @@
       const password = document.getElementById('reg-password').value.trim();
       const phone = document.getElementById('reg-phone').value.trim();
 
+      const payload = { username, password, fullName, role, phone };
+      if (role === 'patient') {
+        payload.age = document.getElementById('reg-age') ? document.getElementById('reg-age').value : 72;
+        payload.location = document.getElementById('reg-location') ? document.getElementById('reg-location').value : 'Guwahati, Assam';
+        payload.emergencyContact = document.getElementById('reg-emergency') ? document.getElementById('reg-emergency').value : phone;
+      } else if (role === 'doctor') {
+        payload.medicalLicense = document.getElementById('reg-license') ? document.getElementById('reg-license').value : 'NER-MC-VERIFIED';
+        payload.specialty = document.getElementById('reg-specialty') ? document.getElementById('reg-specialty').value : 'Chief Clinical Neurologist (MD Neurology)';
+        payload.hospitalAffiliation = document.getElementById('reg-hospital') ? document.getElementById('reg-hospital').value : 'NER Memory Care Network, Guwahati';
+      }
+
       try {
-        const res = await fetch('/api/auth/register', {
+        const apiBase = (window.location.port === '3000' || (!window.location.port && window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1'))) ? '' : 'http://localhost:3000';
+        const res = await fetch(`${apiBase}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password, fullName, role, phone })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.success && data.user) {
@@ -293,8 +380,8 @@
           alert(data.message || 'পঞ্জীয়ন বিফল হ’ল');
         }
       } catch (err) {
-        // Offline registration fallback
-        const offlineUser = { id: Date.now(), username, fullName, role, phone };
+        // Offline registration fallback with full profile preservation
+        const offlineUser = { id: Date.now(), username, fullName, role, phone, ...payload };
         localStorage.setItem('delta_neurons_current_user', JSON.stringify(offlineUser));
         window.location.href = 'index.html';
       }

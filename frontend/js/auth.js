@@ -114,8 +114,40 @@ class AuthEngine {
     window.location.href = 'login.html';
   }
 
+  // Check if a view is permitted for current role
+  isAllowedView(viewId) {
+    const role = (this.currentUser && this.currentUser.role) ? this.currentUser.role : 'patient';
+    const rolePermissions = {
+      patient: ['view-dashboard', 'view-games', 'view-exercise', 'view-reminders'],
+      doctor: ['view-doctor', 'view-games', 'view-exercise', 'view-reminders'],
+      family: ['view-family', 'view-reminders', 'view-dashboard'],
+      admin: ['view-admin', 'view-head-admin', 'view-dashboard', 'view-games', 'view-exercise', 'view-reminders', 'view-doctor', 'view-family'],
+      head_admin: ['view-head-admin', 'view-admin', 'view-dashboard', 'view-games', 'view-exercise', 'view-reminders', 'view-doctor', 'view-family']
+    };
+    const allowed = rolePermissions[role] || rolePermissions.patient;
+    return allowed.includes(viewId);
+  }
+
+  // Filter Navigation Tabs based on Role Access
+  applyRoleAccessControl() {
+    const role = (this.currentUser && this.currentUser.role) ? this.currentUser.role : 'patient';
+    document.body.dataset.userRole = role;
+
+    const navButtons = document.querySelectorAll('.nav-item-btn');
+    navButtons.forEach(btn => {
+      const targetView = btn.dataset.view;
+      if (this.isAllowedView(targetView)) {
+        btn.style.display = 'inline-flex';
+      } else {
+        btn.style.display = 'none';
+      }
+    });
+  }
+
   // Route user automatically to their dedicated portal based on Role
   routeUserByRole(role) {
+    this.applyRoleAccessControl();
+
     if (role === 'head_admin') {
       if (typeof window.showAppView === 'function') {
         window.showAppView('view-head-admin');
@@ -154,16 +186,18 @@ class AuthEngine {
 
   // Update User Profile Indicator in Top Navigation Bar
   updateUserUI() {
+    this.applyRoleAccessControl();
+
     const userPill = document.getElementById('top-user-pill');
     if (!userPill) return;
 
     const u = this.currentUser;
     const roleBadges = {
-      patient: '🧓 ৰোগী (Patient)',
-      doctor: '🩺 চিকিৎসক (Doctor)',
-      family: '👨‍👩‍👧 পৰিয়াল (Family)',
-      admin: '🛡️ প্ৰশাসক (Admin)',
-      head_admin: '👑 মুখ্য প্ৰশাসক (Head Admin)'
+      patient: '🧓 Patient',
+      doctor: '🩺 Doctor',
+      family: '👨‍👩‍👧 Family',
+      admin: '🛡️ Admin',
+      head_admin: '👑 Head Admin'
     };
 
     userPill.innerHTML = `
